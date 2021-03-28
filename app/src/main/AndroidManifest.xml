@@ -17,5 +17,6 @@
             </intent-filter>
         </activity>
     </application>
+ <!--uses permission .. to allow to do things, like share post-->
 
 </manifest>

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "902065744098",
+    "project_id": "soundbliss-8ba73",
+    "storage_bucket": "soundbliss-8ba73.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:902065744098:android:67db24a44f56c38c1956bb",
+        "android_client_info": {
+          "package_name": "com.soundbliss"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "902065744098-kvbamfjf9ovcr7t3c8lcvp5c620idqkk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCprbLgDpm-eVMQ1NdxCbEIb0iels8b77M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "902065744098-kvbamfjf9ovcr7t3c8lcvp5c620idqkk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
