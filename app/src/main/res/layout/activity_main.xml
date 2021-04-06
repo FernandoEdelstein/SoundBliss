@@ -8,15 +8,5 @@
     tools:context=".MainActivity">
 
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="271dp"
-        android:layout_height="153dp"
-        android:text="Welcome to SoundBliss"
-        android:textColor="@color/blue_100"
-        android:textFontWeight="@android:integer/config_mediumAnimTime"
-        android:textSize="100px"
-        tools:layout_editor_absoluteX="60dp"
-        tools:layout_editor_absoluteY="165dp"
-        tools:ignore="MissingConstraints" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
