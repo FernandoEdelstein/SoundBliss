@@ -11,6 +11,7 @@
 
     <string name = "Registrati">Registrati</string>
     <string name = "LogIn">LogIn</string>
-    <string name = "TornaLogIn">TornaLogIn</string>
+    <string name = "TornaLogIn">Torna a LogIn</string>
+    <string name = "ForgotPassword">Ho dimenticato la mia Password</string>
 
 </resources>
