@@ -23,8 +23,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="323dp"
-        android:autofillHints="" />
+        tools:layout_editor_absoluteY="323dp" />
 
     <Button
         android:id="@+id/loginButton"
@@ -88,15 +87,14 @@
         app:layout_constraintBottom_toTopOf="@+id/passwordField"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        android:autofillHints="" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/passwordForget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
-        android:text="@string/ho_dimenticato_la_mia_password"
+        android:text="Ho dimenticato la mia Password"
         android:textColor="@color/blue_100"
         app:layout_constraintBottom_toTopOf="@+id/loginButton"
         app:layout_constraintEnd_toEndOf="parent"

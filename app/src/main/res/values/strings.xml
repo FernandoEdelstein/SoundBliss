@@ -3,15 +3,14 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
-    <string name="Password">Password</string>
-    <string name="Username">Username</string>
-    <string name="Nome">Nome</string>
-    <string name="Cognome">Cognome</string>
-    <string name="eMail">Mail</string>
+    <string name = "Password">Password</string>
+    <string name = "Username">Username</string>
+    <string name = "Nome">Nome</string>
+    <string name = "Cognome">Cognome</string>
+    <string name = "eMail">Mail</string>
 
-    <string name="Registrati">Registrati</string>
-    <string name="LogIn">LogIn</string>
-    <string name="TornaLogIn">TornaLogIn</string>
-    <string name="ho_dimenticato_la_mia_password">Ho dimenticato la mia Password</string>
+    <string name = "Registrati">Registrati</string>
+    <string name = "LogIn">LogIn</string>
+    <string name = "TornaLogIn">TornaLogIn</string>
 
 </resources>
