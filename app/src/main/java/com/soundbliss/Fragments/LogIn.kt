@@ -44,8 +44,7 @@ class LogIn : AppCompatActivity() {
                     if(task.isSuccessful) {
                         Toast.makeText(this, "Successfully Logged In", Toast.LENGTH_LONG).show()
                         val user = auth.currentUser
-                        val intent = Intent(this, MainActivity::class.java)
-                        updateUI(user)
+                        val intent = Intent(this, Profile::class.java)
                         startActivity(intent)
                         finish()
                     }else {
@@ -62,17 +61,8 @@ class LogIn : AppCompatActivity() {
         }
     }
 
-    public override fun onStart() {
-        super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = auth.currentUser
-        if(currentUser != null){
 
-        }
-    }
-    private fun updateUI(user: FirebaseUser?) {
 
-    }
 
     companion object {
         private const val TAG = "EmailPassword"
