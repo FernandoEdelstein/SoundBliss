@@ -28,6 +28,9 @@ class SignUp : AppCompatActivity() {
     private lateinit var registBtn: Button
     private lateinit var backLog: Button
 
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
@@ -41,11 +44,11 @@ class SignUp : AppCompatActivity() {
         backLog = findViewById(R.id.backLogButton)
 
         firebaseDatabase = FirebaseDatabase.getInstance()
-        dbReference = Firebase.database("https://soundbliss-8ba73-default-rtdb.europe-west1.firebasedatabase.app/%22").reference
+        dbReference = Firebase.database("https://soundbliss-8ba73-default-rtdb.europe-west1.firebasedatabase.app").reference;
         dbReference.child("users").setValue("First users")
 
-        //evento al click del bottone per la registrazione
 
+//evento al click del bottone per la registrazione
         registBtn.setOnClickListener{
             var email: String = emailUser.text.toString()
             var pass: String = passUser.text.toString()
@@ -53,13 +56,13 @@ class SignUp : AppCompatActivity() {
             var name: String = nameUser.text.toString()
             var lastName: String = lastNameUser.text.toString()
 
-            if(TextUtils.isEmpty(email)|| TextUtils.isEmpty(pass) || TextUtils.isEmpty(user) || TextUtils.isEmpty(name) || TextUtils.isEmpty(lastName)){
+            if(TextUtils.isEmpty(email)||TextUtils.isEmpty(pass) || TextUtils.isEmpty(user)||TextUtils.isEmpty(name) || TextUtils.isEmpty(lastName)){
                 Toast.makeText(this, R.string.FillAllFields,Toast.LENGTH_LONG).show()
             } else{
                 auth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(this, OnCompleteListener { task ->
                     if(task.isSuccessful){
                         Toast.makeText(this, R.string.SuccessRegister, Toast.LENGTH_LONG).show()
-                        val intent = Intent(this, MainActivity::class.java)
+                        val intent = Intent(this, Profile::class.java)
 
                         dbReference.child("users").child(user);
                         dbReference.child("users").child(name);
@@ -70,7 +73,6 @@ class SignUp : AppCompatActivity() {
                         Toast.makeText(this, R.string.FailRegister, Toast.LENGTH_LONG).show()
                     }
                 });
-
             }
         }
         //per tornare nell'activity di login

@@ -26,7 +26,6 @@ class LogIn : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_in)
 
-
         auth = FirebaseAuth.getInstance()
         emailUserText = findViewById(R.id.userField);
         passwordUserText = findViewById(R.id.passwordField);
@@ -43,7 +42,7 @@ class LogIn : AppCompatActivity() {
                 auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, OnCompleteListener { task ->
                     if(task.isSuccessful) {
                         val user = auth.currentUser
-                        val intent = Intent(this, MainActivity::class.java)
+                        val intent = Intent(this, Profile::class.java)
                         updateUI(user)
                         startActivity(intent)
                         finish()
@@ -53,6 +52,7 @@ class LogIn : AppCompatActivity() {
                 });
             }
         }
+
         //cliccando il bottone si va verso l'activity di SignUp
         regButton.setOnClickListener {
             val intent = Intent(this, SignUp::class.java)

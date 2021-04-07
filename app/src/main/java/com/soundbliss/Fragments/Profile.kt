@@ -45,7 +45,6 @@ class Profile : AppCompatActivity() {
     }
 
     private fun loadProfile(){
-
         val user = auth.currentUser
         val userReference = databaseReference?.child(user?.uid!!)
 
@@ -72,6 +71,5 @@ class Profile : AppCompatActivity() {
 //        startActivity(Intent(this, LogIn::class.java))
 //        finish()
 //    }
-
     }
 }
