@@ -38,18 +38,17 @@ class LogIn : AppCompatActivity() {
             var password: String = passwordUserText.text.toString()
 
             if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-                Toast.makeText(this@LogIn, "Please fill all the fields", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@LogIn, R.string.FillAllFields, Toast.LENGTH_LONG).show()
             } else{
                 auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, OnCompleteListener { task ->
                     if(task.isSuccessful) {
-                        Toast.makeText(this, "Successfully Logged In", Toast.LENGTH_LONG).show()
                         val user = auth.currentUser
                         val intent = Intent(this, MainActivity::class.java)
                         updateUI(user)
                         startActivity(intent)
                         finish()
                     }else {
-                        Toast.makeText(this, "Login Failed", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, R.string.LogInFailed, Toast.LENGTH_LONG).show()
                     }
                 });
             }

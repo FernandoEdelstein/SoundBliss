@@ -66,22 +66,12 @@ class Profile : AppCompatActivity() {
                 TODO("Not yet implemented")
             }
         })
-//
+
 //    logoutButton.setOnClickListener {
 //        auth.signOut()
 //        startActivity(Intent(this, LogIn::class.java))
 //        finish()
 //    }
 
-
     }
-
-
-
-
-
 }
-
-
-
-

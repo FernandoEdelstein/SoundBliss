@@ -2,15 +2,21 @@
     <string name="app_name">SoundBliss</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-
+    <!-- LogIn / Register Fields Strings -->
     <string name = "Password">Password</string>
     <string name = "Username">Username</string>
     <string name = "Nome">Nome</string>
     <string name = "Cognome">Cognome</string>
     <string name = "eMail">Mail</string>
 
+    <!-- LogIn / Register Interface Strings -->
     <string name = "Registrati">Registrati</string>
     <string name = "LogIn">LogIn</string>
     <string name = "TornaLogIn">TornaLogIn</string>
 
+    <!-- LogIn / Register Strings -->
+    <string name="FillAllFields">Please fill all fields to continue</string>
+    <string name="SuccessRegister">Successfully Registered</string>
+    <string name="FailRegister">Registration Failed</string>
+    <string name="LogInFailed">Log In Failed</string>
 </resources>
