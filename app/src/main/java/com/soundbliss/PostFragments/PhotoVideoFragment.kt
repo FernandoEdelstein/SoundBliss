@@ -32,29 +32,20 @@ class PhotoVideoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        close = view!!.findViewById(R.id.close)
-        imageAdded = view!!.findViewById(R.id.image_added)
-        textView = view!!.findViewById(R.id.post)
-        description = view!!.findViewById(R.id.description)
+        close = inflater.inflate(R.layout.fragment_photovideo,container,false).findViewById(R.id.close)
+        imageAdded = inflater.inflate(R.layout.fragment_photovideo,container,false).findViewById(R.id.image_added)
+        textView = inflater.inflate(R.layout.fragment_photovideo,container,false).findViewById(R.id.post)
+        description = inflater.inflate(R.layout.fragment_photovideo,container,false).findViewById(R.id.description)
 
         close.setOnClickListener {
             startActivity(Intent(activity, MainActivity::class.java))
             activity?.finish()
         }
 
-        post.setOnClickListener {
-            upload()
-        }
-
-        activity?.let { CropImage.activity().start(it) }
-
         return inflater.inflate(R.layout.fragment_photovideo, container, false)
     }
 
 
-    private fun upload(){
-
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
