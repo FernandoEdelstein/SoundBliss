@@ -1,24 +1,40 @@
 package com.soundbliss
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.TextView
-import com.hendraanggrian.appcompat.widget.SocialAutoCompleteTextView
-import kotlinx.android.synthetic.main.activity_post.*
+import androidx.fragment.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.soundbliss.PostFragments.PhotoVideoFragment
+import com.soundbliss.PostFragments.TrackFragment
+import kotlinx.android.synthetic.main.activity_main.*
+
 
 class PostActivity : AppCompatActivity() {
 
-    lateinit var description : SocialAutoCompleteTextView
+    private val bottomNavigationView : BottomNavigationView? = null
+    private var selectorFragment : Fragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post)
 
-        val close : ImageView = findViewById(R.id.close)
-        val imageAdded : ImageView = findViewById(R.id.image_added)
-        val textView : TextView = findViewById(R.id.post)
-        description = findViewById(R.id.description)
+        val trackFrag = TrackFragment()
+        val photoFrag = PhotoVideoFragment()
 
+        makeCurrentFragment(trackFrag)
+        bottom_navigation.setOnNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.up_track -> makeCurrentFragment(trackFrag)
+                R.id.up_photo -> makeCurrentFragment(photoFrag)
+            }
+            true
+        }
     }
+
+    private fun makeCurrentFragment(fragment:Fragment) = supportFragmentManager.beginTransaction().apply{
+        replace (R.id.fragment_container,fragment)
+        commit()
+    }
+
 }

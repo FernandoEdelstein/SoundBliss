@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/blue_800"
     android:padding="24dp"
-    tools:context=".Fragments.Profile"
+    tools:context=".Profile"
     tools:ignore="MissingClass"
     tools:layout_editor_absoluteX="-30dp"
     tools:layout_editor_absoluteY="0dp">

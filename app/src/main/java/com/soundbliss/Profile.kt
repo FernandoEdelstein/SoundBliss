@@ -1,19 +1,15 @@
-package com.soundbliss.Fragments
+package com.soundbliss
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.soundbliss.MainActivity
-import com.soundbliss.R
+import com.soundbliss.Login.LogIn
 
 class Profile : AppCompatActivity() {
 

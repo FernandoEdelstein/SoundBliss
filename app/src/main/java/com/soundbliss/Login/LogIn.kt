@@ -1,4 +1,4 @@
-package com.soundbliss.Fragments
+package com.soundbliss.Login
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.soundbliss.Fragments.HomeFragment
+import com.soundbliss.Fragments.ProfileFragment
 import com.soundbliss.MainActivity
 import com.soundbliss.R
 
@@ -42,7 +44,7 @@ class LogIn : AppCompatActivity() {
                 auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, OnCompleteListener { task ->
                     if(task.isSuccessful) {
                         val user = auth.currentUser
-                        val intent = Intent(this, Profile::class.java)
+                        val intent = Intent(this, MainActivity::class.java)
                         updateUI(user)
                         startActivity(intent)
                         finish()
