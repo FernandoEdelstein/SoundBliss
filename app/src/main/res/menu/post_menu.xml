@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+        <item android:id="@+id/up_request"
+            android:icon="@drawable/ic_request"
+            android:title="Request"/>
+
         <item android:id="@+id/up_track"
             android:icon="@drawable/ic_track"
             android:title="Track"/>

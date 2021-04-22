@@ -14,9 +14,9 @@
 
         <activity android:name=".PostActivity" />
         <activity android:name=".Login.SignUp" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".Login.LogIn" />
         <activity android:name=".Profile" />
-        <activity android:name=".Login.LogIn">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
