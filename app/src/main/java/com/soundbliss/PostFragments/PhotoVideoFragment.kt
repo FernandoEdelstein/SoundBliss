@@ -25,20 +25,17 @@ class PhotoVideoFragment : Fragment() {
     private lateinit var imageUri : Uri
 
     private lateinit var imageAdded : ImageView
-    private lateinit var textView: TextView
     private lateinit var description : SocialAutoCompleteTextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         imageAdded = inflater.inflate(R.layout.fragment_photovideo,container,false).findViewById(R.id.image_added)
         description = inflater.inflate(R.layout.fragment_photovideo,container,false).findViewById(R.id.description)
 
         return inflater.inflate(R.layout.fragment_photovideo, container, false)
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

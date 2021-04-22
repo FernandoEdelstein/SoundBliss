@@ -16,8 +16,6 @@ import kotlinx.android.synthetic.main.fragment_photovideo.*
 
 class PostActivity : AppCompatActivity() {
 
-    private val bottomNavigationView : BottomNavigationView? = null
-    private var selectorFragment : Fragment? = null
     private lateinit var closeButton : ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
