@@ -7,12 +7,12 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.soundbliss.PostFragments.PhotoVideoFragment
 import com.soundbliss.PostFragments.TrackFragment
-import kotlinx.android.synthetic.main.activity_main.*
+//import kotlinx.android.synthetic.main.activity_main.*
 
 
 class PostActivity : AppCompatActivity() {
 
-    private val bottomNavigationView : BottomNavigationView? = null
+    private var bottomNavigationView : BottomNavigationView? = null
     private var selectorFragment : Fragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,8 +22,10 @@ class PostActivity : AppCompatActivity() {
         val trackFrag = TrackFragment()
         val photoFrag = PhotoVideoFragment()
 
+        bottomNavigationView = findViewById(R.id.bottom_navigation)
+
         makeCurrentFragment(trackFrag)
-        bottom_navigation.setOnNavigationItemSelectedListener {
+        bottomNavigationView?.setOnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.up_track -> makeCurrentFragment(trackFrag)
                 R.id.up_photo -> makeCurrentFragment(photoFrag)

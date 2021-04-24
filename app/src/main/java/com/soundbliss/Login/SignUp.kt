@@ -13,7 +13,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.soundbliss.Profile
+import com.soundbliss.MainActivity
 import com.soundbliss.R
 
 class SignUp : AppCompatActivity() {
@@ -62,7 +62,7 @@ class SignUp : AppCompatActivity() {
                 auth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(this, OnCompleteListener { task ->
                     if(task.isSuccessful){
                         Toast.makeText(this, R.string.SuccessRegister, Toast.LENGTH_LONG).show()
-                        val intent = Intent(this, Profile::class.java)
+                        val intent = Intent(this, MainActivity::class.java)
 
                         dbReference.child("users").child(user);
                         dbReference.child("users").child(name);
