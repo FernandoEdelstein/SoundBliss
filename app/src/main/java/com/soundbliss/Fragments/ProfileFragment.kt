@@ -32,7 +32,23 @@ class ProfileFragment : Fragment() {
     private var databaseReference: DatabaseReference? = null
     private lateinit var database : FirebaseDatabase
 
-
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        // Inflate the layout for this fragment
+//       val view : View = inflater.inflate(R.layout.fragment_profile, container, false)
+//
+//        name = view.findViewById(R.id.display_name)
+//        lastName = view.findViewById(R.id.display_lastname)
+//        val bund : Bundle? = arguments
+//        name.text = bund?.getString("name")
+//        lastName.text = bund?.getString("lastname")
+//
+//
+//
+//        return view
+//    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

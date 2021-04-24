@@ -1,40 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PostActivity"
-    android:background="@color/blue_800">
+    tools:context=".PostFragments.TrackFragment">
 
-    <LinearLayout
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:text="@string/hello_blank_fragment" />
 
-        <Button
-            android:id="@+id/uploadTrackButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Upload Track"
-            android:textColor="@color/white_100"
-            app:backgroundTint="@color/blue_100" />
-
-        <com.hendraanggrian.appcompat.widget.SocialAutoCompleteTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:hint="Description"
-            android:textColorHint="@color/white_300"
-            android:textColor="@color/white_100"
-            android:maxLines="5"
-            android:id="@+id/description"
-            app:socialFlags="hashtag|mention"
-            app:hashtagColor="@color/blue_100"/>
-
-    </LinearLayout>
-
-</LinearLayout>
+</FrameLayout>
