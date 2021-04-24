@@ -61,7 +61,7 @@ class SignUp : AppCompatActivity() {
                 auth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(this, OnCompleteListener { task ->
                     if(task.isSuccessful){
                         Toast.makeText(this, R.string.SuccessRegister, Toast.LENGTH_LONG).show()
-                        val intent = Intent(this, MainActivity::class.java)
+                        val intent = Intent(this, Profile::class.java)
 
                         dbReference.child("users").child(user);
                         dbReference.child("users").child(name);

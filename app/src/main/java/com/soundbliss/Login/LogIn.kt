@@ -7,8 +7,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -35,7 +33,6 @@ class LogIn : AppCompatActivity() {
         passwordUserText = findViewById(R.id.passwordField);
         buttonLogin = findViewById(R.id.loginButton);
         regButton = findViewById(R.id.regButton)
-
 
         buttonLogin.setOnClickListener {
             var email: String = emailUserText.text.toString()
@@ -64,8 +61,6 @@ class LogIn : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-
-
     }
 
     public override fun onStart() {

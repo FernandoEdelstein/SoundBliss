@@ -19,5 +19,4 @@
     <string name="SuccessRegister">Successfully Registered</string>
     <string name="FailRegister">Registration Failed</string>
     <string name="LogInFailed">Log In Failed</string>
-    <string name="profile_fragment">Profile Fragment</string>
 </resources>
