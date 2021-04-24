@@ -9,15 +9,11 @@ import com.soundbliss.R
 
 
 class RequestFragment : Fragment() {
-
-    override fun onCreateView(
+     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return inflater.inflate(R.layout.fragment_request, container, false)
     }
-
-
 
 }
