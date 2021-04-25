@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_profile"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -23,6 +24,13 @@
         <include layout="@layout/layout_bottom_navigation_view" />
 
     </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/fragmentEdit_profile"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+        <!--you can put your existing views of your current xml here, so yes your entire xml is now inside this FrameLayout -->
+    </FrameLayout>
 
 
 </RelativeLayout>
