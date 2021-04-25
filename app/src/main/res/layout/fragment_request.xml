@@ -1,14 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PostFragments.RequestFragment">
+    tools:context=".PostActivity"
+    android:padding="16dp">
 
-    <!-- TODO: Update blank fragment layout -->
+
     <TextView
+        android:id="@+id/textView3"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/FindOtherMusicians"
+        android:textSize="30sp"
+        android:textColor="@color/white_100"
+        android:layout_marginBottom="16dp"/>
 
-</FrameLayout>
+    <EditText
+        android:id="@+id/requestTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/Title"
+        android:textColorHint="@color/white_300"
+        android:textColor="@color/white_100"/>
+
+    <EditText
+        android:id="@+id/requestGender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/Gender"
+        android:textColorHint="@color/white_300"
+        android:textColor="@color/white_100"/>
+
+
+
+    <com.hendraanggrian.appcompat.widget.SocialAutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:hint="@string/Description"
+            android:maxLines="5"
+            android:id="@+id/description"
+            app:socialFlags="hashtag|mention"
+            app:hashtagColor="@color/blue_100"
+            android:textColorHint="@color/white_300"
+            android:textColor="@color/white_100"/>
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/montserrat"
+        android:text="@string/Location"
+        android:textColor="@color/white_100"/>
+
+
+</LinearLayout>
