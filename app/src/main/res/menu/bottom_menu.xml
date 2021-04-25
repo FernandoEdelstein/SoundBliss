@@ -13,7 +13,7 @@
         android:title="Add"/>
 
     <item android:id="@+id/nav_like"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/ic_like"
         android:title="Like"/>
 
     <item android:id="@+id/nav_profile"
