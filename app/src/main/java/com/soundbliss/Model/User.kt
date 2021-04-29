@@ -8,5 +8,4 @@ class User (fulln:String, usern:String, bio:String, identification:String, mail:
     var email = mail
     var imageurl = imageu
 
-
 }

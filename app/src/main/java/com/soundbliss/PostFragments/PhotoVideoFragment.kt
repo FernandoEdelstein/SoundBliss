@@ -61,7 +61,7 @@ class PhotoVideoFragment : Fragment() {
         }
     }
 
-    fun upload(){
+    fun uploadImage(){
         if(imageUri != null){
             var filePath = FirebaseStorage.getInstance().getReference("Posts").child("${System.currentTimeMillis()}" + "." + getFileExtension(imageUri))
 

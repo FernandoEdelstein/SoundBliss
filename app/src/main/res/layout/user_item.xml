@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/fullname"
             android:fontFamily="@font/montserrat"
+            android:textColor="@color/white_100"
             android:text="Full name"
             android:maxLines="1"/>
 
@@ -46,7 +47,6 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:backgroundTint="@color/blue_100"
-        android:visibility="gone"
         />
 
     
