@@ -72,7 +72,9 @@
                 android:layout_height="50dp"
                 android:layout_below="@+id/changeProfilePhoto"
                 android:layout_marginTop="80dp"
-                android:background="@drawable/grey_border_bottom">
+                android:background="@drawable/text_box"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp">
 
                 <ImageView
                     android:layout_width="35dp"
@@ -89,6 +91,8 @@
                     android:layout_marginLeft="40dp"
                     android:background="@null"
                     android:hint="@string/Username"
+                    android:textColorHint="@color/white_300"
+                    android:textColor="@color/white_100"
                     android:inputType="textNoSuggestions" />
 
             </RelativeLayout>
@@ -101,7 +105,9 @@
                 android:layout_height="50dp"
                 android:layout_below="@+id/relLayout1"
                 android:layout_marginTop="15dp"
-                android:background="@drawable/grey_border_bottom">
+                android:background="@drawable/text_box"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp">
 
                 <ImageView
                     android:layout_width="35dp"
@@ -118,6 +124,8 @@
                     android:layout_marginLeft="40dp"
                     android:background="@null"
                     android:hint="description"
+                    android:textColor="@color/white_100"
+                    android:textColorHint="@color/white_300"
                     android:inputType="textNoSuggestions" />
 
             </RelativeLayout>
@@ -131,7 +139,9 @@
                 android:layout_height="50dp"
                 android:layout_below="@+id/relLayout2"
                 android:layout_marginTop="15dp"
-                android:background="@drawable/grey_border_bottom">
+                android:background="@drawable/text_box"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp">
 
                 <ImageView
                     android:layout_width="35dp"
@@ -148,6 +158,8 @@
                     android:layout_marginLeft="40dp"
                     android:background="@null"
                     android:hint="@string/Password"
+                    android:textColor="@color/white_100"
+                    android:textColorHint="@color/white_300"
                     android:inputType="textPassword" />
 
             </RelativeLayout>
@@ -160,11 +172,13 @@
                 android:layout_height="50dp"
                 android:layout_below="@+id/relLayout3"
                 android:layout_marginTop="15dp"
-                android:background="@drawable/grey_border_bottom">
+                android:background="@drawable/text_box"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp">
 
                 <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_centerVertical="true"
                     android:src="@drawable/ic_mail" />
 
@@ -177,6 +191,8 @@
                     android:layout_marginLeft="40dp"
                     android:background="@null"
                     android:hint="@string/eMail"
+                    android:textColor="@color/white_100"
+                    android:textColorHint="@color/white_300"
                     android:inputType="textNoSuggestions" />
 
 
