@@ -10,25 +10,198 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-<!--        <RelativeLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:id="@+id/relLayout1">-->
-
-<!--            <include layout="@layout/snippet_top_edit_profiletoolbar"/>-->
-
-
-<!--        </RelativeLayout>-->
-
-        <RelativeLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/relLayout1"
-            android:id="@+id/relLayout2">
+            android:background="@color/blue_800">
 
-            <include layout="@layout/snippet_center_edit_profile"/>
 
-        </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/blue_800"
+                android:padding="100dp">
+
+
+                <ImageView
+                    android:id="@+id/backArrow"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="701dp"
+                    android:src="@drawable/ic_back" />
+
+                <ImageView
+                    android:id="@+id/saveChanges"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginRight="35dp"
+                    android:src="@drawable/ic_check" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_photo"
+                    app:civ_border_color="@color/blue_800"
+                    app:civ_border_width="2dp"
+                    android:layout_width="232dp"
+                    android:layout_height="125dp"
+                    android:src="@drawable/settings_icon" />
+
+                <TextView
+                    android:id="@+id/changeProfilePhoto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/profile_photo"
+                    android:layout_centerHorizontal="true"
+                    android:text="Change Photo"
+                    android:textColor="@color/blue_100"
+                    android:textSize="16sp" />
+
+
+                <!-- username section -->
+
+                <RelativeLayout
+                    android:id="@+id/relLayout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_below="@+id/changeProfilePhoto"
+                    android:layout_marginTop="80dp"
+                    android:background="@drawable/text_box"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_person" />
+
+                    <EditText
+                        android:id="@+id/username"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginLeft="40dp"
+                        android:background="@null"
+                        android:hint="@string/Username"
+                        android:inputType="textNoSuggestions"
+                        android:textColor="@color/white_100"
+                        android:textColorHint="@color/white_300" />
+
+                </RelativeLayout>
+
+
+                <!-- description section -->
+                <RelativeLayout
+                    android:id="@+id/relLayout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_below="@+id/relLayout1"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/text_box"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_descript" />
+
+                    <EditText
+                        android:id="@+id/description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginLeft="40dp"
+                        android:background="@null"
+                        android:hint="@string/Description"
+                        android:inputType="textNoSuggestions"
+                        android:textColor="@color/white_100"
+                        android:textColorHint="@color/white_300" />
+
+                </RelativeLayout>
+
+
+                <!-- password section -->
+                <RelativeLayout
+                    android:id="@+id/relLayout3"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_below="@+id/relLayout2"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/text_box"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_key" />
+
+                    <EditText
+                        android:id="@+id/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginLeft="40dp"
+                        android:background="@null"
+                        android:hint="@string/Password"
+                        android:inputType="textPassword"
+                        android:textColor="@color/white_100"
+                        android:textColorHint="@color/white_300" />
+
+                </RelativeLayout>
+
+
+                <!-- email section -->
+                <RelativeLayout
+                    android:id="@+id/relLayout5"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_below="@+id/relLayout3"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/text_box"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_mail" />
+
+                    <EditText
+                        android:id="@+id/email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginLeft="40dp"
+                        android:background="@null"
+                        android:hint="@string/eMail"
+                        android:inputType="textNoSuggestions"
+                        android:textColor="@color/white_100"
+                        android:textColorHint="@color/white_300" />
+
+
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+
+        </ScrollView>
 
 
     </RelativeLayout>

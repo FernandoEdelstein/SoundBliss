@@ -5,7 +5,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white_300">
+        android:background="@color/blue_800">
 
 
 
@@ -18,7 +18,7 @@
             android:layout_below="@+id/relLayout1"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="3dp"
-            android:background="@drawable/white_grey_border_bottom">
+            android:background="@color/blue_800">
 
 
             <LinearLayout
@@ -74,7 +74,7 @@
                     android:id="@+id/display_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/blue_800"
+                    android:textColor="@color/blue_100"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -82,7 +82,7 @@
                     android:id="@+id/display_lastname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/blue_800"
+                    android:textColor="@color/blue_100"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -93,7 +93,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="I love music!"
-                    android:textColor="@color/blue_800"
+                    android:textColor="@color/blue_100"
                     android:textSize="16sp" />
 
                 <TextView
