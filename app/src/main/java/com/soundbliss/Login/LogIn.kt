@@ -59,6 +59,7 @@ class LogIn : AppCompatActivity() {
         regButton.setOnClickListener {
             val intent = Intent(this, SignUp::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
             finish()
         }
     }

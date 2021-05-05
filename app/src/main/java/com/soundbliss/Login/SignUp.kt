@@ -79,6 +79,7 @@ class SignUp : AppCompatActivity() {
         backLog.setOnClickListener{
             val intent = Intent(this, LogIn::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right)
             finish()
         }
     }

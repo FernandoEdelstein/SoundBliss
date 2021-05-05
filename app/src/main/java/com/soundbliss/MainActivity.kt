@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_add -> {
                     null
                     startActivity(Intent(this, PostActivity::class.java))
+
                 }
             }
             true
