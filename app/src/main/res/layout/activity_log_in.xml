@@ -22,6 +22,7 @@
         android:paddingRight="10dp"
         android:textColor="@color/white_100"
         android:textColorHint="@color/white_300"
+        app:layout_constraintTop_toBottomOf="@id/userField"
         app:layout_constraintBottom_toTopOf="@+id/passwordForget"
         app:layout_constraintEnd_toEndOf="parent"
 
@@ -37,6 +38,7 @@
         android:textColor="@color/white_100"
         app:backgroundTint="@color/blue_100"
         app:cornerRadius="22dp"
+        app:layout_constraintTop_toBottomOf="@id/passwordForget"
         app:layout_constraintBottom_toTopOf="@+id/regButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -52,8 +54,8 @@
         app:cornerRadius="22dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/loginButton"/>
 
     <TextView
         android:id="@+id/textView"
@@ -74,7 +76,8 @@
         android:id="@+id/userField"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/text_box"
         android:drawablePadding="20dp"
         android:ems="10"
@@ -96,6 +99,7 @@
         android:layout_marginBottom="24dp"
         android:text="Ho dimenticato la mia Password"
         android:textColor="@color/blue_100"
+        app:layout_constraintTop_toBottomOf="@id/passwordField"
         app:layout_constraintBottom_toTopOf="@+id/loginButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
