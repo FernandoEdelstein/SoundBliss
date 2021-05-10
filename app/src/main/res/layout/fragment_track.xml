@@ -20,14 +20,14 @@
         android:layout_marginBottom="16dp"/>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/uploadTrack"
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/UploadTrack"
         android:textColor="@color/white_100"
         android:background="@color/blue_100"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp" />
 
     <EditText
         android:id="@+id/requestTitle"

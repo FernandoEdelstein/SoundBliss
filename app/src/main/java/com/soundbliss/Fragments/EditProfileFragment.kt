@@ -21,7 +21,7 @@ import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.soundbliss.R
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.android.synthetic.main.snippet_center_edit_profile.*
+
 
 
 class EditProfileFragment : Fragment() {

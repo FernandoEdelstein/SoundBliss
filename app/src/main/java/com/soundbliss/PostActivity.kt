@@ -18,6 +18,8 @@ import org.w3c.dom.Text
 
 class PostActivity : AppCompatActivity() {
 
+    private val StoragePermissionCode = 1
+
     private lateinit var closeButton : ImageView
     private lateinit var postButton : TextView
 
@@ -48,7 +50,7 @@ class PostActivity : AppCompatActivity() {
 
         postButton = findViewById(R.id.post)
 
-        post.setOnClickListener{
+        postButton.setOnClickListener{
             if(photoFrag.isVisible && photoFrag != null){
                 photoFrag.uploadImage()
                 startActivity(Intent(this, MainActivity::class.java))
