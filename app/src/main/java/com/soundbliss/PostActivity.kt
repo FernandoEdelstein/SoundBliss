@@ -3,9 +3,11 @@ package com.soundbliss
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.soundbliss.PostFragments.PhotoVideoFragment
 import com.soundbliss.PostFragments.RequestFragment
 import com.soundbliss.PostFragments.TrackFragment
@@ -22,6 +24,8 @@ class PostActivity : AppCompatActivity() {
 
     private lateinit var closeButton : ImageView
     private lateinit var postButton : TextView
+    private lateinit var uploadTrackButton : Button
+    private lateinit var fragmentManager: FragmentManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,9 +71,17 @@ class PostActivity : AppCompatActivity() {
             }
         }
 
+
+
     }
 
 
+    fun pickAudioFile(){
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "audio/*"
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        startActivityForResult(Intent.createChooser(intent,"Choose Audio File"), 111)
+    }
 
     private fun makeCurrentFragment(fragment:Fragment) = supportFragmentManager.beginTransaction().apply{
         replace (R.id.fragment_container,fragment)

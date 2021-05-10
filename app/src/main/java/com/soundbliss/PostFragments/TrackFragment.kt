@@ -27,29 +27,21 @@ class TrackFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        uploadButton = inflater.inflate(R.layout.fragment_track,container,false).findViewById(R.id.uploadTrack)
-        uploadButton.setOnClickListener {
-            pickAudioFile()
-        }
-
         val view:View = inflater!!.inflate(R.layout.fragment_track,container,false)
 
-        view.uploadTrack.setOnClickListener { view ->
-            Log.d("btnSetup", "Selected")
+        uploadButton = view?.findViewById(R.id.uploadTrack)
+        uploadButton?.setOnClickListener {
+            v: View -> pickAudioFile()
         }
 
         return view
 
         //return inflater.inflate(R.layout.fragment_track, container, false)
-
-
-
     }
 
-    fun pickAudioFile(){
-        val intent = Intent(Intent.ACTION_PICK)
+    private fun pickAudioFile(){
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "audio/*"
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
         startActivityForResult(Intent.createChooser(intent,"Choose Audio File"), 111)
     }
 

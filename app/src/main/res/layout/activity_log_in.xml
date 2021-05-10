@@ -84,6 +84,7 @@
         android:paddingRight="10dp"
         android:textColor="@color/white_100"
         android:textColorHint="@color/white_300"
+        app:layout_constraintTop_toBottomOf="@id/textView"
         app:layout_constraintBottom_toTopOf="@+id/passwordField"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
