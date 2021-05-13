@@ -44,14 +44,14 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
         var user : User = mUser.get(position)
         holder.btnFollow.setText("Follow")
-        holder.username.setText(user.userName)
-        holder.fullName.setText(user.fullName)
+        holder.username.setText(user.username)
+        holder.fullName.setText(user.name)
 
         //isFollowed(user.id, holder.btnFollow)
 
-        if(user.id.equals(fireBaseUser.uid)){
+        /*if(user.id.equals(fireBaseUser.uid)){
             holder.btnFollow.setText("Following")
-        }
+        }*/
     }
 /*
     fun isFollowed(id:String, btnFollow:Button){

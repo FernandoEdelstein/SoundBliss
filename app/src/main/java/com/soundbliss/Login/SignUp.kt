@@ -11,9 +11,9 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
+import com.soundbliss.Fragments.ProfileFragment
 import com.soundbliss.MainActivity
+import com.soundbliss.Model.User
 import com.soundbliss.R
 
 class SignUp : AppCompatActivity() {
@@ -44,8 +44,9 @@ class SignUp : AppCompatActivity() {
         backLog = findViewById(R.id.backLogButton)
 
         firebaseDatabase = FirebaseDatabase.getInstance()
-        dbReference = Firebase.database("https://soundbliss-8ba73-default-rtdb.europe-west1.firebasedatabase.app").reference;
-        dbReference.child("users").setValue("First users")
+       //dbReference = Firebase.database("https://soundbliss-8ba73-default-rtdb.europe-west1.firebasedatabase.app").reference;
+        dbReference = firebaseDatabase.reference.child("users")
+        dbReference.setValue("Ciao")
 
 
 //evento al click del bottone per la registrazione
@@ -56,6 +57,8 @@ class SignUp : AppCompatActivity() {
             var name: String = nameUser.text.toString()
             var lastName: String = lastNameUser.text.toString()
 
+
+
             if(TextUtils.isEmpty(email)||TextUtils.isEmpty(pass) || TextUtils.isEmpty(user)||TextUtils.isEmpty(name) || TextUtils.isEmpty(lastName)){
                 Toast.makeText(this, R.string.FillAllFields,Toast.LENGTH_LONG).show()
             } else{
@@ -63,10 +66,14 @@ class SignUp : AppCompatActivity() {
                     if(task.isSuccessful){
                         Toast.makeText(this, R.string.SuccessRegister, Toast.LENGTH_LONG).show()
                         val intent = Intent(this, MainActivity::class.java)
+                       // val intent = Intent(applicationContext, ProfileFragment::class.java)
 
-                        dbReference.child("users").child(user);
-                        dbReference.child("users").child(name);
-                        dbReference.child("users").child(lastName);
+                        var id = dbReference.push().key
+                        var userIdentity = User (id, name, lastName, user, email, pass)
+                       /*
+                        intent.putExtra("name", name)
+                        intent.putExtra("lastname", lastName)*/
+                        dbReference.child(id!!).setValue(userIdentity)
                         startActivity(intent)
                         finish()
                     }else {

@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.soundbliss.Login.SignUp
 import com.soundbliss.R
 import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.*
@@ -33,27 +34,10 @@ class ProfileFragment : Fragment() {
 //    private lateinit var descriptionProfile : TextView
 
     private lateinit var auth: FirebaseAuth
-    private var databaseReference: DatabaseReference? = null
+    private lateinit var databaseReference: DatabaseReference
     private lateinit var database : FirebaseDatabase
+    private lateinit var recyclerView: RecyclerView
 
-
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        // Inflate the layout for this fragment
-//       val view : View = inflater.inflate(R.layout.fragment_profile, container, false)
-//
-//        name = view.findViewById(R.id.display_name)
-//        lastName = view.findViewById(R.id.display_lastname)
-//        val bund : Bundle? = arguments
-//        name.text = bund?.getString("name")
-//        lastName.text = bund?.getString("lastname")
-//
-//
-//
-//        return view
-//    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -63,36 +47,25 @@ class ProfileFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
-        databaseReference = Firebase.database("https://soundbliss-8ba73-default-rtdb.europe-west1.firebasedatabase.app").reference;
-        databaseReference?.child("rvmF9RWAXzbjgg5FHEkaX9oHLDt1")
+        databaseReference = database.reference.child("users")
+
 
         editProfile = view.findViewById(R.id.textEditProfile)
+        name = view.findViewById(R.id.display_name)
+        lastName = view.findViewById(R.id.display_lastname)
+//      descriptionProfile = view.findViewById(R.id.descriptionProfile)
 
 
+        val user = auth.currentUser.uid
+        val userReference = databaseReference?.child(user)
 
-
-        val user = auth.currentUser
-        val userReference = databaseReference?.child(user?.uid!!)
-
-        val bundle: Bundle? = this.arguments
-
-
-
-        userReference?.addValueEventListener(object : ValueEventListener {
-
+        databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                name = view.findViewById(R.id.display_name)
-                lastName = view.findViewById(R.id.display_lastname)
-//                descriptionProfile = view.findViewById(R.id.descriptionProfile)
-                name.text=  snapshot.child("name").value?.toString()
-                lastName.text=  snapshot.child("lastname").value?.toString()
-//                descriptionProfile.text = bundle?.getString("description", "")
-
+                name.text = snapshot.child("id").child("name").value?.toString()
+                lastName.text = snapshot.child("id").child("lastname").value?.toString()
             }
 
             override fun onCancelled(error: DatabaseError) {
-
-                TODO("Not yet implemented")
             }
         })
 
@@ -104,6 +77,8 @@ class ProfileFragment : Fragment() {
     }
         return view
     }
+
+
 
 
 
