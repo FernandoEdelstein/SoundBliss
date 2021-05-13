@@ -13,7 +13,11 @@ class RequestFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_photovideo, container, false)
+        return inflater.inflate(R.layout.fragment_request, container, false)
+    }
+
+    fun uploadRequest(){
+
     }
 
 }

@@ -1,0 +1,116 @@
+    private lateinit var uploadButton : Button
+    private lateinit var filePath : Uri
+    private lateinit var storageReference : StorageReference
+    private lateinit var database : FirebaseDatabase
+    private lateinit var signedInUser: User
+    private lateinit var submitBtn : TextView
+    private val PICK_TRACK_CODE = 123
+    private var trackUri : Uri? = null
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        val view:View = inflater!!.inflate(R.layout.fragment_track,container,false)
+
+        storageReference = FirebaseStorage.getInstance().reference
+        database = FirebaseDatabase.getInstance()
+
+        submitBtn = view?.findViewById(R.id.post)
+
+
+        uploadButton = view?.findViewById(R.id.uploadTrack)
+        uploadButton?.setOnClickListener {
+            Log.i(TAG,"Open up image picker on device")
+            val trackPickerIntent = Intent(Intent.ACTION_GET_CONTENT)
+            trackPickerIntent.type = "audio/mp3"
+
+                startActivityForResult(trackPickerIntent, PICK_TRACK_CODE)
+
+        }
+
+        return view
+
+        //return inflater.inflate(R.layout.fragment_track, container, false)
+    }
+
+
+    private fun pickAudioFile(){
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "audio/mp3"
+        startActivityForResult(Intent.createChooser(intent,"Choose Audio File"), 111)
+    }
+
+
+    fun uploadAudio(){
+        if(filePath == null){
+            Toast.makeText(context,"No track selected", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if(signedInUser == null){
+            Toast.makeText(context,"No Signed In User", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+
+        submitBtn.isEnabled = false
+        val trackUploadUri = filePath as Uri
+        val trackReference = storageReference.child("tracks/" + UUID.randomUUID().toString() + "-track.mp3")
+
+
+        trackReference.putFile(trackUploadUri)
+            .continueWithTask{ trackUploadTask ->
+                Log.i(TAG,"Uploaded Track : ${trackUploadTask.result?.bytesTransferred}")
+                trackReference.downloadUrl
+            }.continueWithTask{downloadUrlTask ->
+                val post = Post(
+                    signedInUser,
+                    trackDescription.text.toString(),"",
+                    downloadUrlTask.result.toString(),
+                    System.currentTimeMillis()
+                    )
+                return@continueWithTask trackReference.downloadUrl
+            }.addOnCompleteListener{postCreationTask ->
+                submitBtn.isEnabled = true
+                if(!postCreationTask.isSuccessful){
+                    Log.e(TAG,"Exception during firebase operations", postCreationTask.exception)
+                    Toast.makeText(context,"Failed to Save Post" , Toast.LENGTH_SHORT).show()
+                }
+
+                //Get back to main activity
+
+                trackDescription.text.clear()
+                Toast.makeText( context, "Success!", Toast.LENGTH_SHORT).show()
+                val profileIntent = Intent(activity,MainActivity::class.java)
+                startActivity(profileIntent)
+
+            }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == PICK_TRACK_CODE){
+            if(resultCode == Activity.RESULT_OK){
+                trackUri = data?.data
+
+                Log.i(TAG,"track Uri $trackUri")
+
+                //Update player
+
+
+            }else{
+                Toast.makeText(context,"Track pick cancelled", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    /*
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode == 111 && resultCode == Activity.RESULT_OK && data != null){
+            filePath = data.data!!
+        }
+
+    }*/

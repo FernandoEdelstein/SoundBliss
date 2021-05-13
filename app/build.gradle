@@ -61,6 +61,8 @@ dependencies {
 
     implementation 'de.hdodenhof:circleimageview:3.0.0'
 
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
 
 
     // Declare the dependency for the Firebase Authentication library

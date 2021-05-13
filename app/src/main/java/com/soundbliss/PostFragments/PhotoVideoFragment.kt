@@ -81,7 +81,7 @@ class PhotoVideoFragment : Fragment() {
 
                 var map : HashMap<String, Any> = HashMap()
                 map.put("PostId" , postId)
-                map.put("ImageURL" , imageUrl)
+                map.put("FileURL" , imageUrl)
                 map.put("Description" , description.text)
                 map.put("Publisher" , FirebaseAuth.getInstance().currentUser.uid)
 
