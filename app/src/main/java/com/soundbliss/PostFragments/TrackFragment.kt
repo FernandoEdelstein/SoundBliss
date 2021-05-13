@@ -14,16 +14,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.MimeTypeMap
 import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.core.content.ContextCompat
 import androidx.core.os.postDelayed
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.soundbliss.MainActivity
 import com.soundbliss.Model.Post
+import com.soundbliss.Model.TrackPost
 import com.soundbliss.Model.User
 import com.soundbliss.PostActivity
 import com.soundbliss.R
@@ -46,6 +49,7 @@ class TrackFragment : Fragment() {
     private var signedInUser : User? = null
     private lateinit var upTrack : Button
     private lateinit var trackUri : Uri
+    private lateinit var trackUrl : String
     private lateinit var postTxt : TextView
 
 
@@ -62,7 +66,9 @@ class TrackFragment : Fragment() {
 
 
     //Database
-    private var mTrackPostReference: DatabaseReference? = FirebaseDatabase.getInstance().getReference("posts/trackpost")
+    private var mTrackPostReference: DatabaseReference? = FirebaseDatabase.getInstance().getReference("posts/trackposts")
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -211,8 +217,40 @@ class TrackFragment : Fragment() {
 
     }
 
-    private fun uploadTrack(){
-        //mTrackPostReference!!.setValue()
+    fun uploadTrack(){
+        checkParam()
+
+            var filePath = FirebaseStorage.getInstance().getReference("Posts/Tracks").child("${System.currentTimeMillis()}" + "." + getFileExtension(trackUri))
+
+            var uploadTask = filePath.putFile(trackUri)
+            uploadTask.continueWithTask {task ->
+                if(!task.isSuccessful)
+                    throw task.exception!!
+                return@continueWithTask filePath.downloadUrl
+            }.addOnCompleteListener{task ->
+
+                var downloadurl : Uri? = task.result
+                trackUrl = downloadurl.toString()
+
+                var ref : DatabaseReference = FirebaseDatabase.getInstance().getReference("Posts/TrackPosts")
+                var id= mTrackPostReference!!.push().key
+
+                var trackPost = TrackPost(signedInUser!!, trackTitle.text.toString() ,trackGender.text.toString(), trackDescription.text.toString(), trackUrl)
+
+                ref.child(id!!).setValue(trackPost)
+
+                //Back to Home Fragment
+                startActivity(Intent(activity ,MainActivity::class.java))
+                activity?.finish()
+            }.addOnFailureListener{task ->
+                Toast.makeText(activity, "Failure" , Toast.LENGTH_SHORT).show()
+            }
+
+
+    }
+
+    fun getFileExtension(uri: Uri) : String? {
+        return MimeTypeMap.getSingleton().getExtensionFromMimeType(this.context?.contentResolver?.getType(uri))
     }
 
 }

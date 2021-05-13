@@ -65,7 +65,7 @@ class PostActivity : AppCompatActivity() {
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             }else if(trackFrag.isVisible && trackFrag != null){
-
+                trackFrag.uploadTrack()
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
 
