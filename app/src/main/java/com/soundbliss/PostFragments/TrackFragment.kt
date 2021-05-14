@@ -214,6 +214,7 @@ class TrackFragment : Fragment() {
             Toast.makeText(context, "Please Set title", Toast.LENGTH_SHORT).show()
             return
         }else{
+
             var filePath = FirebaseStorage.getInstance().getReference("Posts/Tracks")
                 .child("${System.currentTimeMillis()}" + "." + getFileExtension(trackUri))
 
@@ -227,20 +228,23 @@ class TrackFragment : Fragment() {
                 var downloadurl: Uri? = task.result
                 trackUrl = downloadurl.toString()
 
-                val ref = FirebaseDatabase.getInstance().reference.child("posts")
+
+                val ref = FirebaseDatabase.getInstance().reference.child("/posts/track/")
                 var id = ref.push().key.toString()
 
-                val userRef = FirebaseDatabase.getInstance().reference.child("users")
+                val userRef = FirebaseDatabase.getInstance().reference.child("/users")
 
                 var trackPost = TrackPost(FirebaseAuth.getInstance().currentUser.uid,
-                    userRef.child(FirebaseAuth.getInstance().currentUser.uid).child("username").get().toString(),
+                    userRef.child(FirebaseAuth.getInstance().currentUser.uid).child("/username").get().toString(),
                     trackTitle.text.toString(),
                     trackGender.text.toString(),
                     trackDescription.text.toString(),
                     trackUrl,"track",
                     "${System.currentTimeMillis()}")
 
-                ref.child(id).setValue(trackPost)
+                ref.child(id).setValue(trackPost).addOnSuccessListener {
+                    Log.d("TrackFragment", "Post saved on database")
+                }
 
                 startActivity(Intent(activity, MainActivity::class.java))
                 activity!!.finish()
