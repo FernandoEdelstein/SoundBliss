@@ -22,6 +22,7 @@ import androidx.core.os.postDelayed
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.soundbliss.MainActivity
@@ -32,13 +33,17 @@ import com.soundbliss.PostActivity
 import com.soundbliss.R
 import kotlinx.android.synthetic.main.activity_post.*
 import kotlinx.android.synthetic.main.fragment_track.*
+import kotlinx.android.synthetic.main.fragment_track.trackPlayer
 import kotlinx.android.synthetic.main.fragment_track.view.*
+import kotlinx.android.synthetic.main.item_post_track.*
 import org.w3c.dom.Text
 import java.io.File
 import java.lang.Exception
 import java.sql.Time
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.HashMap
+import kotlin.math.sign
 import android.content.Intent as Intent
 
 private const val TAG = "TrackFragment"
@@ -46,7 +51,7 @@ private const val PICK_AUDIO_CODE = 1234
 
 class TrackFragment : Fragment() {
 
-    private var signedInUser : User? = null
+    private var signedInUser : String? = null
     private lateinit var upTrack : Button
     private lateinit var trackUri : Uri
     private lateinit var trackUrl : String
@@ -67,7 +72,8 @@ class TrackFragment : Fragment() {
 
     //Database
     private var mTrackPostReference: DatabaseReference? = FirebaseDatabase.getInstance().getReference("posts/trackposts")
-
+    private lateinit var database : FirebaseDatabase
+    private lateinit var reference: DatabaseReference
 
 
     override fun onCreateView(
@@ -84,10 +90,7 @@ class TrackFragment : Fragment() {
         btPause = view.findViewById(R.id.btn_pause)
         btPlay = view.findViewById(R.id.btn_play)
 
-
         mediaPlayer = MediaPlayer()
-
-
 
         btPlay.setOnClickListener { v: View? ->
             btPlay.visibility = View.GONE
@@ -103,11 +106,9 @@ class TrackFragment : Fragment() {
             //handler.removeCallbacks(runnable)
         }
 
+        database = FirebaseDatabase.getInstance()
+        reference = database.getReference("posts")
 
-
-        //
-        //SIGNED USER METHOD
-        //
 
         upTrack = view.findViewById(R.id.uploadTrack)
 
@@ -134,23 +135,25 @@ class TrackFragment : Fragment() {
         startActivityForResult(audioPickerIntent, PICK_AUDIO_CODE)
     }
 
-    private fun checkParam() {
+    private fun checkParam(): Boolean {
         if(trackUri == null){
             Toast.makeText(context, "No Track Selected", Toast.LENGTH_SHORT).show()
-            return
+            return false
         }
         if(trackGender.text == null){
             Toast.makeText(context, "Please Select Gender", Toast.LENGTH_SHORT).show()
-            return
+            return false
         }
         if(trackTitle.text == null){
             Toast.makeText(context, "Please Set title", Toast.LENGTH_SHORT).show()
-            return
-        }
-        if(signedInUser == null){
-            Toast.makeText(context,"No signed in user", Toast.LENGTH_SHORT).show()
+            return false
         }
 
+        /*
+        if(signedInUser == null){
+            Toast.makeText(context,"No signed in user", Toast.LENGTH_SHORT).show()
+        }*/
+        return true
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -218,34 +221,33 @@ class TrackFragment : Fragment() {
     }
 
     fun uploadTrack(){
-        checkParam()
-
-            var filePath = FirebaseStorage.getInstance().getReference("Posts/Tracks").child("${System.currentTimeMillis()}" + "." + getFileExtension(trackUri))
+        if(checkParam()) {
+            var filePath = FirebaseStorage.getInstance().getReference("Posts/Tracks")
+                .child("${System.currentTimeMillis()}" + "." + getFileExtension(trackUri))
 
             var uploadTask = filePath.putFile(trackUri)
-            uploadTask.continueWithTask {task ->
-                if(!task.isSuccessful)
+            uploadTask.continueWithTask { task ->
+                if (!task.isSuccessful)
                     throw task.exception!!
                 return@continueWithTask filePath.downloadUrl
-            }.addOnCompleteListener{task ->
+            }.addOnCompleteListener { task ->
 
-                var downloadurl : Uri? = task.result
+                var downloadurl: Uri? = task.result
                 trackUrl = downloadurl.toString()
 
-                var ref : DatabaseReference = FirebaseDatabase.getInstance().getReference("Posts/TrackPosts")
-                var id= mTrackPostReference!!.push().key
+                var id = reference!!.push().key
 
-                var trackPost = TrackPost(signedInUser!!, trackTitle.text.toString() ,trackGender.text.toString(), trackDescription.text.toString(), trackUrl)
+                var trackPost = TrackPost(FirebaseAuth.getInstance().currentUser.uid, trackTitle.text.toString(), trackGender.text.toString(), trackDescription.text.toString(), trackUrl)
 
-                ref.child(id!!).setValue(trackPost)
+                reference.child(id!!).setValue(trackPost)
 
                 //Back to Home Fragment
-                startActivity(Intent(activity ,MainActivity::class.java))
+                startActivity(Intent(activity, MainActivity::class.java))
                 activity?.finish()
-            }.addOnFailureListener{task ->
-                Toast.makeText(activity, "Failure" , Toast.LENGTH_SHORT).show()
+            }.addOnFailureListener { task ->
+                Toast.makeText(activity, "Failure", Toast.LENGTH_SHORT).show()
             }
-
+        }
 
     }
 

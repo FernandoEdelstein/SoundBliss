@@ -76,10 +76,11 @@
             android:text="@string/Location"
             android:layout_marginBottom="8dp"/>
 
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/mapView"
+        <fragment
+            android:id="@+id/postMap"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="200dp"
+            android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
     </LinearLayout>
     <Button

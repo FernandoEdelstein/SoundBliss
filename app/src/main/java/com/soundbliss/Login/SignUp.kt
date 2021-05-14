@@ -58,7 +58,7 @@ class SignUp : AppCompatActivity() {
             var lastName: String = lastNameUser.text.toString()
 
 
-
+/*
             if(TextUtils.isEmpty(email)||TextUtils.isEmpty(pass) || TextUtils.isEmpty(user)||TextUtils.isEmpty(name) || TextUtils.isEmpty(lastName)){
                 Toast.makeText(this, R.string.FillAllFields,Toast.LENGTH_LONG).show()
             } else{
@@ -81,7 +81,7 @@ class SignUp : AppCompatActivity() {
                     }
                 });
             }
-        }
+        }*/
         //per tornare nell'activity di login
         backLog.setOnClickListener{
             val intent = Intent(this, LogIn::class.java)
@@ -90,4 +90,4 @@ class SignUp : AppCompatActivity() {
             finish()
         }
     }
-}
+}}
