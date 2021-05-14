@@ -48,7 +48,7 @@
             android:layout_marginTop="15dp"
             android:hint="@string/Description"
             android:maxLines="5"
-            android:id="@+id/description"
+            android:id="@+id/requestDescription"
             app:socialFlags="hashtag|mention"
             app:hashtagColor="@color/blue_100"
             android:textColorHint="@color/white_300"

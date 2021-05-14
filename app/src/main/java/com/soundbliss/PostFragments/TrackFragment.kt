@@ -51,14 +51,18 @@ private const val PICK_AUDIO_CODE = 1234
 
 class TrackFragment : Fragment() {
 
-    private var signedInUser : String? = null
-    private lateinit var upTrack : Button
+
     private lateinit var trackUri : Uri
     private lateinit var trackUrl : String
     private lateinit var postTxt : TextView
 
+        //Fragment Components
+    private lateinit var trackTitle : EditText
+    private lateinit var trackGender : EditText
+    private lateinit var trackDescription : EditText
+    private lateinit var upTrack : Button
 
-    //Track Player
+        //Track Player
     private lateinit var playerPosition : TextView
     private lateinit var playerDuration : TextView
     private lateinit var seekBar : SeekBar
@@ -68,7 +72,6 @@ class TrackFragment : Fragment() {
     private lateinit var mediaPlayer : MediaPlayer
     private lateinit var handler : Handler
     private lateinit var runnable: Runnable
-
 
     //Database
     private var mTrackPostReference: DatabaseReference? = FirebaseDatabase.getInstance().getReference("posts/trackposts")
@@ -83,32 +86,34 @@ class TrackFragment : Fragment() {
         val view: View = inflater!!.inflate(R.layout.fragment_track, container, false)
 
 
-        //Track player Assignment
+            //Fragment Components
+        trackTitle = view.findViewById(R.id.trackTitle)
+        trackGender = view.findViewById(R.id.trackGender)
+        trackDescription = view.findViewById(R.id.trackDescription)
+
+            //Track player Assignment
         playerDuration = view.findViewById(R.id.player_duration)
         playerPosition = view.findViewById(R.id.player_position)
         seekBar = view.findViewById(R.id.seekBar)
         btPause = view.findViewById(R.id.btn_pause)
         btPlay = view.findViewById(R.id.btn_play)
 
+
+            //Media Player
         mediaPlayer = MediaPlayer()
 
+            //Play/Pause
         btPlay.setOnClickListener { v: View? ->
             btPlay.visibility = View.GONE
             btPause.visibility = View.VISIBLE
             mediaPlayer.start()
             seekBar.max = mediaPlayer.duration
-            //handler.postDelayed(runnable,0)
         }
         btPause.setOnClickListener { v: View ->
             btPause.visibility = View.GONE
             btPlay.visibility = View.VISIBLE
             mediaPlayer.pause()
-            //handler.removeCallbacks(runnable)
         }
-
-        database = FirebaseDatabase.getInstance()
-        reference = database.getReference("posts")
-
 
         upTrack = view.findViewById(R.id.uploadTrack)
 
@@ -149,10 +154,7 @@ class TrackFragment : Fragment() {
             return false
         }
 
-        /*
-        if(signedInUser == null){
-            Toast.makeText(context,"No signed in user", Toast.LENGTH_SHORT).show()
-        }*/
+
         return true
     }
 
@@ -235,11 +237,23 @@ class TrackFragment : Fragment() {
                 var downloadurl: Uri? = task.result
                 trackUrl = downloadurl.toString()
 
-                var id = reference!!.push().key
+                val ref = FirebaseDatabase.getInstance().getReference("posts")
+                var id = ref.push().key
 
-                var trackPost = TrackPost(FirebaseAuth.getInstance().currentUser.uid, trackTitle.text.toString(), trackGender.text.toString(), trackDescription.text.toString(), trackUrl)
+                val userRef = FirebaseDatabase.getInstance().getReference("users")
 
-                reference.child(id!!).setValue(trackPost)
+                var trackPost = TrackPost(FirebaseAuth.getInstance().currentUser.uid,
+                    userRef.child(FirebaseAuth.getInstance().currentUser.uid).child("username").get().toString(),
+                    trackTitle.text.toString(),
+                    trackGender.text.toString(),
+                    trackDescription.text.toString(),
+                    trackUrl,"track",
+                    "${System.currentTimeMillis()}"
+                )
+
+                if (id != null) {
+                    ref.child("track").child(id).setValue(trackPost)
+                }
 
                 //Back to Home Fragment
                 startActivity(Intent(activity, MainActivity::class.java))
