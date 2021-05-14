@@ -29,14 +29,14 @@ class PostAdapter(val context:Context, val posts: List<Post>) :
     override fun getItemCount(): Int = posts.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(posts[position])
+        //holder.bind(posts[position])
     }
 
     inner class ViewHolder (itemView: View): RecyclerView.ViewHolder(itemView){
-        fun bind (post:Post){
+        /*fun bind (post:Post){
             itemView.tvUserName.text = post.user?.user
             itemView.tvDescription.text = post.description
             itemView.tvRelativeTime.text = DateUtils.getRelativeTimeSpanString(post.creationTimeMs)
-        }
+        }*/
     }
 }

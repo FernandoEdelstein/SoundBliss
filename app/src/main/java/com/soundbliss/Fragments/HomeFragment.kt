@@ -25,8 +25,6 @@ class HomeFragment : Fragment() {
     ): View? {
         var view : View = inflater.inflate(R.layout.fragment_home, container, false)
 
-        firebasedb = FirebaseDatabase.getInstance()
-        reference = firebasedb.getReference()
 
 
         return view

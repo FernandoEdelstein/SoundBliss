@@ -32,6 +32,7 @@ import com.soundbliss.Model.User
 import com.soundbliss.PostActivity
 import com.soundbliss.R
 import kotlinx.android.synthetic.main.activity_post.*
+import kotlinx.android.synthetic.main.fragment_request.*
 import kotlinx.android.synthetic.main.fragment_track.*
 import kotlinx.android.synthetic.main.fragment_track.trackPlayer
 import kotlinx.android.synthetic.main.fragment_track.view.*
@@ -125,7 +126,6 @@ class TrackFragment : Fragment() {
     }
 
 
-
 @SuppressLint("DefaultLocale")
     private fun convertFormat(duration:Long):String{
         return String.format("%02d:0%2d",
@@ -140,23 +140,6 @@ class TrackFragment : Fragment() {
         startActivityForResult(audioPickerIntent, PICK_AUDIO_CODE)
     }
 
-    private fun checkParam(): Boolean {
-        if(trackUri == null){
-            Toast.makeText(context, "No Track Selected", Toast.LENGTH_SHORT).show()
-            return false
-        }
-        if(trackGender.text == null){
-            Toast.makeText(context, "Please Select Gender", Toast.LENGTH_SHORT).show()
-            return false
-        }
-        if(trackTitle.text == null){
-            Toast.makeText(context, "Please Set title", Toast.LENGTH_SHORT).show()
-            return false
-        }
-
-
-        return true
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -217,13 +200,20 @@ class TrackFragment : Fragment() {
             }else{
                 Toast.makeText(context,"Audio Pick Cancelled", Toast.LENGTH_SHORT).show()
             }
-
         }
-
     }
 
     fun uploadTrack(){
-        if(checkParam()) {
+        if(trackUri == null){
+            Toast.makeText(context, "No Track Selected", Toast.LENGTH_SHORT).show()
+            return
+        }else if(trackGender.text == null || trackGender.text.equals("")){
+            Toast.makeText(context, "Please Select Gender", Toast.LENGTH_SHORT).show()
+            return
+        }else if(trackTitle.text == null || trackTitle.text.equals("")){
+            Toast.makeText(context, "Please Set title", Toast.LENGTH_SHORT).show()
+            return
+        }else{
             var filePath = FirebaseStorage.getInstance().getReference("Posts/Tracks")
                 .child("${System.currentTimeMillis()}" + "." + getFileExtension(trackUri))
 
@@ -237,10 +227,10 @@ class TrackFragment : Fragment() {
                 var downloadurl: Uri? = task.result
                 trackUrl = downloadurl.toString()
 
-                val ref = FirebaseDatabase.getInstance().getReference("posts")
-                var id = ref.push().key
+                val ref = FirebaseDatabase.getInstance().reference.child("posts")
+                var id = ref.push().key.toString()
 
-                val userRef = FirebaseDatabase.getInstance().getReference("users")
+                val userRef = FirebaseDatabase.getInstance().reference.child("users")
 
                 var trackPost = TrackPost(FirebaseAuth.getInstance().currentUser.uid,
                     userRef.child(FirebaseAuth.getInstance().currentUser.uid).child("username").get().toString(),
@@ -248,19 +238,17 @@ class TrackFragment : Fragment() {
                     trackGender.text.toString(),
                     trackDescription.text.toString(),
                     trackUrl,"track",
-                    "${System.currentTimeMillis()}"
-                )
+                    "${System.currentTimeMillis()}")
 
-                if (id != null) {
-                    ref.child("track").child(id).setValue(trackPost)
-                }
+                ref.child(id).setValue(trackPost)
 
-                //Back to Home Fragment
                 startActivity(Intent(activity, MainActivity::class.java))
-                activity?.finish()
+                activity!!.finish()
+
             }.addOnFailureListener { task ->
                 Toast.makeText(activity, "Failure", Toast.LENGTH_SHORT).show()
             }
+
         }
 
     }

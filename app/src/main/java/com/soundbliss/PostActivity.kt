@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.soundbliss.Adapters.PostAdapter
@@ -59,17 +60,16 @@ class PostActivity : AppCompatActivity() {
 
         postButton = findViewById(R.id.post)
 
-        postButton.setOnClickListener{
-            v: View -> if(photoFrag.isVisible && photoFrag != null){
+        postButton.setOnClickListener{ v: View ->
+            if(photoFrag.isVisible){
                 photoFrag.uploadImage()
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
-            }else if(trackFrag.isVisible && trackFrag != null){
+            }else if(trackFrag.isVisible){
                 trackFrag.uploadTrack()
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
-
-            }else if(requestFrag.isVisible && requestFrag != null){
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
+            }else if(requestFrag.isVisible){
                 requestFrag.uploadRequest()
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
