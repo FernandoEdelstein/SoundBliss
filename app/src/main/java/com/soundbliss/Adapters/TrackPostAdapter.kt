@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.item_post_track.view.*
 import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
-class TrackPostAdapter (val context:Context, val posts: List<TrackPost>) :
+class TrackPostAdapter (val context:Context, val posts: MutableList<Any>) :
     RecyclerView.Adapter<TrackPostAdapter.ViewHolder>(){
 
 
@@ -35,7 +35,7 @@ class TrackPostAdapter (val context:Context, val posts: List<TrackPost>) :
     override fun getItemCount() = posts.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindTrack(posts[position])
+        holder.bindTrack(posts[position] as TrackPost)
     }
 
     inner class ViewHolder (itemView: View): RecyclerView.ViewHolder(itemView){

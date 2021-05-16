@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="@color/blue_800">
+
+
+<LinearLayout
+
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/blue_700"
+    android:padding="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,14 +40,16 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_bold"
                 android:layout_weight="1"
-                android:text="username" />
+                android:text="username"
+                android:textColor="@color/blue_100"/>
 
             <TextView
                 android:id="@+id/postPhotoRelativeTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="minutes ago" />
+                android:text="minutes ago"
+                android:textColor="@color/white_100"/>
         </LinearLayout>
 
 
@@ -58,8 +71,11 @@
             android:id="@+id/postPhotoDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Description" />
+            android:text="Description"
+            android:textColor="@color/white_100"/>
     </LinearLayout>
 
 
 </LinearLayout>
+
+</androidx.cardview.widget.CardView>

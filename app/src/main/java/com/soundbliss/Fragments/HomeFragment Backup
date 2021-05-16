@@ -32,7 +32,7 @@ class HomeFragment : Fragment() {
     private lateinit var firestoreDb: FirebaseFirestore
     private lateinit var posts: MutableList<PostSuperClass>
     private lateinit var imagePosts : MutableList<Post>
-    private var trackPosts : MutableList<Any>? = null
+    private lateinit var trackPosts : MutableList<TrackPost>
     private lateinit var trackPostAdapter: TrackPostAdapter
 
     private lateinit var recyclerView: RecyclerView
@@ -49,7 +49,7 @@ class HomeFragment : Fragment() {
 
         trackPosts = mutableListOf()
 
-        trackPostAdapter = TrackPostAdapter(context!!, trackPosts!!)
+        trackPostAdapter = TrackPostAdapter(context!!,trackPosts)
 
         recyclerView.adapter = trackPostAdapter
 
@@ -61,14 +61,14 @@ class HomeFragment : Fragment() {
             .limit(10).orderBy("creation_time_ms", Query.Direction.DESCENDING)
         postReference.addSnapshotListener{snapshot,exception ->
             if(exception != null || snapshot == null){
-                Log.e(TAG,"Exception when querying track posts" , exception)
+                Log.e(TAG,"Exception when querying image posts" , exception)
                 return@addSnapshotListener
             }
             val trackPostList = snapshot.toObjects(TrackPost::class.java)
-            trackPosts!!.clear()
-            trackPosts!!.addAll(trackPostList)
-
+            trackPosts.clear()
+            trackPosts.addAll(trackPostList)
             trackPostAdapter.notifyDataSetChanged()
+
 
 
             for(post in trackPostList){
