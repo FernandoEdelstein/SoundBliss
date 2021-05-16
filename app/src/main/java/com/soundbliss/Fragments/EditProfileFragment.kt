@@ -92,21 +92,21 @@ class EditProfileFragment : Fragment() {
         val description = mDescription!!.text.toString()
 
         //case1: if the user made a change to their username
-        if (!auth.currentUser.equals(username) ) {
+        if (!auth.currentUser!!.equals(username) ) {
             checkIfUsernameExists(username)
         }
         //case2: if the user made a change to their email
-        if (!auth.currentUser.email.equals(email)) {
+        if (!auth.currentUser!!.email.equals(email)) {
 
             // step1) Reauthenticate
             Toast.makeText(activity, R.string.LogInFailed, Toast.LENGTH_LONG)
             if (email.isNotEmpty()) {
-                auth.currentUser.verifyBeforeUpdateEmail(email)
-                auth.currentUser.updateEmail(email)
+                auth.currentUser!!.verifyBeforeUpdateEmail(email)
+                auth.currentUser!!.updateEmail(email)
             }
         }
         if(password.isNotEmpty())
-            auth.currentUser.updatePassword(password)
+            auth.currentUser!!.updatePassword(password)
 
         if(description.isNotEmpty())
             databaseReference?.child("rvmF9RWAXzbjgg5FHEkaX9oHLDt1")?.child(description)
@@ -135,13 +135,13 @@ class EditProfileFragment : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (!dataSnapshot.exists()) {
                     //add the username
-                    auth.updateCurrentUser(user)
+                    auth.updateCurrentUser(user!!)
                     Toast.makeText(activity, "saved username.", Toast.LENGTH_SHORT).show()
                 }
                 for (singleSnapshot in dataSnapshot.children) {
                     if (singleSnapshot.exists()) {
                         Log.d(
-                            TAG, "checkIfUsernameExists: FOUND A MATCH: " + auth.currentUser.displayName
+                            TAG, "checkIfUsernameExists: FOUND A MATCH: " + auth.currentUser!!.displayName
                         )
                         Toast.makeText(
                             activity, //return the activity where this fragment is associated with (MainActivity)
@@ -165,7 +165,7 @@ class EditProfileFragment : Fragment() {
         database = FirebaseDatabase.getInstance()
         databaseReference = Firebase.database("https://soundbliss-8ba73-default-rtdb.europe-west1.firebasedatabase.app").reference;
         databaseReference?.child("rvmF9RWAXzbjgg5FHEkaX9oHLDt1")
-        userId = auth.currentUser.uid
+        userId = auth.currentUser!!.uid
          mAuthListener = AuthStateListener { firebaseAuth ->
 
             val user = firebaseAuth.currentUser
@@ -192,7 +192,7 @@ class EditProfileFragment : Fragment() {
      * */
     override fun onStart() {
         super.onStart()
-        auth.addAuthStateListener(mAuthListener)
+        auth.addAuthStateListener(mAuthListener!!)
     }
 
     /**
@@ -202,7 +202,7 @@ class EditProfileFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         if (mAuthListener != null) {
-            auth.removeAuthStateListener(mAuthListener)
+            auth.removeAuthStateListener(mAuthListener!!)
         }
     }
 

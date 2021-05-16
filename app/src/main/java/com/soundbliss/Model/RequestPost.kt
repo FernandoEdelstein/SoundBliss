@@ -1,6 +1,12 @@
 package com.soundbliss.Model
 
-import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.firestore.GeoPoint
 
-class RequestPost (userid:String, username:String, title:String, gender:String, description:String, latLng: LatLng, type:String, creation_time_ms:String) {
-}
+class RequestPost (creation_time_ms:String,
+                   description:String,
+                   gender:String,
+                   location: GeoPoint,
+                   title:String,
+                   type:String,
+                   userid:String,
+                   username:String) : PostSuperClass() { }

@@ -39,7 +39,7 @@ class UserAdapter(mContext: Context?, mUsers: List<User>, isFragment: Boolean) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        fireBaseUser = Firebase.auth.currentUser
+        //fireBaseUser = Firebase.auth.currentUser
 
         var user: User = mUser.get(position)
         holder.btnFollow.setText("Follow")

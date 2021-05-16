@@ -120,4 +120,12 @@
         android:textColorHint="@color/white_300"
         android:textColor="@color/white_100"/>
 
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/Post"
+        android:id="@+id/postTest"
+        android:textColor="@color/white_100" />
+
 </LinearLayout>

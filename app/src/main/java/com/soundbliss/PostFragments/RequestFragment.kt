@@ -28,10 +28,10 @@ import kotlinx.android.synthetic.main.fragment_track.*
 
 
 class RequestFragment : Fragment(), OnMapReadyCallback{
-
+    private lateinit var searchView:SearchView
     private lateinit var map: GoogleMap
-    private lateinit var searchView : SearchView
     private lateinit var mapFragment :SupportMapFragment
+
 
     //Fragment Components
     private lateinit var requestTitle: EditText
@@ -45,59 +45,11 @@ class RequestFragment : Fragment(), OnMapReadyCallback{
     ): View? {
          var view = inflater.inflate(R.layout.fragment_request, container, false)
 
-         //Initialization
-         requestTitle = view.findViewById(R.id.requestTitle)
-         requestGender = view.findViewById(R.id.requestGender)
-         requestDescription = view.findViewById(R.id.requestDescription)
 
-         searchView = view.findViewById(R.id.location)
-
-
-         mapFragment = childFragmentManager.findFragmentById((R.id.map)) as SupportMapFragment
-         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-             override fun onQueryTextSubmit(query: String?): Boolean {
-                 var location = searchView.query.toString()
-                 var addressList : List<Address>? = null
-
-                 if(location != null || !location.equals("")){
-                     var geocoder : Geocoder = Geocoder(context)
-                     addressList = geocoder.getFromLocationName(location,1)
-                     var address:Address = addressList.get(0)
-                     latlng = LatLng(address.latitude, address.longitude)
-                     map.addMarker(MarkerOptions().position(latlng).title(location))
-                 }
-
-                 return false
-             }
-
-             override fun onQueryTextChange(newText: String?): Boolean {
-                 TODO("Not yet implemented")
-             }
-         })
-        mapFragment.getMapAsync(this)
         return view
     }
 
     fun uploadRequest(){
-        val ref = FirebaseDatabase.getInstance().getReference("posts")
-        var id = ref.push().key
-
-        val userRef = FirebaseDatabase.getInstance().getReference("users")
-
-        var requestPost = RequestPost(
-            FirebaseAuth.getInstance().currentUser.uid,
-            userRef.child(FirebaseAuth.getInstance().currentUser.uid).child("username").get().toString(),
-            requestTitle.text.toString(),
-            requestGender.text.toString(),
-            requestDescription.text.toString(),
-            latlng,
-            "request",
-            "${System.currentTimeMillis()}"
-        )
-
-        if (id != null) {
-            ref.child("request").child(id).setValue(requestPost)
-        }
 
         //Back to Home Fragment
         startActivity(Intent(activity, MainActivity::class.java))

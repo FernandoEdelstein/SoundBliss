@@ -1,16 +1,23 @@
 package com.soundbliss
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.webkit.MimeTypeMap
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 import com.soundbliss.Adapters.PostAdapter
+import com.soundbliss.Model.TrackPost
 import com.soundbliss.PostFragments.PhotoVideoFragment
 import com.soundbliss.PostFragments.RequestFragment
 import com.soundbliss.PostFragments.TrackFragment
@@ -27,8 +34,6 @@ class PostActivity : AppCompatActivity() {
     private val StoragePermissionCode = 1
 
     private lateinit var closeButton : ImageView
-    private lateinit var postButton : TextView
-    private lateinit var uploadTrackButton : Button
     private lateinit var fragmentManager: FragmentManager
     private lateinit var adapter: PostAdapter
 
@@ -58,30 +63,14 @@ class PostActivity : AppCompatActivity() {
             finish()
         }
 
-        postButton = findViewById(R.id.post)
-
-        postButton.setOnClickListener{ v: View ->
-            if(photoFrag.isVisible){
-                photoFrag.uploadImage()
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
-            }else if(trackFrag.isVisible){
-                trackFrag.uploadTrack()
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
-            }else if(requestFrag.isVisible){
-                requestFrag.uploadRequest()
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
-            }
-        }
-
     }
 
     private fun makeCurrentFragment(fragment:Fragment) = supportFragmentManager.beginTransaction().apply{
         replace (R.id.fragment_container,fragment)
         commit()
     }
+
+
 
 
 }

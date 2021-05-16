@@ -29,7 +29,7 @@
             android:layout_height="200dp"
             android:layout_gravity="center"
             android:scaleType="centerInside"
-            android:src="@mipmap/ic_launcher"
+            android:src="@drawable/ic_add"
             android:id="@+id/image_added"/>
         <com.hendraanggrian.appcompat.widget.SocialAutoCompleteTextView
             android:layout_width="match_parent"
@@ -42,6 +42,12 @@
             app:hashtagColor="@color/blue_100"
             android:textColorHint="@color/white_300"
             android:textColor="@color/white_100"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Post"
+            android:id="@+id/photoPostSubmit"
+            android:textColor="@color/white_100" />
 
     </LinearLayout>
 

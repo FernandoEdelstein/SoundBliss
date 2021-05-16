@@ -18,7 +18,6 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.soundbliss.Login.SignUp
 import com.soundbliss.R
-import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.activity_main.*
 import org.w3c.dom.Text
@@ -56,7 +55,7 @@ class ProfileFragment : Fragment() {
 //      descriptionProfile = view.findViewById(R.id.descriptionProfile)
 
 
-        val user = auth.currentUser.uid
+        val user = auth.currentUser!!.uid
         val userReference = databaseReference?.child(user)
 
         databaseReference.addValueEventListener(object : ValueEventListener {

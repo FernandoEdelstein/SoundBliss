@@ -53,7 +53,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_profile -> makeCurrentFragment(profileFrag)
                 R.id.nav_like -> makeCurrentFragment(notificationFrag)
                 R.id.nav_add -> {
-                    null
                     startActivity(Intent(this, PostActivity::class.java))
 
                 }
