@@ -10,17 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.soundbliss.Model.AllPost
-import com.soundbliss.Model.Post
-import com.soundbliss.Model.PostSuperClass
-import com.soundbliss.Model.TrackPost
 import com.soundbliss.R
 import kotlinx.android.synthetic.main.item_post_image.view.*
 import kotlinx.android.synthetic.main.item_post_track.view.*
-import org.w3c.dom.Text
 import java.lang.Exception
 import java.util.concurrent.TimeUnit
 

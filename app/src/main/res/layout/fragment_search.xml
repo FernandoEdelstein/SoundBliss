@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.SearchFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -15,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/Toolbar"
-            android:background="?android:attr/windowBackground">
+            android:background="@color/blue_700">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -28,24 +29,28 @@
                 android:id="@+id/search_bar"
                 android:background="@android:color/transparent"
                 android:hint="Search"
+                android:textColorHint="@color/white_100"
+                android:textColor="@color/white_100"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="20dp"/>
 
         </androidx.appcompat.widget.Toolbar>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/search_navigation"
+            app:itemIconTint="@color/selector"
+            app:itemTextColor="@color/selector"
+            android:background="@color/blue_700"
+            app:menu="@menu/search_menu"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/recyclerViewUsers" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/recyclerViewTags"
-            android:layout_marginTop="5dp"/>
 
-
-        
     </com.google.android.material.appbar.AppBarLayout>
 
 

@@ -58,6 +58,7 @@
             android:id="@+id/bottom_navigation"
             app:itemIconTint="@color/selector"
             android:background="@color/blue_700"
+            app:itemTextColor="@color/selector"
             app:menu="@menu/post_menu"/>
 
     </com.google.android.material.appbar.AppBarLayout>

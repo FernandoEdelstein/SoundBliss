@@ -1,33 +1,16 @@
 package com.soundbliss
 
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.webkit.MimeTypeMap
-import android.widget.Button
 import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.storage.FirebaseStorage
 import com.soundbliss.Adapters.PostAdapter
-import com.soundbliss.Model.TrackPost
 import com.soundbliss.PostFragments.PhotoVideoFragment
 import com.soundbliss.PostFragments.RequestFragment
 import com.soundbliss.PostFragments.TrackFragment
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.bottom_navigation
-import kotlinx.android.synthetic.main.activity_post.*
-import kotlinx.android.synthetic.main.fragment_photovideo.*
-import kotlinx.android.synthetic.main.fragment_track.*
-import org.w3c.dom.Text
-
 
 class PostActivity : AppCompatActivity() {
 

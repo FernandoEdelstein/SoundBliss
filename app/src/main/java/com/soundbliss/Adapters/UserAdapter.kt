@@ -28,7 +28,7 @@ class UserAdapter(mContext: Context?, mUsers: List<User>, isFragment: Boolean) :
         var profileImage: CircleImageView = itemView.findViewById(R.id.imageProfile)
         var username : TextView = itemView.findViewById(R.id.username_item)
         var fullName : TextView = itemView.findViewById(R.id.fullname)
-        var btnFollow : Button = itemView.findViewById(R.id.btn_follow)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -42,17 +42,13 @@ class UserAdapter(mContext: Context?, mUsers: List<User>, isFragment: Boolean) :
         //fireBaseUser = Firebase.auth.currentUser
 
         var user: User = mUser.get(position)
-        holder.btnFollow.setText("Follow")
+
         holder.username.setText(user.user)
         holder.fullName.setText(user.name)
 
         Picasso.get().load(user.imageurl).placeholder(R.mipmap.ic_launcher).into(holder.profileImage)
 
-        isFollowed(user.uid, holder.btnFollow)
 
-        if(user.uid.equals(fireBaseUser.uid)){
-            holder.btnFollow.setText("Following")
-        }
     }
 
 
@@ -61,23 +57,5 @@ class UserAdapter(mContext: Context?, mUsers: List<User>, isFragment: Boolean) :
         TODO("Not yet implemented")
     }
 
-    fun isFollowed(id: String, btnFollow: Button) {
-        var reference: DatabaseReference =
-            FirebaseDatabase.getInstance().getReference().child("Follow")
-                .child(fireBaseUser.uid).child("Following")
-        reference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.child(id).exists())
-                    btnFollow.setText("Following")
-                else
-                    btnFollow.setText("Follow")
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-
-            }
-        })
-
-    }
 
 }

@@ -23,12 +23,7 @@
 
     </RelativeLayout>
 
-    <FrameLayout
-        android:id="@+id/fragmentEdit_profile"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent">
-        <!--you can put your existing views of your current xml here, so yes your entire xml is now inside this FrameLayout -->
-    </FrameLayout>
+
 
 
 </RelativeLayout>

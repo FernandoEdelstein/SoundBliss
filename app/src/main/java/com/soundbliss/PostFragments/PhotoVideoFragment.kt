@@ -32,8 +32,6 @@ import com.google.firebase.storage.StorageTask
 import com.hendraanggrian.appcompat.widget.SocialAutoCompleteTextView
 import com.soundbliss.MainActivity
 import com.soundbliss.Model.AllPost
-import com.soundbliss.Model.Post
-import com.soundbliss.PostActivity
 import com.soundbliss.R
 import kotlinx.android.synthetic.main.fragment_photovideo.*
 

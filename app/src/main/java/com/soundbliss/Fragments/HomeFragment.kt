@@ -2,26 +2,17 @@ package com.soundbliss.Fragments
 
 import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.renderscript.Sampler
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.soundbliss.Adapters.PostAdapter
-import com.soundbliss.Adapters.TrackPostAdapter
 import com.soundbliss.Model.AllPost
-import com.soundbliss.Model.Post
-import com.soundbliss.Model.PostSuperClass
-import com.soundbliss.Model.TrackPost
 import com.soundbliss.R
 import kotlinx.android.synthetic.main.fragment_home.*
 import java.util.*
@@ -38,13 +29,15 @@ class HomeFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         var view : View = inflater.inflate(R.layout.fragment_home, container, false)
 
-        recyclerView = view.findViewById(R.id.rvPosts)
+
+        recyclerView = view!!.findViewById(R.id.rvPosts)
 
         posts = mutableListOf()
 

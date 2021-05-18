@@ -20,8 +20,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.soundbliss.MainActivity
-import com.soundbliss.Model.RequestPost
-import com.soundbliss.Model.TrackPost
+
 import com.soundbliss.R
 import kotlinx.android.synthetic.main.fragment_request.*
 import kotlinx.android.synthetic.main.fragment_track.*

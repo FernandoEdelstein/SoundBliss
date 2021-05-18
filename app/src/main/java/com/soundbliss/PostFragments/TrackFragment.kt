@@ -2,9 +2,6 @@ package com.soundbliss.PostFragments
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.ContentValues.TAG
-import android.content.pm.PackageManager
-import android.media.Image
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
@@ -16,38 +13,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
 import android.widget.*
-import android.widget.SeekBar.OnSeekBarChangeListener
-import androidx.core.content.ContextCompat
-import androidx.core.os.postDelayed
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.Query
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.soundbliss.MainActivity
 import com.soundbliss.Model.AllPost
-import com.soundbliss.Model.Post
-import com.soundbliss.Model.TrackPost
-import com.soundbliss.Model.User
-import com.soundbliss.PostActivity
 import com.soundbliss.R
-import kotlinx.android.synthetic.main.activity_post.*
-import kotlinx.android.synthetic.main.fragment_request.*
 import kotlinx.android.synthetic.main.fragment_track.*
 import kotlinx.android.synthetic.main.fragment_track.trackPlayer
-import kotlinx.android.synthetic.main.fragment_track.view.*
-import kotlinx.android.synthetic.main.item_post_track.*
-import org.w3c.dom.Text
 import java.io.File
 import java.lang.Exception
-import java.sql.Time
-import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.collections.HashMap
-import kotlin.math.sign
 import android.content.Intent as Intent
 
 private const val TAG = "TrackFragment"
@@ -91,14 +67,6 @@ class TrackFragment : Fragment() {
         storageReference = FirebaseStorage.getInstance().reference
         firestoreDb = FirebaseFirestore.getInstance()
 
-        /*
-        firestoreDb.collection("users")
-            .document(FirebaseAuth.getInstance().currentUser?.uid as String)
-            .get()
-            .addOnSuccessListener {userSnapshot ->
-                signedInUser
-            }
-*/
 
 
             //Track player Assignment
@@ -254,8 +222,8 @@ class TrackFragment : Fragment() {
                     downloadUrlTask.result.toString(),
                     trackTitle.text.toString(),
                     "id",
-                    "Ferna3138"
-                )
+                    "Ferna3138")
+
                 firestoreDb.collection("posts/").add(trackPost)
             }.addOnCompleteListener {postCreationTask ->
                 testPost.isEnabled = true

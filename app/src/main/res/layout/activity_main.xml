@@ -6,31 +6,13 @@
     android:layout_height="match_parent"
     android:background="@color/blue_800"
     tools:context=".MainActivity">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:id="@+id/titleLayout"
-        android:orientation="horizontal"
-        android:background="@color/blue_700">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="SoundBliss"
-            android:textColor="@color/white_100"
-            android:layout_gravity="center"
-            android:fontFamily="@font/montserrat_bold"
-            android:textSize="24dp"
-            android:layout_marginLeft="16dp"/>
-
-    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottom_bar"
-        android:layout_below="@+id/titleLayout" />
+        android:layout_above="@id/bottom_bar"/>
 
 
     <com.google.android.material.appbar.AppBarLayout
