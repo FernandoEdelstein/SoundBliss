@@ -16,29 +16,11 @@ class MainActivity : AppCompatActivity() {
     private val bottomNavigationView : BottomNavigationView? = null
     private var selectorFragment : Fragment? = null
 
+    private var homeFragment : Fragment? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
-/*
-        bottomNavigationView = findViewById(R.id.bottom_navigation)
-        bottomNavigationView.setOnNavigationItemSelectedListener{
-                    when(it.itemId){
-                        R.id.nav_home -> selectorFragment = HomeFragment()
-                        R.id.nav_search -> selectorFragment = SearchFragment()
-                        R.id.nav_add -> selectorFragment = null
-                        R.id.nav_like -> selectorFragment = NotificationFragment()
-                        R.id.nav_profile -> selectorFragment = ProfileFragment()
-                    }
-
-                    if(selectorFragment != null)
-                        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, selectorFragment!!).commit()
-                    true
-            }
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, HomeFragment()).commit()*/
-
-
 
         val homeFrag = HomeFragment()
         val searchFrag = SearchFragment()

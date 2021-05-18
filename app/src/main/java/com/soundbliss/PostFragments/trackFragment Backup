@@ -22,6 +22,8 @@ import androidx.core.os.postDelayed
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.Query
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -52,16 +54,13 @@ private const val PICK_AUDIO_CODE = 1234
 
 class TrackFragment : Fragment() {
 
-
-    internal lateinit var trackUri : Uri
+    private val TAG = "TrackFragment"
+    private var trackUri : Uri? = null
     internal lateinit var trackUrl : String
     private lateinit var postTxt : TextView
 
         //Fragment Components
-    internal lateinit var trackTitleEt : EditText
-    internal lateinit var trackGenderEt : EditText
-    internal lateinit var trackDescriptionEt : EditText
-    internal lateinit var upTrackBt : Button
+    private lateinit var upTrackBt : Button
 
         //Track Player
     private lateinit var playerPosition : TextView
@@ -75,9 +74,8 @@ class TrackFragment : Fragment() {
     private lateinit var runnable: Runnable
 
     //Database
-    private var mTrackPostReference: DatabaseReference? = FirebaseDatabase.getInstance().getReference("posts/trackposts")
-    private lateinit var database : FirebaseDatabase
-    private lateinit var reference: DatabaseReference
+    private lateinit var firestoreDb : FirebaseFirestore
+    private lateinit var storageReference: StorageReference
 
 
     private lateinit var testPost : Button
@@ -88,11 +86,19 @@ class TrackFragment : Fragment() {
     ): View? {
         val view: View = inflater!!.inflate(R.layout.fragment_track, container, false)
 
+        //Firestore / Storage
+        storageReference = FirebaseStorage.getInstance().reference
+        firestoreDb = FirebaseFirestore.getInstance()
 
-            //Fragment Components
-        trackTitleEt = view.findViewById(R.id.trackTitle)
-        trackGenderEt = view.findViewById(R.id.trackGender)
-        trackDescriptionEt = view.findViewById(R.id.trackDescription)
+        /*
+        firestoreDb.collection("users")
+            .document(FirebaseAuth.getInstance().currentUser?.uid as String)
+            .get()
+            .addOnSuccessListener {userSnapshot ->
+                signedInUser
+            }
+*/
+
 
             //Track player Assignment
         playerDuration = view.findViewById(R.id.player_duration)
@@ -123,6 +129,7 @@ class TrackFragment : Fragment() {
         upTrackBt.setOnClickListener { v: View? ->
             pickAudioFile()
         }
+
 
 
         testPost = view.findViewById(R.id.postTest)
@@ -157,7 +164,7 @@ class TrackFragment : Fragment() {
                 Log.i(TAG, "Audio $trackUri")
                 trackName.visibility = View.VISIBLE
 
-                var file : File = File(trackUri.path)
+                var file : File = File(trackUri?.path)
                 trackName.text = file.name
 
                 trackPlayer.visibility = View.VISIBLE
@@ -217,55 +224,54 @@ class TrackFragment : Fragment() {
             Toast.makeText(context, "No Track Selected", Toast.LENGTH_SHORT).show()
             return
         }
-        if(trackGenderEt.text == null || trackGenderEt.text.equals("")){
-            Toast.makeText(context, "Please Select Gender", Toast.LENGTH_SHORT).show()
-            return
-        }
-        if(trackTitleEt.text == null || trackTitleEt.text.equals("")){
+
+        if(trackTitle.text.isBlank()){
             Toast.makeText(context, "Please Set title", Toast.LENGTH_SHORT).show()
             return
         }
 
-        var filePath = FirebaseStorage.getInstance().getReference("Posts/Tracks")
-            .child("${System.currentTimeMillis()}" + "." + getFileExtension(trackUri))
-
-        var uploadTask = filePath.putFile(trackUri)
-        uploadTask.continueWithTask { task ->
-            if (!task.isSuccessful)
-                throw task.exception!!
-            return@continueWithTask filePath.downloadUrl
-        }.addOnCompleteListener { task ->
-
-            var downloadurl: Uri? = task.result
-            trackUrl = downloadurl.toString()
-
-            val ref = FirebaseDatabase.getInstance().getReference("/tracks")
-            var id = ref.push().key.toString()
-
-            //val userRef = FirebaseDatabase.getInstance().getReference("/username")
-
-            var trackPost = TrackPost(
-                FirebaseAuth.getInstance().currentUser.uid,
-                "123",
-                trackTitleEt.text.toString(),
-                trackGenderEt.text.toString(),
-                trackDescriptionEt.text.toString(),
-                trackUrl,"track",
-                "${System.currentTimeMillis()}"
-            )
-
-            ref.child(id).push().setValue(trackPost)
-
-            startActivity(Intent(activity, MainActivity::class.java))
-            activity!!.finish()
-
-        }.addOnFailureListener { task ->
-            Toast.makeText(context, "Failure", Toast.LENGTH_SHORT).show()
+        if(trackGender.text.isBlank()){
+            Toast.makeText(context, "Please Select Gender", Toast.LENGTH_SHORT).show()
+            return
         }
 
+
+        testPost.isEnabled = false
+
+        val uploadTrackUri = trackUri as Uri
+
+        val trackReference = storageReference.child("Posts/Track/${System.currentTimeMillis()}-track." + getFileExtension(trackUri!!))
+        trackReference.putFile(uploadTrackUri)
+            .continueWithTask {trackUploadTask ->
+                Log.i(TAG,"uploaded bytes : ${trackUploadTask.result?.bytesTransferred}")
+                trackReference.downloadUrl
+            }.continueWithTask { downloadUrlTask ->
+                val trackPost = TrackPost(
+                    System.currentTimeMillis(),
+                    trackDescription.text.toString(),
+                    trackGender.text.toString(),
+                    downloadUrlTask.result.toString(),
+                    trackTitle.text.toString(),
+                    "track",
+                    "id",
+                    "Ferna3138"
+                )
+                firestoreDb.collection("tracks/").add(trackPost)
+            }.addOnCompleteListener {postCreationTask ->
+                testPost.isEnabled = true
+                if(!postCreationTask.isSuccessful){
+                    Log.e(TAG, "Exception during FireStore Operations", postCreationTask.exception)
+                    Toast.makeText(context,"Failed to save post",Toast.LENGTH_SHORT).show()
+                }
+                Toast.makeText(context,"Success!" , Toast.LENGTH_SHORT)
+                val mainIntent = Intent(activity,MainActivity::class.java)
+                startActivity(mainIntent)
+                activity!!.finish()
+
+            }
     }
 
-    fun getFileExtension(uri: Uri) : String? {
+    private fun getFileExtension(uri: Uri) : String? {
         return MimeTypeMap.getSingleton().getExtensionFromMimeType(context!!.contentResolver?.getType(uri))
     }
 

@@ -28,6 +28,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.soundbliss.MainActivity
+import com.soundbliss.Model.AllPost
 import com.soundbliss.Model.Post
 import com.soundbliss.Model.TrackPost
 import com.soundbliss.Model.User
@@ -246,17 +247,16 @@ class TrackFragment : Fragment() {
                 Log.i(TAG,"uploaded bytes : ${trackUploadTask.result?.bytesTransferred}")
                 trackReference.downloadUrl
             }.continueWithTask { downloadUrlTask ->
-                val trackPost = TrackPost(
+                val trackPost = AllPost(
                     System.currentTimeMillis(),
                     trackDescription.text.toString(),
                     trackGender.text.toString(),
                     downloadUrlTask.result.toString(),
                     trackTitle.text.toString(),
-                    "track",
                     "id",
                     "Ferna3138"
                 )
-                firestoreDb.collection("tracks/").add(trackPost)
+                firestoreDb.collection("posts/").add(trackPost)
             }.addOnCompleteListener {postCreationTask ->
                 testPost.isEnabled = true
                 if(!postCreationTask.isSuccessful){

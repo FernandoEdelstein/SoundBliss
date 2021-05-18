@@ -31,6 +31,7 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.StorageTask
 import com.hendraanggrian.appcompat.widget.SocialAutoCompleteTextView
 import com.soundbliss.MainActivity
+import com.soundbliss.Model.AllPost
 import com.soundbliss.Model.Post
 import com.soundbliss.PostActivity
 import com.soundbliss.R
@@ -106,15 +107,14 @@ class PhotoVideoFragment : Fragment() {
                 Log.i(TAG, "Uploaded bytes: ${photoUploadTask.result?.bytesTransferred}")
                 photoReference.downloadUrl
             }.continueWithTask { downloadUrlTask ->
-                    val post = Post(
+                    val post = AllPost(
                         System.currentTimeMillis(),
                         description.text.toString(),
                         downloadUrlTask.result.toString(),
-                        "image",
                         "123",
                         "Ferna3138"
                     )
-                firestoreDb.collection("images/").add(post)
+                firestoreDb.collection("posts/").add(post)
             }.addOnCompleteListener { postCreationTask ->
                 photoPostSubmit.isEnabled = true
 

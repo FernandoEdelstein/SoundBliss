@@ -16,7 +16,9 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.soundbliss.Adapters.PostAdapter
 import com.soundbliss.Adapters.TrackPostAdapter
+import com.soundbliss.Model.AllPost
 import com.soundbliss.Model.Post
 import com.soundbliss.Model.PostSuperClass
 import com.soundbliss.Model.TrackPost
@@ -30,10 +32,9 @@ class HomeFragment : Fragment() {
 
 
     private lateinit var firestoreDb: FirebaseFirestore
-    private lateinit var posts: MutableList<PostSuperClass>
-    private lateinit var imagePosts : MutableList<Post>
-    private var trackPosts : MutableList<Any>? = null
-    private lateinit var trackPostAdapter: TrackPostAdapter
+    
+    private lateinit var posts : MutableList<AllPost>
+    private lateinit var postAdapter: PostAdapter
 
     private lateinit var recyclerView: RecyclerView
 
@@ -47,31 +48,28 @@ class HomeFragment : Fragment() {
 
         posts = mutableListOf()
 
-        trackPosts = mutableListOf()
+        postAdapter = PostAdapter(context!!, posts)
 
-        trackPostAdapter = TrackPostAdapter(context!!, trackPosts!!)
-
-        recyclerView.adapter = trackPostAdapter
+        recyclerView.adapter = postAdapter
 
         recyclerView.layoutManager = LinearLayoutManager(context)
 
 
         firestoreDb = FirebaseFirestore.getInstance()
-        val postReference = firestoreDb.collection("tracks")
-            .limit(10).orderBy("creation_time_ms", Query.Direction.DESCENDING)
+        val postReference = firestoreDb.collection("posts")
+            .limit(20).orderBy("creation_time_ms", Query.Direction.DESCENDING)
         postReference.addSnapshotListener{snapshot,exception ->
             if(exception != null || snapshot == null){
-                Log.e(TAG,"Exception when querying track posts" , exception)
+                Log.e(TAG,"Exception when querying posts" , exception)
                 return@addSnapshotListener
             }
-            val trackPostList = snapshot.toObjects(TrackPost::class.java)
-            trackPosts!!.clear()
-            trackPosts!!.addAll(trackPostList)
+            val postList = snapshot.toObjects(AllPost::class.java)
+            posts.clear()
+            posts.addAll(postList)
+            postAdapter.notifyDataSetChanged()
 
-            trackPostAdapter.notifyDataSetChanged()
 
-
-            for(post in trackPostList){
+            for(post in postList){
                 Log.i(TAG,"Post ${post}")
             }
 

@@ -13,6 +13,7 @@ import android.widget.SeekBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.soundbliss.Model.AllPost
 import com.soundbliss.Model.Post
 import com.soundbliss.Model.PostSuperClass
 import com.soundbliss.Model.TrackPost
@@ -24,17 +25,12 @@ import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
 
-class PostAdapter(context: Context, list: List<PostSuperClass>) :
+class PostAdapter(var context: Context, list: List<AllPost>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private val TAG = "RecyclerAdapter"
-    var list = list
-    var context = context
+    private var list = list
 
     private inner class ViewHolderOnePhoto(itemView:View):RecyclerView.ViewHolder(itemView){
-        var photoDescription = itemView.postPhotoDescription
-        var imageUrl = itemView.postPhotoImageView
-        var photoUsername = itemView.postPhotoUserName
-        var photoRelativeTime = itemView.postPhotoRelativeTime
 
     }
 
@@ -52,6 +48,7 @@ class PostAdapter(context: Context, list: List<PostSuperClass>) :
         var btPause = itemView.btn_pause
         var btPlay = itemView.btn_play
 
+
     }
 
     private inner class ViewHolderThreeRequest(itemView:View):RecyclerView.ViewHolder(itemView){
@@ -59,44 +56,47 @@ class PostAdapter(context: Context, list: List<PostSuperClass>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        var layoutInflater = LayoutInflater.from(parent.context)
-        var view : View
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val view : View
 
-        if(viewType == 0){
+        return if(viewType == 0){
             view = layoutInflater.inflate(R.layout.item_post_image, parent,false)
-            return ViewHolderOnePhoto(view)
+            ViewHolderOnePhoto(view)
         }else if(viewType == 1){
             view = layoutInflater.inflate(R.layout.item_post_track,parent, false)
-            return ViewHolderTwoTrack(view)
+            ViewHolderTwoTrack(view)
+        }else {
+            view = layoutInflater.inflate(R.layout.item_post_request, parent, false)
+            ViewHolderThreeRequest(view)
         }
-        view = layoutInflater.inflate(R.layout.item_post_request,parent,false)
-        return ViewHolderThreeRequest(view)
-
     }
 
     override fun getItemViewType(position: Int): Int {
-        if(list.get(position) is Post){
-            return 0
-        }else if(list.get(position) is TrackPost){
-            return 1
-        }else
-            return 2
+        return when (list[position].type) {
+            "image" -> {
+                0
+            }
+            "track" -> {
+                1
+            }
+            else -> 2
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if(list.get(position) is Post){
-            var post = list.get(position) as Post
-            var viewHolderOne = holder as ViewHolderOnePhoto
+        if(getItemViewType(position) == 0){
+            val post = list[position]
+            val viewHolderOne = holder as ViewHolderOnePhoto
 
-            viewHolderOne.photoDescription.text = post.description
-            viewHolderOne.photoUsername.text = post.username
-            viewHolderOne.photoRelativeTime.text = DateUtils.getRelativeTimeSpanString(post.creation_time_ms)
-            Glide.with(context).load(post.posturl).into(viewHolderOne.imageUrl)
+                viewHolderOne.itemView.postPhotoDescription.text = post.description
+                viewHolderOne.itemView.postPhotoUserName.text = post.username
+                viewHolderOne.itemView.postPhotoRelativeTime.text = DateUtils.getRelativeTimeSpanString(post.creation_time_ms)
+                Glide.with(context).load(post.posturl).into(viewHolderOne.itemView.postPhotoImageView)
 
-        }else if(list.get(position) is TrackPost){
-            var post = list.get(position) as TrackPost
+        }else if(getItemViewType(position) == 1){
+            val post = list.get(position)
 
-            var viewHolderTwo = holder as ViewHolderTwoTrack
+            val viewHolderTwo = holder as ViewHolderTwoTrack
 
             viewHolderTwo.postGender.text = post.gender
             viewHolderTwo.postTitle.text = post.title
@@ -122,11 +122,11 @@ class PostAdapter(context: Context, list: List<PostSuperClass>) :
 
             mediaPlayer = MediaPlayer.create(context, Uri.parse(post.posturl))
 
-            var duration = mediaPlayer.duration
-            var stDuration : String = convertFormat(duration.toLong())
+            val duration = mediaPlayer.duration
+            val stDuration : String = convertFormat(duration.toLong())
             viewHolderTwo.playerDuration.text = stDuration
 
-            var handler = Handler()
+            val handler = Handler()
 
             handler.postDelayed(object : Runnable{
                 override fun run() {
@@ -163,7 +163,7 @@ class PostAdapter(context: Context, list: List<PostSuperClass>) :
                 }
             })
 
-        }else{
+        }else if(getItemViewType(position) == 2){
             var viewHolderThreeRequest = holder as ViewHolderThreeRequest
         }
     }
