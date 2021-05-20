@@ -52,7 +52,6 @@ class UserAdapter(mContext: Context?, mUsers: List<User>, isFragment: Boolean) :
     }
 
 
-
     override fun getItemCount(): Int {
         TODO("Not yet implemented")
     }

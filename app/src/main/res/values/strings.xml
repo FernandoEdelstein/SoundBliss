@@ -50,6 +50,7 @@
     <string name="field_phone_number">phone_number</string>
 
     <!-- Google Maps -->
-    <string name="map_key" translatable="false">AIzaSyAznU0yEYTIDfEShtrV2GNwhEDQrDyVznQ</string>
+    <string name="map_key" translatable="false">AIzaSyCvdLhMZbFFpsEXCppxm_mD7Eqj4y4xin4</string>
+    <string name="Instrument">Instrument</string>
 
 </resources>
