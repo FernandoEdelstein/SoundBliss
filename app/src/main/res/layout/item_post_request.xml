@@ -85,9 +85,9 @@
             android:id="@+id/postRequestLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/blue_100"
+            android:textColor="@color/green"
             android:text="@string/Location"
-            android:textSize="12sp"
+            android:textSize="16sp"
             android:fontFamily="@font/montserrat_bold"
             android:layout_marginBottom="8dp"/>
 

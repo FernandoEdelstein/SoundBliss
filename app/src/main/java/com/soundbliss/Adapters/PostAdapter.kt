@@ -4,6 +4,7 @@ package com.soundbliss.Adapters
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.location.Geocoder
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
@@ -24,6 +25,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.stats.CodePackage.LOCATION
 import com.google.common.net.HttpHeaders.LOCATION
+import com.google.firebase.firestore.GeoPoint
 import com.mypopsy.maps.StaticMap
 import com.soundbliss.MapsActivity
 import com.soundbliss.Model.AllPost
@@ -40,9 +42,6 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val TAG = "RecyclerAdapter"
     private var list = list
-    private lateinit var supportMapFragment: SupportMapFragment
-
-    private lateinit var latLng: LatLng
 
 
     private inner class ViewHolderOnePhoto(itemView:View):RecyclerView.ViewHolder(itemView){
@@ -67,7 +66,7 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
     }
 
     private inner class ViewHolderThreeRequest(itemView:View):RecyclerView.ViewHolder(itemView){
-
+        var postLocation = itemView.postRequestLocation
 
     }
 
@@ -183,7 +182,7 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
                 }
             })
 
-        }else if(getItemViewType(position) == 2){
+        }else if(getItemViewType(position) == 2) {
             var viewHolderThreeRequest = holder as ViewHolderThreeRequest
 
             val post = list[position]
@@ -192,24 +191,20 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
             viewHolderThreeRequest.itemView.postRequestGender.text = post.gender
             viewHolderThreeRequest.itemView.postRequestDescription.text = post.description
             viewHolderThreeRequest.itemView.postRequestUserName.text = post.username
-            viewHolderThreeRequest.itemView.postRequestRelativeTime.text = DateUtils.getRelativeTimeSpanString(post.creation_time_ms)
+            viewHolderThreeRequest.itemView.postRequestRelativeTime.text =
+                DateUtils.getRelativeTimeSpanString(post.creation_time_ms)
 
-            latLng = LatLng(list[position].location!!.latitude,list[position].location!!.longitude)
 
             viewHolderThreeRequest.itemView.postRequestLocation.text = post.locationtext + " - Maps"
 
-            viewHolderThreeRequest.itemView.postRequestLocation.setOnClickListener {
-                Log.e("MAPACTIVITYSEND", latLng.toString())
-
-                val mapIntent = Intent(context,MapsActivity::class.java)
+            viewHolderThreeRequest.postLocation.setOnClickListener { v:View? ->
+                val mapIntent = Intent(context, MapsActivity::class.java)
                 var bundle = Bundle()
-                bundle.putParcelable("latlng",latLng)
-                mapIntent.putExtra("latlng",bundle)
+                bundle.putParcelable("latlng", LatLng(list[position].location!!.latitude, list[position].location!!.longitude))
+                mapIntent.putExtra("latlng", bundle)
                 context.startActivity(mapIntent)
             }
-
         }
-
     }
 
     override fun getItemCount(): Int = list.size

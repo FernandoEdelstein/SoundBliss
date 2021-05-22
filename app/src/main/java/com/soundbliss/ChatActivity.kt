@@ -70,12 +70,7 @@ class ChatActivity : AppCompatActivity() {
                 Log.i(ContentValues.TAG, "Message ${msg}")
             }
         }
-
-
-
-
     }
-
 
     private fun sendMessage() {
         val newMessage = TextMessage(
