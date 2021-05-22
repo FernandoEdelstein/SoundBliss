@@ -8,20 +8,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.SearchView
+import android.widget.*
 import androidx.fragment.app.FragmentManager
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 import com.soundbliss.MainActivity
+import com.soundbliss.Model.AllPost
 
 import com.soundbliss.R
 import kotlinx.android.synthetic.main.fragment_request.*
 import kotlinx.android.synthetic.main.fragment_track.*
+import kotlinx.android.synthetic.main.item_post_request.*
 import java.io.IOException
+import java.util.*
 
 
 class RequestFragment : Fragment(), OnMapReadyCallback {
@@ -34,12 +38,26 @@ class RequestFragment : Fragment(), OnMapReadyCallback {
     private lateinit var requestGender: EditText
     private lateinit var requestDescription: EditText
 
+    private lateinit var latLng : LatLng
+    private lateinit var firestoreDb: FirebaseFirestore
+
+    private lateinit var submitButton: Button
+    private lateinit var geocoder: Geocoder
+    private var addressList: MutableList<Address>? = null
+
+
      override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
          var view = inflater.inflate(R.layout.fragment_request, container, false)
+
+         firestoreDb = FirebaseFirestore.getInstance()
+
+         requestTitle = view.findViewById(R.id.requestTitle)
+         requestDescription = view.findViewById(R.id.requestDescription)
+         requestGender = view.findViewById(R.id.requestGender)
+         submitButton = view.findViewById(R.id.requestSubmit)
 
          search = view.findViewById(R.id.requestSearch)
 
@@ -50,23 +68,22 @@ class RequestFragment : Fragment(), OnMapReadyCallback {
          search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query:String) : Boolean{
                 var location : String = search.query.toString()
-                var addressList : List<Address>? = null
+                addressList = null
 
                 if(location != null || location != ""){
-                    var geocoder = Geocoder(context)
+                    geocoder = Geocoder(context)
                     try{
                         addressList = geocoder.getFromLocationName(location,1)
                     }catch (e:IOException){
                         e.printStackTrace()
                     }
                     var address = addressList?.get(0)
-                    var latLng = LatLng(address!!.latitude!!,address!!.longitude)
+                    latLng = LatLng(address!!.latitude!!,address!!.longitude)
 
                     mMap.clear()
                     mMap.addMarker(MarkerOptions().position(latLng).title(location))
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10F))
                 }
-
                 return false
             }
 
@@ -76,6 +93,12 @@ class RequestFragment : Fragment(), OnMapReadyCallback {
              }
          })
 
+
+
+         submitButton.setOnClickListener {
+             uploadRequest()
+         }
+
         return view
     }
 
@@ -84,18 +107,33 @@ class RequestFragment : Fragment(), OnMapReadyCallback {
 
         val milan = LatLng(45.4642,9.1900)
         mMap.addMarker(MarkerOptions().position(milan).title("Milan"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(milan))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(milan,10F))
     }
 
 
     fun uploadRequest(){
+        val geoLocation = GeoPoint(latLng.latitude,latLng.longitude)
+
+        val locationText = addressList!!.get(0).locality
+
+
+        val requestPost = AllPost(
+            System.currentTimeMillis(),
+            requestDescription.text.toString(),
+            requestGender.text.toString(),
+            geoLocation,
+            locationText,
+            requestTitle.text.toString(),
+            "uid",
+            "Ferna3138"
+        )
+        firestoreDb.collection("posts/").add(requestPost)
 
         //Back to Home Fragment
-        startActivity(Intent(activity, MainActivity::class.java))
+        Toast.makeText(context,"Success" , Toast.LENGTH_SHORT).show()
+        val profileIntent = Intent(activity,MainActivity::class.java)
+        startActivity(profileIntent)
         activity?.finish()
     }
-
-
-
 
 }

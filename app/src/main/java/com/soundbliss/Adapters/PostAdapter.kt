@@ -1,29 +1,49 @@
 package com.soundbliss.Adapters
 
+
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
+import android.os.Bundle
 import android.os.Handler
 import android.text.format.DateUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.gms.common.internal.Constants
+import com.google.android.gms.maps.*
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.stats.CodePackage.LOCATION
+import com.google.common.net.HttpHeaders.LOCATION
+import com.mypopsy.maps.StaticMap
+import com.soundbliss.MapsActivity
 import com.soundbliss.Model.AllPost
 import com.soundbliss.R
 import kotlinx.android.synthetic.main.item_post_image.view.*
+import kotlinx.android.synthetic.main.item_post_request.view.*
 import kotlinx.android.synthetic.main.item_post_track.view.*
 import java.lang.Exception
 import java.util.concurrent.TimeUnit
+import androidx.fragment.app.Fragment as fragment
 
 
 class PostAdapter(var context: Context, list: List<AllPost>) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val TAG = "RecyclerAdapter"
     private var list = list
+    private lateinit var supportMapFragment: SupportMapFragment
+
+    private lateinit var latLng: LatLng
+
 
     private inner class ViewHolderOnePhoto(itemView:View):RecyclerView.ViewHolder(itemView){
 
@@ -48,7 +68,10 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
 
     private inner class ViewHolderThreeRequest(itemView:View):RecyclerView.ViewHolder(itemView){
 
+
     }
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -78,7 +101,9 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    @SuppressLint("SetTextI18n")
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int){
+
         if(getItemViewType(position) == 0){
             val post = list[position]
             val viewHolderOne = holder as ViewHolderOnePhoto
@@ -160,7 +185,31 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
 
         }else if(getItemViewType(position) == 2){
             var viewHolderThreeRequest = holder as ViewHolderThreeRequest
+
+            val post = list[position]
+
+            viewHolderThreeRequest.itemView.postRequestTitle.text = post.title
+            viewHolderThreeRequest.itemView.postRequestGender.text = post.gender
+            viewHolderThreeRequest.itemView.postRequestDescription.text = post.description
+            viewHolderThreeRequest.itemView.postRequestUserName.text = post.username
+            viewHolderThreeRequest.itemView.postRequestRelativeTime.text = DateUtils.getRelativeTimeSpanString(post.creation_time_ms)
+
+            latLng = LatLng(list[position].location!!.latitude,list[position].location!!.longitude)
+
+            viewHolderThreeRequest.itemView.postRequestLocation.text = post.locationtext + " - Maps"
+
+            viewHolderThreeRequest.itemView.postRequestLocation.setOnClickListener {
+                Log.e("MAPACTIVITYSEND", latLng.toString())
+
+                val mapIntent = Intent(context,MapsActivity::class.java)
+                var bundle = Bundle()
+                bundle.putParcelable("latlng",latLng)
+                mapIntent.putExtra("latlng",bundle)
+                context.startActivity(mapIntent)
+            }
+
         }
+
     }
 
     override fun getItemCount(): Int = list.size
@@ -173,4 +222,5 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
                     TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)))
     }
 
+    
 }

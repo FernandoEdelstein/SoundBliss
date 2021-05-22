@@ -7,14 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import com.soundbliss.R
 
-class NotificationFragment : Fragment() {
+class ChatListFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_notification, container, false)
+        var view = inflater.inflate(R.layout.fragment_notification, container, false)
+
+
+        return view
     }
 
 }

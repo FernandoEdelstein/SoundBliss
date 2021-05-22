@@ -105,7 +105,6 @@ class ProfileFragment : Fragment() {
         val postReference = firestoreDb.collection("posts")
             .limit(20).orderBy("creation_time_ms", Query.Direction.DESCENDING)
 
-
                 //HARD CODED -> TO BE REPLACED WITH CURRENT USER
             postReference.whereEqualTo("username","Ferna3138")
 

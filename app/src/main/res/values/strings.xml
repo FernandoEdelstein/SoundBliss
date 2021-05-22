@@ -53,4 +53,6 @@
     <string name="map_key" translatable="false">AIzaSyCvdLhMZbFFpsEXCppxm_mD7Eqj4y4xin4</string>
     <string name="Instrument">Instrument</string>
 
+    <string name="see_where">See Where</string>
+
 </resources>

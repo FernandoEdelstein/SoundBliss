@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.soundbliss.Fragments.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -20,8 +22,9 @@ class MainActivity : AppCompatActivity() {
 
         val homeFrag = HomeFragment()
         val searchFrag = SearchFragment()
-        val notificationFrag = NotificationFragment()
+        val chatFrag = ChatListFragment()
         val profileFrag = ProfileFragment()
+
 
         makeCurrentFragment(homeFrag)
         bottom_navigation.setOnNavigationItemSelectedListener {
@@ -29,7 +32,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home -> makeCurrentFragment(homeFrag)
                 R.id.nav_search -> makeCurrentFragment(searchFrag)
                 R.id.nav_profile -> makeCurrentFragment(profileFrag)
-                R.id.nav_like -> makeCurrentFragment(notificationFrag)
+                R.id.nav_like -> makeCurrentFragment(chatFrag)
                 R.id.nav_add -> {
                     startActivity(Intent(this, PostActivity::class.java))
 
@@ -44,5 +47,8 @@ class MainActivity : AppCompatActivity() {
             replace (R.id.fragment_container,fragment)
             commit()
         }
+
+
+
 
 }

@@ -99,4 +99,8 @@ dependencies {
     compile 'com.xwray:groupie:2.0.3'
     compile 'com.xwray:groupie-kotlin-android-extensions:2.0.3'
 
+
+    compile 'com.github.renaudcerrato:static-maps-api:1.0.4'
+
+
 }
