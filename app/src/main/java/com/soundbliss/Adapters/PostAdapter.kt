@@ -29,7 +29,6 @@ import com.google.android.gms.stats.CodePackage.LOCATION
 import com.google.common.net.HttpHeaders.LOCATION
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.GeoPoint
-import com.mypopsy.maps.StaticMap
 import com.soundbliss.MapsActivity
 import com.soundbliss.Model.AllPost
 import com.soundbliss.R
