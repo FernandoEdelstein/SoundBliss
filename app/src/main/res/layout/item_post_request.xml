@@ -47,7 +47,16 @@
                 android:layout_weight="1"
                 android:text="minutes ago"
                 android:textColor="@color/white_100"/>
+
         </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_close"
+            android:layout_marginLeft="200dp"
+            android:id="@+id/deleteRequestPost"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

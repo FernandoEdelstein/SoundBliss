@@ -2,20 +2,34 @@ package com.soundbliss.Adapters
 
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.location.Geocoder
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.text.format.DateUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.SeekBar
+import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.gms.common.internal.Constants
+import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.stats.CodePackage.LOCATION
+import com.google.common.net.HttpHeaders.LOCATION
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.GeoPoint
+import com.mypopsy.maps.StaticMap
 import com.soundbliss.MapsActivity
 import com.soundbliss.Model.AllPost
 import com.soundbliss.R
@@ -24,6 +38,7 @@ import kotlinx.android.synthetic.main.item_post_request.view.*
 import kotlinx.android.synthetic.main.item_post_track.view.*
 import java.lang.Exception
 import java.util.concurrent.TimeUnit
+import androidx.fragment.app.Fragment as fragment
 
 
 class PostAdapter(var context: Context, list: List<AllPost>) :
@@ -31,6 +46,7 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
     private val TAG = "RecyclerAdapter"
     private var list = list
 
+    private val currentUser = FirebaseAuth.getInstance().currentUser
 
     private inner class ViewHolderOnePhoto(itemView:View):RecyclerView.ViewHolder(itemView){
 
@@ -56,6 +72,7 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
     private inner class ViewHolderThreeRequest(itemView:View):RecyclerView.ViewHolder(itemView){
         var postLocation = itemView.postRequestLocation
 
+        var deleteRequest = itemView.deleteRequestPost
     }
 
 
@@ -192,6 +209,27 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
                 mapIntent.putExtra("latlng", bundle)
                 context.startActivity(mapIntent)
             }
+
+            if(currentUser!!.uid == post.userid){
+                viewHolderThreeRequest.deleteRequest.visibility = View.VISIBLE
+                viewHolderThreeRequest.deleteRequest.setOnClickListener {
+                    val builder = AlertDialog.Builder(context)
+                    builder.setMessage("Delete post?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes"){ dialog, id ->
+                            //DELETE FROM DATABASE METHOD
+
+                        }
+                        .setNegativeButton("No"){ dialog, id ->
+                            dialog.dismiss()
+                        }
+                    val alert = builder.create()
+                    alert.show()
+                }
+            }else{
+                viewHolderThreeRequest.deleteRequest.visibility = View.GONE
+            }
+
         }
     }
 
