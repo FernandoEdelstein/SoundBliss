@@ -5,30 +5,21 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.location.Geocoder
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.text.format.DateUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.SeekBar
-import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.android.gms.common.internal.Constants
-import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.stats.CodePackage.LOCATION
-import com.google.common.net.HttpHeaders.LOCATION
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.GeoPoint
+import com.google.firebase.firestore.FirebaseFirestore
 import com.soundbliss.MapsActivity
 import com.soundbliss.Model.AllPost
 import com.soundbliss.R
@@ -37,7 +28,6 @@ import kotlinx.android.synthetic.main.item_post_request.view.*
 import kotlinx.android.synthetic.main.item_post_track.view.*
 import java.lang.Exception
 import java.util.concurrent.TimeUnit
-import androidx.fragment.app.Fragment as fragment
 
 
 class PostAdapter(var context: Context, list: List<AllPost>) :
@@ -46,9 +36,10 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
     private var list = list
 
     private val currentUser = FirebaseAuth.getInstance().currentUser
+    private var firestoreDb = FirebaseFirestore.getInstance()
 
     private inner class ViewHolderOnePhoto(itemView:View):RecyclerView.ViewHolder(itemView){
-
+        var deletePhoto = itemView.deleteImagePost
     }
 
     private inner class ViewHolderTwoTrack(itemView:View):RecyclerView.ViewHolder(itemView){
@@ -65,13 +56,15 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
         var btPause = itemView.btn_pause
         var btPlay = itemView.btn_play
 
+        var deleteTrack = itemView.deleteTrackPost
 
     }
 
     private inner class ViewHolderThreeRequest(itemView:View):RecyclerView.ViewHolder(itemView){
         var postLocation = itemView.postRequestLocation
-
         var deleteRequest = itemView.deleteRequestPost
+        var contactButton = itemView.postRequestContact
+
     }
 
 
@@ -115,6 +108,28 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
                 viewHolderOne.itemView.postPhotoUserName.text = post.username
                 viewHolderOne.itemView.postPhotoRelativeTime.text = DateUtils.getRelativeTimeSpanString(post.creation_time_ms)
                 Glide.with(context).load(post.posturl).into(viewHolderOne.itemView.postPhotoImageView)
+
+            if(currentUser!!.uid == post.userid){
+                viewHolderOne.deletePhoto.visibility = View.VISIBLE
+                viewHolderOne.deletePhoto.setOnClickListener {
+                    val builder = AlertDialog.Builder(context)
+                    builder.setMessage("Delete post?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes"){ dialog, id ->
+                            //DELETE FROM DATABASE METHOD
+                            deletePost(position)
+                        }
+                        .setNegativeButton("No"){ dialog, id ->
+                            dialog.dismiss()
+                        }
+                    val alert = builder.create()
+                    alert.show()
+                }
+            }else{
+                viewHolderOne.deletePhoto.visibility = View.GONE
+            }
+
+
 
         }else if(getItemViewType(position) == 1){
             val post = list.get(position)
@@ -186,6 +201,30 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
                 }
             })
 
+
+            if(currentUser!!.uid == post.userid){
+                viewHolderTwo.deleteTrack.visibility = View.VISIBLE
+                viewHolderTwo.deleteTrack.setOnClickListener {
+                    val builder = AlertDialog.Builder(context)
+                    builder.setMessage("Delete post?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes"){ dialog, id ->
+                            //DELETE FROM DATABASE METHOD
+                            deletePost(position)
+                        }
+                        .setNegativeButton("No"){ dialog, id ->
+                            dialog.dismiss()
+                        }
+                    val alert = builder.create()
+                    alert.show()
+                }
+            }else{
+                viewHolderTwo.deleteTrack.visibility = View.GONE
+            }
+
+
+
+
         }else if(getItemViewType(position) == 2) {
             var viewHolderThreeRequest = holder as ViewHolderThreeRequest
 
@@ -209,6 +248,11 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
                 context.startActivity(mapIntent)
             }
 
+            //If current user = Poster then hide contact button
+            if(currentUser!!.uid.equals(post.userid))
+                viewHolderThreeRequest.contactButton.visibility = View.GONE
+
+            //DELETE POST SECTION
             if(currentUser!!.uid == post.userid){
                 viewHolderThreeRequest.deleteRequest.visibility = View.VISIBLE
                 viewHolderThreeRequest.deleteRequest.setOnClickListener {
@@ -217,7 +261,7 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
                         .setCancelable(false)
                         .setPositiveButton("Yes"){ dialog, id ->
                             //DELETE FROM DATABASE METHOD
-
+                            deletePost(position)
                         }
                         .setNegativeButton("No"){ dialog, id ->
                             dialog.dismiss()
@@ -242,5 +286,19 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
                     TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)))
     }
 
-    
+
+    private fun deletePost(position: Int){
+        firestoreDb.collection("posts").document(list.get(position).documentId)
+            .delete()
+            .addOnCompleteListener{task ->
+                if(task.isSuccessful){
+                    list.drop(position)
+                    notifyDataSetChanged()
+                    Toast.makeText(context,"Item Deleted", Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(context,"Error" + task.exception!!.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
 }

@@ -14,6 +14,13 @@ data class AllPost(@get:PropertyName("creation_time_ms")@set:PropertyName("creat
                    @get:PropertyName("userid")@set:PropertyName("userid") var userid: String = "",
                    @get:PropertyName("username")@set:PropertyName("username") var username: String = "") {
 
+
+    var documentId : String = ""
+
+    @JvmName("setDocumentId1")
+    fun setDocumentId(s: String){
+        documentId = s
+    }
     //Track Constructor
     constructor(creation_time_ms: Long = 0,
                 description: String = "",

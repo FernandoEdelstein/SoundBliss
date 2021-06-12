@@ -128,16 +128,14 @@ class ProfileFragment() : Fragment() {
                 Log.e(ContentValues.TAG,"Exception when querying posts" , exception)
                 return@addSnapshotListener
             }
-            val postList = snapshot.toObjects(AllPost::class.java)
             posts.clear()
-            posts.addAll(postList)
-            postAdapter.notifyDataSetChanged()
-
-
-            for(post in postList){
-                Log.i(ContentValues.TAG,"Post ${post}")
+            for (documentSnapshot in snapshot){
+                var documentid = documentSnapshot.id
+                var post = documentSnapshot.toObject(AllPost::class.java)
+                post.setDocumentId(documentid)
+                posts.add(post)
             }
-
+            postAdapter.notifyDataSetChanged()
         }
 
         return view

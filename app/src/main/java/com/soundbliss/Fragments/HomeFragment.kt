@@ -56,13 +56,24 @@ class HomeFragment : Fragment() {
                 Log.e(TAG,"Exception when querying posts" , exception)
                 return@addSnapshotListener
             }
-            val postList = snapshot.toObjects(AllPost::class.java)
             posts.clear()
-            posts.addAll(postList)
+
+            for (documentSnapshot in snapshot){
+                var documentid = documentSnapshot.id
+
+                var post = documentSnapshot.toObject(AllPost::class.java)
+                post.setDocumentId(documentid)
+
+                posts.add(post)
+            }
+            //val postList = snapshot.toObjects(AllPost::class.java)
+
+
+            //posts.addAll(postList)
             postAdapter.notifyDataSetChanged()
 
 
-            for(post in postList){
+            for(post in posts){
                 Log.i(TAG,"Post ${post}")
             }
 
