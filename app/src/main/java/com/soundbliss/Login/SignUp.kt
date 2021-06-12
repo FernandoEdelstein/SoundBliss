@@ -73,7 +73,7 @@ class SignUp : AppCompatActivity() {
                         val intent = Intent(applicationContext, ProfileFragment::class.java)
 
                         id = auth.currentUser!!.uid
-                        var userIdentity = User (name, lastName, user, "","",email,"")
+                        var userIdentity = User (name, lastName, user, id,"",email,"")
 
                         val utenti = HashMap<String, Any> ()
                         utenti["lastname"] = userIdentity.lastname

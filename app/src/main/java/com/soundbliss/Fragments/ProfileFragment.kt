@@ -7,8 +7,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -19,6 +21,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
@@ -35,7 +39,9 @@ import org.w3c.dom.Text
 class ProfileFragment() : Fragment() {
     private var signedInUser: User? = null
 
+    private lateinit var auth : FirebaseAuth
     private lateinit var firestoreDb: FirebaseFirestore
+    private lateinit var documentReference: DocumentReference
 
     private lateinit var posts : MutableList<AllPost>
     private lateinit var postAdapter: PostAdapter
@@ -43,15 +49,10 @@ class ProfileFragment() : Fragment() {
     private lateinit var recyclerView: RecyclerView
 
 
-    private val mProfilePhoto: ImageView? = null
-    private lateinit var name: TextView
-    private lateinit var lastName : TextView
-    private lateinit var editProfile : TextView
+    private lateinit var username: TextView
+    private lateinit var editProfile : Button
 //    private lateinit var descriptionProfile : TextView
 
-
-    private lateinit var databaseReference: DatabaseReference
-    private lateinit var database : FirebaseDatabase
 
 
     override fun onCreateView(
@@ -62,40 +63,26 @@ class ProfileFragment() : Fragment() {
         val view : View = inflater.inflate(R.layout.fragment_profile, container, false)
 
 
-        /*
+
+        editProfile = view.findViewById(R.id.editProfile)
+        username= view.findViewById(R.id.username)
+
+        auth = FirebaseAuth.getInstance()
+
+        //per ottenere lo username
+
         firestoreDb = FirebaseFirestore.getInstance()
-
-        firestoreDb.collection("users")
-            .document(FirebaseAuth.getInstance().currentUser?.uid as String)
-            .get()
-            .addOnSuccessListener { userSnapshot ->
-                signedInUser = userSnapshot.toObject(User::class.java)!!
+        documentReference = firestoreDb.collection("users").document()
+             documentReference.get()
+             .addOnSuccessListener { documentSnapshot ->
+                 if(documentSnapshot.exists()) {
+                     username.text = documentSnapshot.getString("username")
+                 }
             }
-            .addOnFailureListener{ exception ->
-                Log.i("HomeFragment","Failure fetching signed in user" , exception)
-            }
-*/
+             .addOnFailureListener{ exception ->
+                 Log.i("HomeFragment","Failure fetching signed in user" , exception)
+             }
 
-
-        editProfile = view.findViewById(R.id.textEditProfile)
-        name = view.findViewById(R.id.display_name)
-        lastName = view.findViewById(R.id.display_lastname)
-
-        database = FirebaseDatabase.getInstance()
-        databaseReference = database.reference.child("users")
-
-//      descriptionProfile = view.findViewById(R.id.descriptionProfile)
-
-
-        databaseReference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                name.text = snapshot.child("id").child("name").value?.toString()
-                lastName.text = snapshot.child("id").child("lastname").value?.toString()
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-            }
-        })
 
         //EDIT PROFILE
             editProfile.setOnClickListener {

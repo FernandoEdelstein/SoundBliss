@@ -174,6 +174,8 @@ class EditProfileFragment : Fragment() {
                  * User is signed in.
                  * User is able to edit and re-edit the profile, going throw the Fragment Profile 
                  * */
+
+
                 Log.d(TAG, "onAuthStateChanged:signed_in:" + user.uid)
                 fragmentManager?.beginTransaction()
                     ?.replace(R.id.fragment_profile, EditProfileFragment())
