@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
@@ -24,14 +25,15 @@ import com.google.firebase.ktx.Firebase
 import com.soundbliss.Adapters.PostAdapter
 import com.soundbliss.Login.SignUp
 import com.soundbliss.Model.AllPost
+import com.soundbliss.Model.User
 import com.soundbliss.R
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.activity_main.*
 import org.w3c.dom.Text
 
 
-class ProfileFragment : Fragment() {
-
+class ProfileFragment() : Fragment() {
+    private var signedInUser: User? = null
 
     private lateinit var firestoreDb: FirebaseFirestore
 
@@ -47,7 +49,7 @@ class ProfileFragment : Fragment() {
     private lateinit var editProfile : TextView
 //    private lateinit var descriptionProfile : TextView
 
-    private lateinit var auth: FirebaseAuth
+
     private lateinit var databaseReference: DatabaseReference
     private lateinit var database : FirebaseDatabase
 
@@ -59,19 +61,31 @@ class ProfileFragment : Fragment() {
         // Inflate the layout for this fragment
         val view : View = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        auth = FirebaseAuth.getInstance()
-        database = FirebaseDatabase.getInstance()
-        databaseReference = database.reference.child("users")
+
+        /*
+        firestoreDb = FirebaseFirestore.getInstance()
+
+        firestoreDb.collection("users")
+            .document(FirebaseAuth.getInstance().currentUser?.uid as String)
+            .get()
+            .addOnSuccessListener { userSnapshot ->
+                signedInUser = userSnapshot.toObject(User::class.java)!!
+            }
+            .addOnFailureListener{ exception ->
+                Log.i("HomeFragment","Failure fetching signed in user" , exception)
+            }
+*/
 
 
         editProfile = view.findViewById(R.id.textEditProfile)
         name = view.findViewById(R.id.display_name)
         lastName = view.findViewById(R.id.display_lastname)
+
+        database = FirebaseDatabase.getInstance()
+        databaseReference = database.reference.child("users")
+
 //      descriptionProfile = view.findViewById(R.id.descriptionProfile)
 
-
-        val user = auth.currentUser!!.uid
-        val userReference = databaseReference?.child(user)
 
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -83,13 +97,15 @@ class ProfileFragment : Fragment() {
             }
         })
 
-    editProfile.setOnClickListener {
-        fragmentManager?.beginTransaction()
-            ?.replace(R.id.fragmentEdit_profile, EditProfileFragment())
-            ?.commit()
+        //EDIT PROFILE
+            editProfile.setOnClickListener {
+                fragmentManager?.beginTransaction()
+                    ?.replace(R.id.fragmentEdit_profile, EditProfileFragment())
+                    ?.commit()
 
-    }
+            }
 
+        //POSTS RECYCLER VIEW
         recyclerView = view!!.findViewById(R.id.rvProfilePosts)
 
         posts = mutableListOf()
@@ -105,8 +121,7 @@ class ProfileFragment : Fragment() {
         val postReference = firestoreDb.collection("posts")
             .limit(20).orderBy("creation_time_ms", Query.Direction.DESCENDING)
 
-                //HARD CODED -> TO BE REPLACED WITH CURRENT USER
-            postReference.whereEqualTo("username","Ferna3138")
+            postReference.whereEqualTo("userid",FirebaseAuth.getInstance().currentUser?.uid)
 
         postReference.addSnapshotListener{snapshot,exception ->
             if(exception != null || snapshot == null){
@@ -125,23 +140,7 @@ class ProfileFragment : Fragment() {
 
         }
 
-
-
-
-
         return view
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-

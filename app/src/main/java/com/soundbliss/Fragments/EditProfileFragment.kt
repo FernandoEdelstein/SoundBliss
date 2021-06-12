@@ -67,7 +67,7 @@ class EditProfileFragment : Fragment() {
 
 
         setupFirebaseAuth()
-
+/*
         back!!.setOnClickListener{
             Log.d(TAG, "onClick: navigating back to FragmentProfile")
             fragmentManager?.beginTransaction()?.replace(R.id.fragment_profile, ProfileFragment())?.commit()
@@ -78,7 +78,7 @@ class EditProfileFragment : Fragment() {
             fragmentManager?.beginTransaction()?.replace(R.id.fragment_profile, ProfileFragment())?.commit()
             saveProfileSettings()
         }
-
+*/
 
 
         return view

@@ -4,19 +4,15 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.*
-import com.google.firebase.ktx.Firebase
 import com.soundbliss.Model.User
 import com.soundbliss.R
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 
-class UserAdapter(mContext: Context?, mUsers: List<User>, isFragment: Boolean) : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
+class UserSearchAdapter(mContext: Context?, mUsers: List<User>, isFragment: Boolean) : RecyclerView.Adapter<UserSearchAdapter.ViewHolder>() {
 
     lateinit var mContext : Context
     var mUser = listOf<User>()
@@ -32,21 +28,20 @@ class UserAdapter(mContext: Context?, mUsers: List<User>, isFragment: Boolean) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-
         var view : View = LayoutInflater.from(mContext).inflate(R.layout.user_item, parent ,false)
-        return UserAdapter.ViewHolder(view)
+        return UserSearchAdapter.ViewHolder(view)
 
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         //fireBaseUser = Firebase.auth.currentUser
-
         var user: User = mUser.get(position)
 
         holder.username.setText(user.user)
         holder.fullName.setText(user.name)
 
-        Picasso.get().load(user.imageurl).placeholder(R.mipmap.ic_launcher).into(holder.profileImage)
+        if(user.imageurl != null)
+            Picasso.get().load(user.imageurl).placeholder(R.mipmap.ic_launcher).into(holder.profileImage)
 
 
     }
@@ -55,6 +50,8 @@ class UserAdapter(mContext: Context?, mUsers: List<User>, isFragment: Boolean) :
     override fun getItemCount(): Int {
         TODO("Not yet implemented")
     }
+
+
 
 
 }

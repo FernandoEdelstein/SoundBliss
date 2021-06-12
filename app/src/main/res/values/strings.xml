@@ -36,6 +36,7 @@
     <string name="Followers">Followers</string>
     <string name="Following">Following</string>
     <string name="Contact">Contact</string>
+    <string name="Message">Message</string>
 
     <!-- Firebase database fields -->
     <string name="dbname_users">users</string>
