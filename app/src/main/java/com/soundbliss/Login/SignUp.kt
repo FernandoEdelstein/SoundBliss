@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.soundbliss.Fragments.ProfileFragment
+import com.soundbliss.MainActivity
 import com.soundbliss.Model.User
 import com.soundbliss.R
 import kotlin.collections.HashMap
@@ -70,17 +71,18 @@ class SignUp : AppCompatActivity() {
                     if(task.isSuccessful){
                         Toast.makeText(this, R.string.SuccessRegister, Toast.LENGTH_LONG).show()
                         //val intent = Intent(this, MainActivity::class.java)
-                        val intent = Intent(applicationContext, ProfileFragment::class.java)
+                        val intent = Intent(applicationContext, MainActivity::class.java)
 
                         id = auth.currentUser!!.uid
-                        var userIdentity = User (name, lastName, user, id,"",email,"")
+                        val userIdentity = User (name, lastName, user, auth.currentUser!!.uid,"",email,"")
 
                         val utenti = HashMap<String, Any> ()
+                        utenti["id"] = userIdentity.uid
                         utenti["lastname"] = userIdentity.lastname
                         utenti["mail"] = userIdentity.email
                         utenti["name"] = userIdentity.name
                         utenti["username"] = userIdentity.user
-                        firestoreDb.collection("users/").add(utenti)
+                        firestoreDb.collection("users").document("users").collection("id").document(id).set(utenti)
                             .addOnSuccessListener { Log.d("Ok", "Registration success!") }
                             .addOnFailureListener { e -> Log.w("Error", "Error writing user", e) }
                         startActivity(intent)

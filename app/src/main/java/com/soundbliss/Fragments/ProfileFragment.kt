@@ -65,16 +65,18 @@ class ProfileFragment() : Fragment() {
 
 
         editProfile = view.findViewById(R.id.editProfile)
-        username= view.findViewById(R.id.username)
+        username= view.findViewById(R.id.usernameProfile)
 
         auth = FirebaseAuth.getInstance()
+        var id = auth.currentUser!!.uid
+
 
         //per ottenere lo username
 
         firestoreDb = FirebaseFirestore.getInstance()
-        documentReference = firestoreDb.collection("users").document()
-             documentReference.get()
-             .addOnSuccessListener { documentSnapshot ->
+        documentReference = firestoreDb.collection("users/users/id").document(id)
+        documentReference.get()
+            .addOnSuccessListener { documentSnapshot ->
                  if(documentSnapshot.exists()) {
                      username.text = documentSnapshot.getString("username")
                  }
