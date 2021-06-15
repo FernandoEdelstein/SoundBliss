@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.dynamic.SupportFragmentWrapper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
@@ -51,7 +52,7 @@ class ProfileFragment() : Fragment() {
 
     private lateinit var username: TextView
     private lateinit var editProfile : Button
-//    private lateinit var descriptionProfile : TextView
+    private lateinit var descriptionProfile : TextView
 
 
 
@@ -66,19 +67,20 @@ class ProfileFragment() : Fragment() {
 
         editProfile = view.findViewById(R.id.editProfile)
         username= view.findViewById(R.id.usernameProfile)
+        descriptionProfile = view.findViewById(R.id.descriptionBio)
 
         auth = FirebaseAuth.getInstance()
         var id = auth.currentUser!!.uid
 
 
-        //per ottenere lo username
-
+        // ottenere lo username in base all'id dell'utente
         firestoreDb = FirebaseFirestore.getInstance()
-        documentReference = firestoreDb.collection("users/users/id").document(id)
+        documentReference = firestoreDb.collection("users").document(id)
         documentReference.get()
             .addOnSuccessListener { documentSnapshot ->
                  if(documentSnapshot.exists()) {
                      username.text = documentSnapshot.getString("username")
+                     descriptionProfile.text = documentSnapshot.getString("bio")
                  }
             }
              .addOnFailureListener{ exception ->
@@ -87,10 +89,18 @@ class ProfileFragment() : Fragment() {
 
 
         //EDIT PROFILE
-            editProfile.setOnClickListener {
-                fragmentManager?.beginTransaction()
-                    ?.replace(R.id.fragmentEdit_profile, EditProfileFragment())
-                    ?.commit()
+            editProfile!!.setOnClickListener {
+               /*fragmentManager?.beginTransaction()
+                    ?.replace(R.id.fragment_edit, EditProfileFragment())
+                    ?.commit()*/
+                val fragmentManager = fragmentManager
+                val fragmentTransaction = fragmentManager!!.beginTransaction()
+                val editProfileFragment: EditProfileFragment = EditProfileFragment()
+                fragmentTransaction.replace(R.id.fragment_profile, editProfileFragment)
+                fragmentTransaction.commit()
+
+
+
 
             }
 

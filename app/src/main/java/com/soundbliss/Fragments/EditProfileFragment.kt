@@ -30,7 +30,7 @@ class EditProfileFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
     private var databaseReference: DatabaseReference? = null
-    private lateinit var database : FirebaseDatabase
+    private lateinit var database: FirebaseDatabase
     private var mAuthListener: AuthStateListener? = null
 
 
@@ -41,10 +41,9 @@ class EditProfileFragment : Fragment() {
     private lateinit var mEmail: EditText//EditProfile Fragment widgets
     private lateinit var mChangeProfilePhoto: TextView
     private var mProfilePhoto: CircleImageView? = null
-    private var back : ImageView? = null
+    private var back: ImageView? = null
     private var checkMark: ImageView? = null
     private var userId: String? = null
-
 
 
     @SuppressLint("WrongViewCast")
@@ -66,24 +65,25 @@ class EditProfileFragment : Fragment() {
         checkMark = view.findViewById(R.id.saveChanges) as ImageView
 
 
-        setupFirebaseAuth()
-/*
-        back!!.setOnClickListener{
+        //setupFirebaseAuth()
+
+        back!!.setOnClickListener {
             Log.d(TAG, "onClick: navigating back to FragmentProfile")
-            fragmentManager?.beginTransaction()?.replace(R.id.fragment_profile, ProfileFragment())?.commit()
+            fragmentManager?.beginTransaction()?.replace(R.id.fragment_profile, ProfileFragment())
+                ?.commit()
         };
 
         checkMark!!.setOnClickListener {
             Log.d(TAG, "onClick: attempting to save changes to FragmentProfile");
-            fragmentManager?.beginTransaction()?.replace(R.id.fragment_profile, ProfileFragment())?.commit()
-            saveProfileSettings()
+            fragmentManager?.beginTransaction()?.replace(R.id.fragment_profile, ProfileFragment())
+                ?.commit()
+            // saveProfileSettings()
         }
-*/
-
 
         return view
     }
-
+}
+/*
 // method to save the update of the profile settings
     private fun saveProfileSettings() {
         val username = mUsername!!.text.toString()
@@ -170,10 +170,10 @@ class EditProfileFragment : Fragment() {
 
             val user = firebaseAuth.currentUser
             if (user != null) {
-                /**
+                *//**
                  * User is signed in.
                  * User is able to edit and re-edit the profile, going throw the Fragment Profile 
-                 * */
+                 * *//*
 
 
                 Log.d(TAG, "onAuthStateChanged:signed_in:" + user.uid)
@@ -189,18 +189,18 @@ class EditProfileFragment : Fragment() {
 
     }
 
-    /**
+    *//**
      * onStart() makes the fragment visible to the user (based on its containing activity being started)
-     * */
+     * *//*
     override fun onStart() {
         super.onStart()
         auth.addAuthStateListener(mAuthListener!!)
     }
 
-    /**
+    *//**
      * onStop() fragment is no longer visible to the user either because
      * its activity is being stopped or a fragment operation is modifying it in the activity.
-     * */
+     * *//*
     override fun onStop() {
         super.onStop()
         if (mAuthListener != null) {
@@ -209,6 +209,6 @@ class EditProfileFragment : Fragment() {
     }
 
 
-}
+}*/
 
 

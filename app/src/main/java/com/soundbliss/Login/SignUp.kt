@@ -82,7 +82,7 @@ class SignUp : AppCompatActivity() {
                         utenti["mail"] = userIdentity.email
                         utenti["name"] = userIdentity.name
                         utenti["username"] = userIdentity.user
-                        firestoreDb.collection("users").document("users").collection("id").document(id).set(utenti)
+                        firestoreDb.collection("users").document(id).set(utenti)
                             .addOnSuccessListener { Log.d("Ok", "Registration success!") }
                             .addOnFailureListener { e -> Log.w("Error", "Error writing user", e) }
                         startActivity(intent)

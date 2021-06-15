@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         val searchFrag = SearchFragment()
         val chatFrag = ChatListFragment()
         val profileFrag = ProfileFragment()
+        val editProfileFragment = EditProfileFragment()
 
 
         makeCurrentFragment(homeFrag)
