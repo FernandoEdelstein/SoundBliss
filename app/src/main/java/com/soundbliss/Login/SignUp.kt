@@ -74,14 +74,23 @@ class SignUp : AppCompatActivity() {
                         val intent = Intent(applicationContext, MainActivity::class.java)
 
                         id = auth.currentUser!!.uid
-                        val userIdentity = User (name, lastName, user, auth.currentUser!!.uid,"",email,"")
+                        //val userIdentity = User (name, lastName, user, auth.currentUser!!.uid,"",email,"")
 
-                        val utenti = HashMap<String, Any> ()
+                        val utenti = User(
+                            name,
+                            lastName,
+                            user,
+                            id,
+                            "",
+                            email,
+                            ""
+                        )
+                            /*HashMap<String, Any> ()
                         utenti["id"] = userIdentity.uid
                         utenti["lastname"] = userIdentity.lastname
                         utenti["mail"] = userIdentity.mail
                         utenti["name"] = userIdentity.name
-                        utenti["username"] = userIdentity.uname
+                        utenti["username"] = userIdentity.uname*/
                         firestoreDb.collection("users").document(id).set(utenti)
                             .addOnSuccessListener { Log.d("Ok", "Registration success!") }
                             .addOnFailureListener { e -> Log.w("Error", "Error writing user", e) }

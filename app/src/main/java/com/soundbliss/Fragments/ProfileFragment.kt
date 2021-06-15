@@ -79,7 +79,7 @@ class ProfileFragment() : Fragment() {
         documentReference.get()
             .addOnSuccessListener { documentSnapshot ->
                  if(documentSnapshot.exists()) {
-                     username.text = documentSnapshot.getString("username")
+                     username.text = documentSnapshot.getString("uname")
                      descriptionProfile.text = documentSnapshot.getString("bio")
                  }
             }
