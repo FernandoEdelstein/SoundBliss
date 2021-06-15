@@ -3,6 +3,7 @@ package com.soundbliss.Fragments
 import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
+import android.transition.Transition
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -96,8 +97,10 @@ class ProfileFragment() : Fragment() {
                 val fragmentManager = fragmentManager
                 val fragmentTransaction = fragmentManager!!.beginTransaction()
                 val editProfileFragment: EditProfileFragment = EditProfileFragment()
-                fragmentTransaction.replace(R.id.fragment_profile, editProfileFragment)
-                fragmentTransaction.commit()
+                fragmentTransaction.replace(R.id.mainActivity, editProfileFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_NONE)
+                    .addToBackStack(null)
+                    .commit()
 
 
 

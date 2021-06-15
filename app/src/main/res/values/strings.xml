@@ -37,6 +37,10 @@
     <string name="Following">Following</string>
     <string name="Contact">Contact</string>
     <string name="Message">Message</string>
+    <string name="User">Username changed!</string>
+    <string name="Pass">Password changed!</string>
+    <string name="Bio">Description changed!</string>
+    <string name="Email">Email changed!</string>
 
     <!-- Firebase database fields -->
     <string name="dbname_users">users</string>
