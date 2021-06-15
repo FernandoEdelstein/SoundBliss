@@ -37,11 +37,11 @@ class UserSearchAdapter(mContext: Context?, mUsers: List<User>, isFragment: Bool
         //fireBaseUser = Firebase.auth.currentUser
         var user: User = mUser.get(position)
 
-        holder.username.setText(user.user)
+        holder.username.setText(user.uname)
         holder.fullName.setText(user.name)
 
-        if(user.imageurl != null)
-            Picasso.get().load(user.imageurl).placeholder(R.mipmap.ic_launcher).into(holder.profileImage)
+        if(user.imageu != null)
+            Picasso.get().load(user.imageu).placeholder(R.mipmap.ic_launcher).into(holder.profileImage)
 
 
     }

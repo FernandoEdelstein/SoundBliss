@@ -1,18 +1,15 @@
 package com.soundbliss.Model
 
-class User (fulln:String, usern:String, uname:String, uid: String, bio:String, mail:String, imageu:String){
+import com.google.firebase.database.PropertyName
 
-    var email = mail
+data class User (@get:PropertyName("lastname")@set:PropertyName("lastname") var lastname:String,
+                 @get:PropertyName("name")@set:PropertyName("name") var  name:String,
+                 @get:PropertyName("username")@set:PropertyName("username") var  uname:String,
+                 @get:PropertyName("id")@set:PropertyName("id") var  uid: String,
+                 @get:PropertyName("bio")@set:PropertyName("bio") var  bio:String,
+                 @get:PropertyName("mail")@set:PropertyName("mail") var  mail:String,
+                 @get:PropertyName("image")@set:PropertyName("image") var  imageu:String
+){
 
-    var lastname = usern
 
-    var name = fulln
-
-    var user = uname
-        
-    var bio = bio
-
-    var imageurl = imageu
-
-    var uid = uid
 }
