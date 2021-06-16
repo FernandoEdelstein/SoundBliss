@@ -36,7 +36,6 @@ class HomeFragment : Fragment() {
     ): View? {
         var view : View = inflater.inflate(R.layout.fragment_home, container, false)
 
-
         recyclerView = view!!.findViewById(R.id.rvPosts)
 
         posts = mutableListOf()

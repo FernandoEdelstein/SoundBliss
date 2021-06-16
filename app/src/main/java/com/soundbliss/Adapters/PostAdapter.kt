@@ -1,6 +1,5 @@
 package com.soundbliss.Adapters
 
-
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
@@ -28,7 +27,6 @@ import kotlinx.android.synthetic.main.item_post_request.view.*
 import kotlinx.android.synthetic.main.item_post_track.view.*
 import java.lang.Exception
 import java.util.concurrent.TimeUnit
-
 
 class PostAdapter(var context: Context, list: List<AllPost>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {

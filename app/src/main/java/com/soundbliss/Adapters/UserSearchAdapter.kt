@@ -3,6 +3,7 @@ package com.soundbliss.Adapters
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.inflate
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -11,16 +12,15 @@ import com.soundbliss.Model.User
 import com.soundbliss.R
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.android.synthetic.main.item_post_image.view.*
 
-class UserSearchAdapter(mContext: Context?, mUsers: List<User>, isFragment: Boolean) : RecyclerView.Adapter<UserSearchAdapter.ViewHolder>() {
+class UserSearchAdapter(context: Context, mUsers: List<User>, isFragment: Boolean) : RecyclerView.Adapter<UserSearchAdapter.ViewHolder>() {
 
-    lateinit var mContext : Context
-    var mUser = listOf<User>()
-    var isFragment : Boolean = false
-    private lateinit var fireBaseUser : FirebaseUser
+
+    var mUser = mUsers
+
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         var profileImage: CircleImageView = itemView.findViewById(R.id.imageProfile)
         var username : TextView = itemView.findViewById(R.id.username_item)
         var fullName : TextView = itemView.findViewById(R.id.fullname)
@@ -28,17 +28,17 @@ class UserSearchAdapter(mContext: Context?, mUsers: List<User>, isFragment: Bool
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        var view : View = LayoutInflater.from(mContext).inflate(R.layout.user_item, parent ,false)
-        return UserSearchAdapter.ViewHolder(view)
-
+        val layoutInflater = LayoutInflater.from(parent.context)
+        var view = layoutInflater.inflate(R.layout.user_item, parent,false)
+        return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         //fireBaseUser = Firebase.auth.currentUser
         var user: User = mUser.get(position)
 
-        holder.username.setText(user.uname)
-        holder.fullName.setText(user.name)
+        holder.username.text = user.uname
+        holder.fullName.text = user.name
 
         if(user.imageu != null)
             Picasso.get().load(user.imageu).placeholder(R.mipmap.ic_launcher).into(holder.profileImage)
@@ -46,12 +46,6 @@ class UserSearchAdapter(mContext: Context?, mUsers: List<User>, isFragment: Bool
 
     }
 
-
-    override fun getItemCount(): Int {
-        TODO("Not yet implemented")
-    }
-
-
-
+    override fun getItemCount(): Int = mUser.size
 
 }

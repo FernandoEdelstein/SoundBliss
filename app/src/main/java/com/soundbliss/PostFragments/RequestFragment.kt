@@ -14,6 +14,7 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
@@ -45,6 +46,8 @@ class RequestFragment : Fragment(), OnMapReadyCallback {
     private lateinit var geocoder: Geocoder
     private var addressList: MutableList<Address>? = null
 
+    private lateinit var currentUsername : String
+    private lateinit var firebaseUser : FirebaseUser
 
      override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,6 +56,15 @@ class RequestFragment : Fragment(), OnMapReadyCallback {
          var view = inflater.inflate(R.layout.fragment_request, container, false)
 
          firestoreDb = FirebaseFirestore.getInstance()
+         firebaseUser = FirebaseAuth.getInstance().currentUser!!
+         var documentReference = firestoreDb.collection("users").document(firebaseUser.uid)
+         documentReference.get()
+             .addOnSuccessListener { documentSnapshot ->
+                 if(documentSnapshot.exists()) {
+                     currentUsername = documentSnapshot.getString("uname").toString()
+                 }
+             }
+
 
          requestTitle = view.findViewById(R.id.requestTitle)
          requestDescription = view.findViewById(R.id.requestDescription)
@@ -124,8 +136,8 @@ class RequestFragment : Fragment(), OnMapReadyCallback {
             geoLocation,
             locationText,
             requestTitle.text.toString(),
-            "uid",
-            "Ferna3138"
+            firebaseUser.uid,
+            currentUsername
         )
         firestoreDb.collection("posts/").add(requestPost)
 

@@ -2,33 +2,23 @@ package com.soundbliss.PostFragments
 
 import android.app.Activity
 import android.content.Intent
-import android.content.ContentResolver
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.SurfaceControl
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.canhub.cropper.CropImage
-import com.canhub.cropper.CropImageView
-import com.google.android.gms.tasks.Continuation
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.StorageTask
 import com.hendraanggrian.appcompat.widget.SocialAutoCompleteTextView
 import com.soundbliss.MainActivity
 import com.soundbliss.Model.AllPost
@@ -47,6 +37,8 @@ class PhotoVideoFragment : Fragment() {
     //Database
     private lateinit var firestoreDb : FirebaseFirestore
     private lateinit var storageReference: StorageReference
+    private lateinit var firebaseUser : FirebaseUser
+    private lateinit var currentUsername : String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,6 +48,16 @@ class PhotoVideoFragment : Fragment() {
 
         storageReference = FirebaseStorage.getInstance().reference
         firestoreDb = FirebaseFirestore.getInstance()
+        firebaseUser = FirebaseAuth.getInstance().currentUser!!
+        var documentReference = firestoreDb.collection("users").document(firebaseUser.uid)
+        documentReference.get()
+            .addOnSuccessListener { documentSnapshot ->
+                if(documentSnapshot.exists()) {
+                    currentUsername = documentSnapshot.getString("uname").toString()
+                }
+            }
+
+
 
         imageAdded = view.findViewById(R.id.image_added)
         imageAdded.setOnClickListener {
@@ -101,7 +103,7 @@ class PhotoVideoFragment : Fragment() {
 
         val photoReference = storageReference.child("Posts/Photo/${System.currentTimeMillis()}-photo." + getFileExtension(imageUri!!))
         photoReference.putFile(photoUploadUri)
-            .continueWith {photoUploadTask ->
+            .continueWithTask {photoUploadTask ->
                 Log.i(TAG, "Uploaded bytes: ${photoUploadTask.result?.bytesTransferred}")
                 photoReference.downloadUrl
             }.continueWithTask { downloadUrlTask ->
@@ -109,9 +111,10 @@ class PhotoVideoFragment : Fragment() {
                         System.currentTimeMillis(),
                         description.text.toString(),
                         downloadUrlTask.result.toString(),
-                        "123",
-                        "Ferna3138"
+                        firebaseUser.uid,
+                        currentUsername
                     )
+
                 firestoreDb.collection("posts/").add(post)
             }.addOnCompleteListener { postCreationTask ->
                 photoPostSubmit.isEnabled = true
