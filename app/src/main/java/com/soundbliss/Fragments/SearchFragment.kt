@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hendraanggrian.appcompat.widget.SocialAutoCompleteTextView
 import com.soundbliss.Adapters.PostAdapter
 import com.soundbliss.Adapters.UserSearchAdapter
@@ -26,10 +28,12 @@ class SearchFragment : Fragment() {
     private lateinit var mUsers : MutableList<User>
     private lateinit var userAdapter : UserSearchAdapter
 
-    private lateinit var posts : MutableList<AllPost>
+    private lateinit var posts: MutableList<AllPost>
     private lateinit var postAdapter: PostAdapter
 
     private lateinit var searchMenu: ContextMenu
+
+    private lateinit var searchNavigation: BottomNavigationView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +47,7 @@ class SearchFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
 
         mUsers = mutableListOf()
+        posts = mutableListOf()
 
         userAdapter = UserSearchAdapter(context!!, mUsers,true)
         postAdapter = PostAdapter(context!!,posts)
@@ -50,8 +55,9 @@ class SearchFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         searchBar = view.findViewById(R.id.search_bar)
+        searchNavigation = view.findViewById(R.id.search_navigation)
 
-        search_navigation.setOnNavigationItemSelectedListener {
+        searchNavigation.setOnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.ser_user -> recyclerView.adapter = userAdapter
                 R.id.ser_location -> recyclerView.adapter = postAdapter
