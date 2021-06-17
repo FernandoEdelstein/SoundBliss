@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.inflate
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseUser
@@ -16,9 +18,7 @@ import kotlinx.android.synthetic.main.item_post_image.view.*
 
 class UserSearchAdapter(context: Context, mUsers: List<User>, isFragment: Boolean) : RecyclerView.Adapter<UserSearchAdapter.ViewHolder>() {
 
-
     var mUser = mUsers
-
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var profileImage: CircleImageView = itemView.findViewById(R.id.imageProfile)
@@ -27,6 +27,7 @@ class UserSearchAdapter(context: Context, mUsers: List<User>, isFragment: Boolea
 
     }
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         var view = layoutInflater.inflate(R.layout.user_item, parent,false)
@@ -34,16 +35,14 @@ class UserSearchAdapter(context: Context, mUsers: List<User>, isFragment: Boolea
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        //fireBaseUser = Firebase.auth.currentUser
-        var user: User = mUser.get(position)
+        var user: User = mUser[position]
 
         holder.username.text = user.uname
         holder.fullName.text = user.name
 
-        if(user.imageu != null)
+        if(user.imageu != ""){
             Picasso.get().load(user.imageu).placeholder(R.mipmap.ic_launcher).into(holder.profileImage)
-
-
+        }
     }
 
     override fun getItemCount(): Int = mUser.size

@@ -8,7 +8,7 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/bar"
         android:background="?android:attr/windowBackground">
 
@@ -18,22 +18,13 @@
             android:id="@+id/Toolbar"
             android:background="@color/blue_700">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_search"
-                android:layout_marginRight="10dp"/>
-
-            <com.hendraanggrian.appcompat.widget.SocialAutoCompleteTextView
+            <SearchView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/search_bar"
-                android:background="@android:color/transparent"
-                android:hint="Search"
-                android:textColorHint="@color/white_100"
-                android:textColor="@color/white_100"
+                android:layout_height="match_parent"
+                android:layout_marginRight="16dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="20dp"/>
+                android:id="@+id/search_field"
+                />
 
         </androidx.appcompat.widget.Toolbar>
 
@@ -47,9 +38,10 @@
             app:menu="@menu/search_menu"/>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewUser"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/recyclerViewSearch" />
+            android:layout_height="match_parent"
+            android:background="@color/blue_800" />
 
 
     </com.google.android.material.appbar.AppBarLayout>

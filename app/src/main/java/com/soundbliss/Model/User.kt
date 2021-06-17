@@ -11,5 +11,6 @@ data class User (@get:PropertyName("lastname")@set:PropertyName("lastname") var 
                  @get:PropertyName("image")@set:PropertyName("image") var  imageu:String
 ){
 
+constructor():this("","","","","","","")
 
 }

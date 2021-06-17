@@ -3,17 +3,13 @@ package com.soundbliss
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.soundbliss.Fragments.*
-import com.soundbliss.Model.User
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_search.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -42,7 +38,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home -> makeCurrentFragment(homeFrag)
                 R.id.nav_search -> makeCurrentFragment(searchFrag)
                 R.id.nav_profile -> makeCurrentFragment(profileFrag)
-                R.id.nav_like -> makeCurrentFragment(chatFrag)
+                R.id.nav_chat -> makeCurrentFragment(chatFrag)
                 R.id.nav_add -> {
                     startActivity(Intent(this, PostActivity::class.java))
 
@@ -51,14 +47,11 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+
     }
 
         private fun makeCurrentFragment(fragment:Fragment) = supportFragmentManager.beginTransaction().apply{
             replace (R.id.fragment_container,fragment)
             commit()
         }
-
-
-
-
 }

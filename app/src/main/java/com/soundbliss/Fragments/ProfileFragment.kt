@@ -39,6 +39,8 @@ import org.w3c.dom.Text
 
 
 class ProfileFragment() : Fragment() {
+
+
     private var signedInUser: User? = null
 
     private lateinit var auth : FirebaseAuth
@@ -63,8 +65,6 @@ class ProfileFragment() : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view : View = inflater.inflate(R.layout.fragment_profile, container, false)
-
-
 
         editProfile = view.findViewById(R.id.editProfile)
         username= view.findViewById(R.id.usernameProfile)
@@ -101,10 +101,6 @@ class ProfileFragment() : Fragment() {
                     .setTransition(FragmentTransaction.TRANSIT_NONE)
                     .addToBackStack(null)
                     .commit()
-
-
-
-
             }
 
         //POSTS RECYCLER VIEW
@@ -121,9 +117,9 @@ class ProfileFragment() : Fragment() {
 
         firestoreDb = FirebaseFirestore.getInstance()
         val postReference = firestoreDb.collection("posts")
-            .limit(20).orderBy("creation_time_ms", Query.Direction.DESCENDING)
+            .limit(20)
 
-            postReference.whereEqualTo("userid",FirebaseAuth.getInstance().currentUser?.uid)
+            postReference.whereEqualTo("userid",id).orderBy("creation_time_ms", Query.Direction.DESCENDING)
 
         postReference.addSnapshotListener{snapshot,exception ->
             if(exception != null || snapshot == null){
@@ -133,8 +129,11 @@ class ProfileFragment() : Fragment() {
             posts.clear()
             for (documentSnapshot in snapshot){
                 var documentid = documentSnapshot.id
-                var post = documentSnapshot.toObject(AllPost::class.java)
+
+                    var post = documentSnapshot.toObject(AllPost::class.java)
+
                 post.setDocumentId(documentid)
+
                 posts.add(post)
             }
             postAdapter.notifyDataSetChanged()
