@@ -56,6 +56,10 @@ class SignUp : AppCompatActivity() {
 
 //evento al click del bottone per la registrazione
         registBtn.setOnClickListener{
+
+            //Disable button so that it can't be clicked multiple times causing the system to register multiple instances of the same user
+            registBtn.isEnabled = false
+
             var email: String = emailUser.text.toString()
             var pass: String = passUser.text.toString()
             var user: String = userName.text.toString()
@@ -68,6 +72,9 @@ class SignUp : AppCompatActivity() {
                 Toast.makeText(this, R.string.FillAllFields,Toast.LENGTH_LONG).show()
             } else{
                 auth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(this, OnCompleteListener { task ->
+                    // Re enable button
+                    registBtn.isEnabled = true
+
                     if(task.isSuccessful){
                         Toast.makeText(this, R.string.SuccessRegister, Toast.LENGTH_LONG).show()
                         //val intent = Intent(this, MainActivity::class.java)

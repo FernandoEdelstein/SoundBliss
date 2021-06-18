@@ -21,6 +21,7 @@ import com.google.firebase.database.ktx.getValue
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.soundbliss.Model.User
 import com.soundbliss.R
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -56,6 +57,7 @@ class EditProfileFragment : Fragment() {
         val view: View = inflater.inflate(R.layout.fragment_edit_profile, container, false)
         auth = getInstance()
         userId = auth.currentUser!!.uid
+
         mProfilePhoto = view.findViewById(R.id.profile_photo) as CircleImageView
         mUsername = view.findViewById(R.id.username) as EditText
         mDescription = view.findViewById(R.id.description) as EditText
@@ -69,6 +71,7 @@ class EditProfileFragment : Fragment() {
         document = firestoreDb.collection("users").document(userId!!)
 
 
+
         //setupFirebaseAuth()
 
         back!!.setOnClickListener {
@@ -78,9 +81,10 @@ class EditProfileFragment : Fragment() {
         };
 
         checkMark!!.setOnClickListener {
+
+            saveChangesSetting()
             fragmentManager?.beginTransaction()?.replace(R.id.fragment_profile, ProfileFragment())
                 ?.commit()
-            saveChangesSetting()
         }
 
         return view

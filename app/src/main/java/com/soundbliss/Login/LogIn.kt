@@ -35,6 +35,8 @@ class LogIn : AppCompatActivity() {
         regButton = findViewById(R.id.regButton)
 
         buttonLogin.setOnClickListener {
+            buttonLogin.isEnabled = false
+
             var email: String = emailUserText.text.toString()
             var password: String = passwordUserText.text.toString()
 
@@ -42,6 +44,7 @@ class LogIn : AppCompatActivity() {
                 Toast.makeText(this@LogIn, R.string.FillAllFields, Toast.LENGTH_LONG).show()
             } else{
                 auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, OnCompleteListener { task ->
+                    buttonLogin.isEnabled = true
                     if(task.isSuccessful) {
                         val user = auth.currentUser
                         val intent = Intent(this, MainActivity::class.java)

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -16,6 +17,7 @@ import android.widget.AbsListView
 import android.widget.EditText
 import android.widget.SearchView
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.database.FirebaseRecyclerAdapter
@@ -41,7 +43,7 @@ import com.soundbliss.R.menu.search_menu
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.user_item.view.*
 
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(), UserSearchAdapter.onUserListener {
 
     private lateinit var userRecyclerView: RecyclerView
     private lateinit var searchBar : SearchView
@@ -74,7 +76,7 @@ class SearchFragment : Fragment() {
         posts = mutableListOf()
 
         userRecyclerView.layoutManager = LinearLayoutManager(context)
-        userAdapter = UserSearchAdapter(context!!, mUsers, true)
+        userAdapter = UserSearchAdapter(context!!, mUsers, true, this)
         userAdapter.notifyDataSetChanged()
 
         postAdapter = PostAdapter(context!!,posts)
@@ -170,7 +172,7 @@ class SearchFragment : Fragment() {
                         mUsers.add(user)
                 }
             }
-            userAdapter = UserSearchAdapter(context!!, mUsers, true)
+            userAdapter = UserSearchAdapter(context!!, mUsers, true, this)
             userAdapter.notifyDataSetChanged()
 
             userRecyclerView.adapter = userAdapter
@@ -250,6 +252,14 @@ class SearchFragment : Fragment() {
 
             userRecyclerView.adapter = postAdapter
         }
+    }
+
+    override fun onClick(position: Int) {
+        val fragmentTransaction = fragmentManager!!.beginTransaction()
+        val profileFragment = ProfileFragment(mUsers[position])
+        fragmentTransaction.replace(R.id.fragment_container, profileFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
 }

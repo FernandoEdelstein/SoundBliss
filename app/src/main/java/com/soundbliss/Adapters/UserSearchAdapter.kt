@@ -16,14 +16,23 @@ import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.item_post_image.view.*
 
-class UserSearchAdapter(context: Context, mUsers: List<User>, isFragment: Boolean) : RecyclerView.Adapter<UserSearchAdapter.ViewHolder>() {
+class UserSearchAdapter(context: Context, mUsers: List<User>, isFragment: Boolean, onListener: onUserListener) : RecyclerView.Adapter<UserSearchAdapter.ViewHolder>() {
 
     var mUser = mUsers
+    var mOnListener = onListener
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View, onListener: onUserListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         var profileImage: CircleImageView = itemView.findViewById(R.id.imageProfile)
         var username : TextView = itemView.findViewById(R.id.username_item)
         var fullName : TextView = itemView.findViewById(R.id.fullname)
+        var onLister = onListener
+
+        var itemView = itemView.setOnClickListener (this)
+
+        override fun onClick(v: View?) {
+            onLister.onClick(adapterPosition)
+        }
+
 
     }
 
@@ -31,7 +40,7 @@ class UserSearchAdapter(context: Context, mUsers: List<User>, isFragment: Boolea
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         var view = layoutInflater.inflate(R.layout.user_item, parent,false)
-        return ViewHolder(view)
+        return ViewHolder(view,mOnListener)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -47,4 +56,7 @@ class UserSearchAdapter(context: Context, mUsers: List<User>, isFragment: Boolea
 
     override fun getItemCount(): Int = mUser.size
 
+    interface onUserListener{
+        fun onClick(position: Int)
+    }
 }

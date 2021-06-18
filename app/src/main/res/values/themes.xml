@@ -13,4 +13,10 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+    
+    <style name="ThemeOverlay.SearchView" parent="">
+        <item name="android:editTextColor">@color/white_100</item>
+        <item name="android:textColorHint">@color/white_300</item>
+        <item name="searchHintIcon">@null</item>
+    </style>
 </resources>

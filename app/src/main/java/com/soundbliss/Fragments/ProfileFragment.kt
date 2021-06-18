@@ -1,24 +1,17 @@
 package com.soundbliss.Fragments
 
 import android.content.ContentValues
-import android.content.Intent
 import android.os.Bundle
-import android.transition.Transition
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.dynamic.SupportFragmentWrapper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
@@ -27,25 +20,24 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.ktx.Firebase
 import com.soundbliss.Adapters.PostAdapter
-import com.soundbliss.Login.SignUp
 import com.soundbliss.Model.AllPost
 import com.soundbliss.Model.User
 import com.soundbliss.R
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.activity_main.*
-import org.w3c.dom.Text
 
 
-class ProfileFragment() : Fragment() {
+class ProfileFragment(user:User?) : Fragment() {
 
-
-    private var signedInUser: User? = null
+    constructor() : this(null){}
 
     private lateinit var auth : FirebaseAuth
     private lateinit var firestoreDb: FirebaseFirestore
     private lateinit var documentReference: DocumentReference
+
+    private lateinit var editProfileButton: Button
+    private lateinit var messageButton: Button
 
     private lateinit var posts : MutableList<AllPost>
     private lateinit var postAdapter: PostAdapter
@@ -57,6 +49,8 @@ class ProfileFragment() : Fragment() {
     private lateinit var editProfile : Button
     private lateinit var descriptionProfile : TextView
 
+    private var initUser = user
+
 
 
     override fun onCreateView(
@@ -66,27 +60,57 @@ class ProfileFragment() : Fragment() {
         // Inflate the layout for this fragment
         val view : View = inflater.inflate(R.layout.fragment_profile, container, false)
 
+        //POSTS RECYCLER VIEW
+        recyclerView = view.findViewById(R.id.rvProfilePosts)
+
+        posts = mutableListOf()
+
+        postAdapter = PostAdapter(context!!, posts)
+
+        recyclerView.adapter = postAdapter
+
+        recyclerView.layoutManager = LinearLayoutManager(context)
+
         editProfile = view.findViewById(R.id.editProfile)
         username= view.findViewById(R.id.usernameProfile)
         descriptionProfile = view.findViewById(R.id.descriptionBio)
+        editProfileButton = view.findViewById(R.id.editProfile)
+        messageButton = view.findViewById(R.id.messageButton)
 
         auth = FirebaseAuth.getInstance()
         var id = auth.currentUser!!.uid
 
 
-        // ottenere lo username in base all'id dell'utente
-        firestoreDb = FirebaseFirestore.getInstance()
-        documentReference = firestoreDb.collection("users").document(id)
-        documentReference.get()
-            .addOnSuccessListener { documentSnapshot ->
-                 if(documentSnapshot.exists()) {
-                     username.text = documentSnapshot.getString("uname")
-                     descriptionProfile.text = documentSnapshot.getString("bio")
-                 }
+        if(initUser !=null){
+            Log.i("PROFILE", initUser.toString())
+            username.text = initUser!!.uname
+            descriptionProfile.text = initUser!!.bio
+
+            getPosts(initUser!!.uid)
+
+            if(initUser!!.uid == FirebaseAuth.getInstance().currentUser!!.uid){
+                editProfileButton.visibility = View.VISIBLE
+                messageButton.visibility = View.GONE
+            }else{
+                editProfileButton.visibility = View.GONE
+                messageButton.visibility = View.VISIBLE
             }
-             .addOnFailureListener{ exception ->
-                 Log.i("HomeFragment","Failure fetching signed in user" , exception)
-             }
+        }else{
+            firestoreDb = FirebaseFirestore.getInstance()
+            documentReference = firestoreDb.collection("users").document(id)
+            documentReference.get()
+                .addOnSuccessListener { documentSnapshot ->
+                    if(documentSnapshot.exists()) {
+                        username.text = documentSnapshot.getString("uname")
+                        descriptionProfile.text = documentSnapshot.getString("bio")
+                        getPosts(documentSnapshot.id)
+                    }
+                }
+                .addOnFailureListener{ exception ->
+                    Log.i("HomeFragment","Failure fetching signed in user" , exception)
+                }
+
+        }
 
 
         //EDIT PROFILE
@@ -103,43 +127,37 @@ class ProfileFragment() : Fragment() {
                     .commit()
             }
 
-        //POSTS RECYCLER VIEW
-        recyclerView = view!!.findViewById(R.id.rvProfilePosts)
 
-        posts = mutableListOf()
+        return view
+    }
 
-        postAdapter = PostAdapter(context!!, posts)
-
-        recyclerView.adapter = postAdapter
-
-        recyclerView.layoutManager = LinearLayoutManager(context)
-
-
+    private fun getPosts(uid: String){
         firestoreDb = FirebaseFirestore.getInstance()
-        val postReference = firestoreDb.collection("posts")
-            .limit(20)
+        var postReference = firestoreDb.collection("posts")
+            .limit(20).whereEqualTo("userid",uid).orderBy("creation_time_ms", Query.Direction.DESCENDING)
 
-            postReference.whereEqualTo("userid",id).orderBy("creation_time_ms", Query.Direction.DESCENDING)
 
-        postReference.addSnapshotListener{snapshot,exception ->
-            if(exception != null || snapshot == null){
-                Log.e(ContentValues.TAG,"Exception when querying posts" , exception)
+
+
+        postReference.addSnapshotListener { snapshot, exception ->
+            if (exception != null || snapshot == null) {
+                Log.e(ContentValues.TAG, "Exception when querying posts", exception)
                 return@addSnapshotListener
             }
             posts.clear()
-            for (documentSnapshot in snapshot){
+
+            for (documentSnapshot in snapshot) {
                 var documentid = documentSnapshot.id
 
-                    var post = documentSnapshot.toObject(AllPost::class.java)
-
+                var post = documentSnapshot.toObject(AllPost::class.java)
                 post.setDocumentId(documentid)
 
                 posts.add(post)
             }
-            postAdapter.notifyDataSetChanged()
-        }
 
-        return view
+            postAdapter.notifyDataSetChanged()
+
+        }
     }
 
 }
