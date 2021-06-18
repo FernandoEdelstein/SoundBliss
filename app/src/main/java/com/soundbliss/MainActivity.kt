@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
         val homeFrag = HomeFragment()
         val searchFrag = SearchFragment()
-        val chatFrag = ChatListFragment()
+        //val chatFrag = ChatListFragment()
         //val profileFrag = ProfileFragment()
 
         makeCurrentFragment(homeFrag)
@@ -56,7 +56,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home -> makeCurrentFragment(homeFrag)
                 R.id.nav_search -> makeCurrentFragment(searchFrag)
                 R.id.nav_profile -> makeCurrentFragment(ProfileFragment())
-                R.id.nav_chat -> makeCurrentFragment(chatFrag)
+                R.id.nav_chat -> {
+                    startActivity(Intent(this, ChatActivity::class.java))
+                }
                 R.id.nav_add -> {
                     startActivity(Intent(this, PostActivity::class.java))
 
