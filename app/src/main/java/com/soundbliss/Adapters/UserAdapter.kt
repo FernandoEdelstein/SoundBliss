@@ -10,7 +10,7 @@ import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.user_layout.view.*
 
-class UserItem(val user: User, val userId: String, val context:
+class UserAdapter(val user: User, val userId: String, val context:
 Context): Item<ViewHolder>() {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {

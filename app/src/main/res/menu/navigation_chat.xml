@@ -4,10 +4,10 @@
     <item
         android:id="@+id/navigation_people"
         android:icon="@drawable/ic_people_black_24dp"
-        android:title="People" />
+        android:title="Friends" />
 
     <item
         android:id="@+id/navigation_my_account"
         android:icon="@drawable/ic_account_circle_black_24dp"
-        android:title="My Account" />
+        android:title="Chat Archive" />
 </menu>

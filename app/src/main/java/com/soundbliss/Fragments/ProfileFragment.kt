@@ -136,9 +136,6 @@ class ProfileFragment(user:User?) : Fragment() {
         var postReference = firestoreDb.collection("posts")
             .limit(20).whereEqualTo("userid",uid).orderBy("creation_time_ms", Query.Direction.DESCENDING)
 
-
-
-
         postReference.addSnapshotListener { snapshot, exception ->
             if (exception != null || snapshot == null) {
                 Log.e(ContentValues.TAG, "Exception when querying posts", exception)

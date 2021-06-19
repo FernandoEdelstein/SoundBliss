@@ -1,6 +1,7 @@
 package com.soundbliss.Fragments
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,8 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
-import com.soundbliss.Adapters.UserItem
-import com.soundbliss.ChatActivity
+import com.soundbliss.Adapters.UserAdapter
+import com.soundbliss.MessengerActivity
 import com.soundbliss.Model.User
 import com.soundbliss.R
 import com.xwray.groupie.GroupAdapter
@@ -35,7 +36,7 @@ class PeopleChatFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        userListenerRegistration = addUsersListener(this.activity!!, this::updateRecyclerView)
+        userListenerRegistration = addUsersListener(this.requireActivity(), this::updateRecyclerView)
 
         return inflater.inflate(R.layout.fragment_people, container, false)
 
@@ -48,18 +49,20 @@ class PeopleChatFragment : Fragment() {
         shouldInitRecyclerView = true
     }
 
-    private fun updateRecyclerView(items: List<UserItem>) {
+    //update the list of users present as Friends
+    private fun updateRecyclerView(adapters: List<UserAdapter>) {
         fun init() {
             recyclerview_chatPeople.apply {
                 layoutManager = LinearLayoutManager(this.context)
                 adapter = GroupAdapter<ViewHolder>().apply {
-                    peopleSection = Section(items)
+                    peopleSection = Section(adapters)
                     add(peopleSection)
+                    setOnItemClickListener(onItemClick)
                 }
             }
             shouldInitRecyclerView = false
         }
-        fun updateItems() = peopleSection.update(items)
+        fun updateItems() = peopleSection.update(adapters)
 
         if (shouldInitRecyclerView)
             init()
@@ -68,9 +71,10 @@ class PeopleChatFragment : Fragment() {
 
     }
 
+    //add some new user to the list of Friends
     private fun addUsersListener(
         context: Context,
-        onListen: (List<UserItem>) -> Unit
+        onListen: (List<UserAdapter>) -> Unit
     ): ListenerRegistration {
         var firestoreInstance = FirebaseFirestore.getInstance()
         return firestoreInstance.collection("users")
@@ -80,14 +84,23 @@ class PeopleChatFragment : Fragment() {
                     return@addSnapshotListener
                 }
 
-                var items = mutableListOf<UserItem>()
+                var items = mutableListOf<UserAdapter>()
                 querySnapshot!!.documents.forEach {
                     if (it.id != FirebaseAuth.getInstance().currentUser?.uid)
-                        items.add(UserItem(it.toObject(User::class.java)!!, it.id, context))
+                        items.add(UserAdapter(it.toObject(User::class.java)!!, it.id, context))
                 }
                 onListen(items)
             }
 
+    }
+
+    private val onItemClick = OnItemClickListener{ item, view ->
+        if(item is UserAdapter){
+          val intent = Intent(activity, MessengerActivity::class.java)
+            intent.putExtra("username", item.user.uname)
+            intent.putExtra("friendUid", item.user.uid)
+            startActivity(intent)
+        }
     }
 
 

@@ -1,5 +1,11 @@
 package com.soundbliss.Model
 
-data class TextMessage(val creation_time_ms : Long, val receiverid : String, val senderid : String, val text : String ) {
-    constructor():this(0,"","","")
+import java.util.*
+
+data class TextMessage (val text : String,
+                        override val time : Date,
+                        override val senderId: String,
+                        override val type: String = MessageType.TEXT)
+    : Message{
+    constructor(): this("", Date(0), "")
 }
