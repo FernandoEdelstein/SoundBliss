@@ -44,31 +44,37 @@ class PeopleChatFragment : Fragment() {
 
 
     }
-
+//remove the listener
     override fun onDestroyView() {
         super.onDestroyView()
         removeListener(userListenerRegistration)
+    //set true to initialize again che recyclerview (add user to the list)
         initRecyclerView = true
     }
 
     //update the list of users present as Friends
     private fun updateRecyclerView(adapters: List<UserAdapter>) {
         fun init() {
+            //recyclerview from the fragment_people to add and show the list of Friends
             recyclerview_chatPeople.apply {
                 layoutManager = LinearLayoutManager(this.context)
                 adapter = GroupAdapter<ViewHolder>().apply {
+                    //groupAdapter holds the Section but the Section holds "users"
                     peopleSection = Section(adapters)
+                    //add to the Adapter
                     add(peopleSection)
                     setOnItemClickListener(onItemClick)
                 }
             }
+            //set false when users have been added to the list
             initRecyclerView = false
         }
         fun updateItems() = peopleSection.update(adapters)
-
+        //if true the recyclerview is initialized
         if (initRecyclerView)
             init()
         else
+
             updateItems()
 
     }
@@ -98,6 +104,7 @@ class PeopleChatFragment : Fragment() {
     }
 
     private val onItemClick = OnItemClickListener{ item, view ->
+        //if the item is an User
         if(item is UserAdapter){
           val intent = Intent(activity, MessengerActivity::class.java)
             intent.putExtra("username", item.user.uname)

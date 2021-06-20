@@ -78,10 +78,14 @@ class MessengerActivity : AppCompatActivity() {
                 friendId: String,
                 onComplete: (channelId: String) -> Unit
             ) {
+        //reference to the collection of the chat
                 val chatChannel = firestoreDb.collection("chatChannels")
+        //activeChat -> to save in which chat users are engaged
                 currentUser.collection("activeChat")
                     .document(friendId).get().addOnSuccessListener { documentSnapshot ->
+                        //if it exists, it means that a chat alreay exists
                         if (documentSnapshot.exists()) {
+                            //call onComplete to show from documentSnaphot the chat
                             onComplete(documentSnapshot["channelId"] as String)
                             return@addOnSuccessListener
                         }
@@ -95,17 +99,18 @@ class MessengerActivity : AppCompatActivity() {
                             .document(friendId)
                             .set(mapOf("channelId" to newChatChannel.id))
 
-                        //a friend to chat with me
+                        //a friend to chat with me and save his Id in my activeChat
                         firestoreDb.collection("users").document(friendId)
                             .collection("activeChat")
                             .document(currentUserId)
                             .set(mapOf("channelId" to newChatChannel.id))
+                        //newChatChannel.id is the new document in firestore where to store the new chat
 
                         onComplete(newChatChannel.id)
 
                     }
             }
-
+    //listen to message inside the Channel
             private fun addMessageListener(
                 channelId: String, context: Context,
                 onListen: (List<MessageAdapter>) -> Unit
@@ -162,6 +167,6 @@ class MessengerActivity : AppCompatActivity() {
                 else
                     updateItems()
 
-                recycler_view_messages.scrollToPosition(recycler_view_messages.adapter!!.itemCount - 1)
+                recycler_view_messages.scrollToPosition(recycler_view_messages.adapter!!.itemCount - 2)
             }
         }

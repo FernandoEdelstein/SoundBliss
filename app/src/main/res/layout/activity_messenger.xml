@@ -23,7 +23,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_messages"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="704dp" />
 
 
     <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -46,12 +46,14 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="2dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/rect_oval_white"
         android:elevation="2dp"
         android:hint="Write here.."
         android:padding="8dp"
         android:textAlignment="center"
+        app:layout_anchor="@+id/recycler_view_messages"
+        app:layout_anchorGravity="bottom|center"
         tools:ignore="RtlCompat" />
 
     <ImageView
@@ -59,14 +61,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
         android:elevation="2dp"
         android:src="@drawable/ic_send_black_24dp"
         app:layout_anchor="@+id/editText_message"
-        app:layout_anchorGravity="end|center"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="24dp" />
+        app:layout_anchorGravity="end|center" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
