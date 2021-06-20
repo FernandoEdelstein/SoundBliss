@@ -30,6 +30,12 @@
     <string name="UploadTrack">Upload Track</string>
     <string name="ShareYourMusic">Share Your Music</string>
 
+    <string name="FillTitle">Please fill the title</string>
+    <string name="FillGender">Please fill the gender</string>
+    <string name="FillDescription">Please add a description</string>
+    <string name="FillLocation">Please add a location</string>
+
+
     <!-- Profile -->
     <string name="EditProfile">Edit Your Profile</string>
     <string name="Posts">Posts</string>

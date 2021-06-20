@@ -70,6 +70,8 @@ class RequestFragment : Fragment(), OnMapReadyCallback {
          requestDescription = view.findViewById(R.id.requestDescription)
          requestGender = view.findViewById(R.id.requestGender)
          submitButton = view.findViewById(R.id.requestSubmit)
+         latLng = LatLng(45.4642,9.1900)
+
 
          search = view.findViewById(R.id.requestSearch)
 
@@ -105,8 +107,6 @@ class RequestFragment : Fragment(), OnMapReadyCallback {
              }
          })
 
-
-
          submitButton.setOnClickListener {
              uploadRequest()
          }
@@ -124,9 +124,40 @@ class RequestFragment : Fragment(), OnMapReadyCallback {
 
 
     fun uploadRequest(){
+        if(requestTitle.text.isBlank() || requestTitle == null){
+            Toast.makeText(context,R.string.FillTitle,Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if(requestGender.text.isBlank() || requestGender == null){
+            Toast.makeText(context,R.string.FillGender,Toast.LENGTH_SHORT).show()
+        return}
+
+        if(requestDescription.text.isBlank() || requestDescription == null) {
+            Toast.makeText(context, R.string.FillDescription, Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if(latLng == null){
+            Toast.makeText(context,"Error",Toast.LENGTH_SHORT).show()
+            return
+        }
+
+
+
         val geoLocation = GeoPoint(latLng.latitude,latLng.longitude)
 
-        val locationText = addressList!!.get(0).locality
+        val locationText = ""
+        if(addressList == null){
+            Toast.makeText(context,R.string.FillLocation,Toast.LENGTH_SHORT).show()
+        }else{
+            val locationText = addressList!!.get(0).locality
+        }
+
+        if(locationText == ""){
+            Toast.makeText(context,R.string.FillLocation,Toast.LENGTH_SHORT).show()
+            return
+        }
 
 
         val requestPost = AllPost(
