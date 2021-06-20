@@ -44,8 +44,8 @@ class MessengerActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar))
 
 
-        findViewById<ImageView>(R.id.send).setOnClickListener { view ->
-            Snackbar.make(view, "Sending message", Snackbar.LENGTH_LONG)
+        /*findViewById<ImageView>(R.id.send).setOnClickListener { view ->
+            Snackbar.make(view, "Sending message", Snackbar.LENGTH_LONG)*/
 
             auth = FirebaseAuth.getInstance()
             firestoreDb = FirebaseFirestore.getInstance()
@@ -71,7 +71,7 @@ class MessengerActivity : AppCompatActivity() {
                 }
             }
         }
-    }
+
 
     //creation of the chat channel
             private fun onCreateChatChannel(
@@ -98,7 +98,7 @@ class MessengerActivity : AppCompatActivity() {
                         //a friend to chat with me
                         firestoreDb.collection("users").document(friendId)
                             .collection("activeChat")
-                            .document("uname")
+                            .document(currentUserId)
                             .set(mapOf("channelId" to newChatChannel.id))
 
                         onComplete(newChatChannel.id)

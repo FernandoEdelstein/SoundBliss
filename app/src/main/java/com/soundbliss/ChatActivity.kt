@@ -39,10 +39,10 @@ class ChatActivity : AppCompatActivity() {
                     makeCurrentFragment(PeopleChatFragment())
                     true
                 }
-                R.id.navigation_my_account -> {
+             /*   R.id.navigation_my_account -> {
                     makeCurrentFragment(ChatArchiveFragment())
                     true
-                }
+                }*/
                 else -> false
             }
         }

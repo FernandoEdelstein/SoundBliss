@@ -25,9 +25,11 @@ import kotlinx.android.synthetic.main.fragment_people.*
 
 class PeopleChatFragment : Fragment() {
 
+    //ListenerRegistration because when someone sign up in the app should be added to the list of Friends where I can chat with
+    // so the List of Friends is also updated.
     private lateinit var userListenerRegistration: ListenerRegistration
 
-    private var shouldInitRecyclerView = true
+    private var initRecyclerView = true
 
     private lateinit var peopleSection: Section
 
@@ -46,7 +48,7 @@ class PeopleChatFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         removeListener(userListenerRegistration)
-        shouldInitRecyclerView = true
+        initRecyclerView = true
     }
 
     //update the list of users present as Friends
@@ -60,33 +62,34 @@ class PeopleChatFragment : Fragment() {
                     setOnItemClickListener(onItemClick)
                 }
             }
-            shouldInitRecyclerView = false
+            initRecyclerView = false
         }
         fun updateItems() = peopleSection.update(adapters)
 
-        if (shouldInitRecyclerView)
+        if (initRecyclerView)
             init()
         else
             updateItems()
 
     }
 
-    //add some new user to the list of Friends
+    //add some new user to the list of Friends or get them if already exists
     private fun addUsersListener(
         context: Context,
         onListen: (List<UserAdapter>) -> Unit
     ): ListenerRegistration {
         var firestoreInstance = FirebaseFirestore.getInstance()
         return firestoreInstance.collection("users")
-            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                if (firebaseFirestoreException != null) {
-                    Log.e("FIRESTORE", "Users listener error.", firebaseFirestoreException)
+            .addSnapshotListener { querySnapshot, firestoreException ->
+                if (firestoreException != null) {
+                    Log.e("FIRESTORE", "Users listener error.", firestoreException)
                     return@addSnapshotListener
                 }
 
                 var items = mutableListOf<UserAdapter>()
                 querySnapshot!!.documents.forEach {
                     if (it.id != FirebaseAuth.getInstance().currentUser?.uid)
+                        //if the user doesn't exist, it will be added
                         items.add(UserAdapter(it.toObject(User::class.java)!!, it.id, context))
                 }
                 onListen(items)
