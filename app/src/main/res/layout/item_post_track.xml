@@ -77,53 +77,14 @@
         android:textColor="@color/white_100"
         android:layout_marginLeft="8dp"/>
 
-    <LinearLayout
+
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:id="@+id/postTrackPlayer">
-
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/ic_play"
-            android:id="@+id/btn_play"/>
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/ic_pause"
-            android:id="@+id/btn_pause"
-            android:visibility="gone"/>
-
-        <SeekBar
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/seekBar"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/player_position"
-            android:text="00:00"
-            android:textColor="@color/blue_100"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/slash"
-            android:text="|"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp"
-            android:textColor="@color/white_300"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/player_duration"
-            android:text="00:00"
-            android:textColor="@color/white_100"/>
-
-    </LinearLayout>
+        android:text="@string/play_track"
+        android:textColor="@color/white_100"
+        android:id="@+id/playBtn"
+        android:layout_gravity="center"/>
 
     <TextView
         android:layout_width="match_parent"

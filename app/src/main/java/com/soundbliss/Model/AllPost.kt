@@ -1,7 +1,9 @@
 package com.soundbliss.Model
 
+import android.os.Parcelable
 import com.google.firebase.database.PropertyName
 import com.google.firebase.firestore.GeoPoint
+import java.io.Serializable
 
 data class AllPost(@get:PropertyName("creation_time_ms")@set:PropertyName("creation_time_ms") var creation_time_ms: Long = 0,
                    @get:PropertyName("description")@set:PropertyName("description") var description: String = "",
@@ -12,7 +14,8 @@ data class AllPost(@get:PropertyName("creation_time_ms")@set:PropertyName("creat
                    @get:PropertyName("title")@set:PropertyName("title") var title: String? = "",
                    @get:PropertyName("type")@set:PropertyName("type") var type: String = "",
                    @get:PropertyName("userid")@set:PropertyName("userid") var userid: String = "",
-                   @get:PropertyName("username")@set:PropertyName("username") var username: String = "") {
+                   @get:PropertyName("username")@set:PropertyName("username") var username: String = "") :
+    Serializable {
 
 
     var documentId : String = ""

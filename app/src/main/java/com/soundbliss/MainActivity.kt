@@ -1,5 +1,6 @@
 package com.soundbliss
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
@@ -58,6 +60,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_profile -> makeCurrentFragment(ProfileFragment())
                 R.id.nav_chat -> {
                     startActivity(Intent(this, ChatActivity::class.java))
+                    overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
                 }
                 R.id.nav_add -> {
                     startActivity(Intent(this, PostActivity::class.java))
@@ -75,4 +78,5 @@ class MainActivity : AppCompatActivity() {
             addToBackStack(null)
             commit()
         }
+
 }

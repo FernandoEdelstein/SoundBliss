@@ -15,12 +15,14 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.soundbliss.MapsActivity
 import com.soundbliss.Model.AllPost
+import com.soundbliss.Player
 import com.soundbliss.R
 import kotlinx.android.synthetic.main.item_post_image.view.*
 import kotlinx.android.synthetic.main.item_post_request.view.*
@@ -29,36 +31,34 @@ import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
 class PostAdapter(var context: Context, list: List<AllPost>) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    RecyclerView.Adapter<ViewHolder>() {
     private val TAG = "RecyclerAdapter"
     private var list = list
 
     private val currentUser = FirebaseAuth.getInstance().currentUser
     private var firestoreDb = FirebaseFirestore.getInstance()
 
-    private inner class ViewHolderOnePhoto(itemView:View):RecyclerView.ViewHolder(itemView){
+    private inner class ViewHolderOnePhoto(itemView:View): ViewHolder(itemView){
         var deletePhoto = itemView.deleteImagePost
     }
 
-    private inner class ViewHolderTwoTrack(itemView:View):RecyclerView.ViewHolder(itemView){
+    private inner class ViewHolderTwoTrack(itemView:View): ViewHolder(itemView){
         var postGender = itemView.postTrackGender
         var postTitle = itemView.postTrackName
         var postUsername = itemView.postTrackUserName
         var relativeTime = itemView.postTrackRelativeTime
         var postDescription = itemView.postTrackDescription
 
-
-        var playerDuration = itemView.player_duration
-        var playerPosition = itemView.player_position
-        var seekBar = itemView.seekBar
-        var btPause = itemView.btn_pause
-        var btPlay = itemView.btn_play
+        var playBtn = itemView.playBtn
 
         var deleteTrack = itemView.deleteTrackPost
 
+
+
+
     }
 
-    private inner class ViewHolderThreeRequest(itemView:View):RecyclerView.ViewHolder(itemView){
+    private inner class ViewHolderThreeRequest(itemView:View): ViewHolder(itemView){
         var postLocation = itemView.postRequestLocation
         var deleteRequest = itemView.deleteRequestPost
         var contactButton = itemView.postRequestContact
@@ -67,7 +67,7 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
 
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view : View
 
@@ -96,7 +96,7 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
     }
 
     @SuppressLint("SetTextI18n")
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int){
+    override fun onBindViewHolder(holder: ViewHolder, position: Int){
 
         if(getItemViewType(position) == 0){
             val post = list[position]
@@ -140,66 +140,16 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
             viewHolderTwo.relativeTime.text = DateUtils.getRelativeTimeSpanString(post.creation_time_ms)
             viewHolderTwo.postDescription.text = post.description
 
-            //Media Player
-            var mediaPlayer = MediaPlayer()
-
-            //Play/Pause
-            viewHolderTwo.btPlay.setOnClickListener { v: View? ->
-                viewHolderTwo.btPlay.visibility = View.GONE
-                viewHolderTwo.btPause.visibility = View.VISIBLE
-                mediaPlayer.start()
-                viewHolderTwo.seekBar.max = mediaPlayer.duration
-            }
-            viewHolderTwo.btPause.setOnClickListener { v: View ->
-                viewHolderTwo.btPause.visibility = View.GONE
-                viewHolderTwo.btPlay.visibility = View.VISIBLE
-                mediaPlayer.pause()
+            viewHolderTwo.playBtn.setOnClickListener { v:View? ->
+                val intent = Intent(context, Player::class.java)
+                var trackBundle = Bundle()
+                trackBundle.putSerializable("post",post)
+                intent.putExtra("Post", trackBundle)
+                context.startActivity(intent)
             }
 
-            mediaPlayer = MediaPlayer.create(context, Uri.parse(post.posturl))
 
-            val duration = mediaPlayer.duration
-            val stDuration : String = convertFormat(duration.toLong())
-            viewHolderTwo.playerDuration.text = stDuration
-
-            val handler = Handler()
-
-            handler.postDelayed(object : Runnable{
-                override fun run() {
-                    try{
-                        viewHolderTwo.seekBar.progress = mediaPlayer.currentPosition
-                        handler.postDelayed(this, 1000 )
-                    }catch (e : Exception){
-                        viewHolderTwo.seekBar.progress = 0
-                    }
-                }
-            },0)
-
-            viewHolderTwo.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
-                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                    if(fromUser){
-                        mediaPlayer.seekTo(progress)
-                    }
-                    viewHolderTwo.playerPosition.text = convertFormat(mediaPlayer.currentPosition.toLong())
-                }
-
-                override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                }
-
-                override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                }
-
-            })
-
-            mediaPlayer.setOnCompletionListener ( object: MediaPlayer.OnCompletionListener {
-                override fun onCompletion(mp: MediaPlayer?) {
-                    viewHolderTwo.btPause.visibility = View.GONE
-                    viewHolderTwo.btPlay.visibility = View.VISIBLE
-                    mediaPlayer.seekTo(0)
-                }
-            })
-
-
+            //Delete Button
             if(currentUser!!.uid == post.userid){
                 viewHolderTwo.deleteTrack.visibility = View.VISIBLE
                 viewHolderTwo.deleteTrack.setOnClickListener {
@@ -298,5 +248,7 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
                 }
             }
     }
+
+
 
 }

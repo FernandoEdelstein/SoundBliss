@@ -3,6 +3,7 @@ package com.soundbliss
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
@@ -19,7 +20,10 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var currentUser: DocumentReference
 
-
+    override fun onDestroy() {
+        super.onDestroy()
+        overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
