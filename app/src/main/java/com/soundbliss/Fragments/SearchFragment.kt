@@ -43,7 +43,7 @@ import com.soundbliss.R.menu.search_menu
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.user_item.view.*
 
-class SearchFragment : Fragment(), UserSearchAdapter.onUserListener {
+class SearchFragment : Fragment(), UserSearchAdapter.onUserListener, PostAdapter.onUserListener {
 
     private lateinit var userRecyclerView: RecyclerView
     private lateinit var searchBar : SearchView
@@ -76,10 +76,10 @@ class SearchFragment : Fragment(), UserSearchAdapter.onUserListener {
         posts = mutableListOf()
 
         userRecyclerView.layoutManager = LinearLayoutManager(context)
-        userAdapter = UserSearchAdapter(context!!, mUsers, true, this)
+        userAdapter = UserSearchAdapter(requireContext(), mUsers, true, this)
         userAdapter.notifyDataSetChanged()
 
-        postAdapter = PostAdapter(context!!,posts)
+        postAdapter = PostAdapter(requireContext(),posts,this)
 
         userRecyclerView.adapter = userAdapter
 
@@ -172,7 +172,7 @@ class SearchFragment : Fragment(), UserSearchAdapter.onUserListener {
                         mUsers.add(user)
                 }
             }
-            userAdapter = UserSearchAdapter(context!!, mUsers, true, this)
+            userAdapter = UserSearchAdapter(requireContext(), mUsers, true, this)
             userAdapter.notifyDataSetChanged()
 
             userRecyclerView.adapter = userAdapter
@@ -197,7 +197,7 @@ class SearchFragment : Fragment(), UserSearchAdapter.onUserListener {
                         posts.add(post)
             }
 
-            postAdapter = PostAdapter(context!!, posts)
+            postAdapter = PostAdapter(requireContext(), posts,this)
             postAdapter.notifyDataSetChanged()
 
             userRecyclerView.adapter = postAdapter
@@ -222,7 +222,7 @@ class SearchFragment : Fragment(), UserSearchAdapter.onUserListener {
                     posts.add(post)
             }
 
-            postAdapter = PostAdapter(context!!, posts)
+            postAdapter = PostAdapter(requireContext(), posts,this)
             postAdapter.notifyDataSetChanged()
 
             userRecyclerView.adapter = postAdapter
@@ -247,7 +247,7 @@ class SearchFragment : Fragment(), UserSearchAdapter.onUserListener {
                     posts.add(post)
             }
 
-            postAdapter = PostAdapter(context!!, posts)
+            postAdapter = PostAdapter(requireContext(), posts,this)
             postAdapter.notifyDataSetChanged()
 
             userRecyclerView.adapter = postAdapter
@@ -260,6 +260,21 @@ class SearchFragment : Fragment(), UserSearchAdapter.onUserListener {
         fragmentTransaction.replace(R.id.fragment_container, profileFragment)
             .addToBackStack(null)
             .commit()
+    }
+
+    override fun onPostClick(position: Int) {
+        val fragmentTransaction = fragmentManager!!.beginTransaction()
+
+        var postCreator : User
+        var poster = firestoreDb.collection("users").document(posts[position].userid)
+        poster.get().addOnSuccessListener { documentSnapshot ->
+            postCreator = documentSnapshot.toObject(User::class.java)!!
+
+            val profileFragment = ProfileFragment(postCreator)
+            fragmentTransaction.replace(R.id.fragment_container, profileFragment)
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
 }

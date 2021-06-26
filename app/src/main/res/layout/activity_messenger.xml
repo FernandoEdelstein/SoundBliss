@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,9 +7,13 @@
     tools:context=".MessengerActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/Theme.SoundBliss.AppBarOverlay">
+        android:theme="@style/Theme.SoundBliss.AppBarOverlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -20,10 +24,16 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_messages"
         android:layout_width="match_parent"
-        android:layout_height="704dp" />
+        android:layout_height="0dp"
+        android:background="@color/blue_800"
+        app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 
     <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -38,37 +48,42 @@
         app:layout_anchor="@+id/editText_message"
         app:layout_anchorGravity="start|center" />-->
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/editText_message"
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="2dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/rect_oval_white"
-        android:elevation="2dp"
-        android:hint="Write here.."
-        android:padding="8dp"
-        android:textAlignment="center"
-        app:layout_anchor="@+id/recycler_view_messages"
-        app:layout_anchorGravity="bottom|center"
-        tools:ignore="RtlCompat" />
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@color/blue_800">
 
-    <ImageView
-        android:id="@+id/send"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:elevation="2dp"
-        android:src="@drawable/ic_send_black_24dp"
-        app:layout_anchor="@+id/editText_message"
-        app:layout_anchorGravity="end|center" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:background="@drawable/rect_oval_white"
+            android:elevation="2dp"
+            android:hint="Write here.."
+            android:padding="8dp"
+            android:textAlignment="center"
+            app:layout_anchorGravity="bottom|center"
+            tools:ignore="RtlCompat" />
 
+        <ImageView
+            android:id="@+id/send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:elevation="2dp"
+            android:src="@drawable/ic_send_black_24dp"
+            app:layout_anchor="@+id/editText_message"
+            app:layout_anchorGravity="end|center" />
+    </RelativeLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

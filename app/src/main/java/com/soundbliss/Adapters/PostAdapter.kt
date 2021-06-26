@@ -4,15 +4,11 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SeekBar
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -27,10 +23,8 @@ import com.soundbliss.R
 import kotlinx.android.synthetic.main.item_post_image.view.*
 import kotlinx.android.synthetic.main.item_post_request.view.*
 import kotlinx.android.synthetic.main.item_post_track.view.*
-import java.lang.Exception
-import java.util.concurrent.TimeUnit
 
-class PostAdapter(var context: Context, list: List<AllPost>) :
+class PostAdapter(var context: Context, list: List<AllPost>,onListener: onUserListener) :
     RecyclerView.Adapter<ViewHolder>() {
     private val TAG = "RecyclerAdapter"
     private var list = list
@@ -38,11 +32,21 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
     private val currentUser = FirebaseAuth.getInstance().currentUser
     private var firestoreDb = FirebaseFirestore.getInstance()
 
-    private inner class ViewHolderOnePhoto(itemView:View): ViewHolder(itemView){
+    var mOnListener = onListener
+
+    private inner class ViewHolderOnePhoto(itemView:View,onListener: onUserListener): ViewHolder(itemView),View.OnClickListener{
         var deletePhoto = itemView.deleteImagePost
+        var postPhotoProfileImg = itemView.postPhotoProfileImg
+
+        //Listener for accessing poster profile
+        var onListener = onListener
+        var postPhotoUserName = itemView.postPhotoUserName.setOnClickListener(this)
+        override fun onClick(v: View?) {
+            onListener.onPostClick(adapterPosition)
+        }
     }
 
-    private inner class ViewHolderTwoTrack(itemView:View): ViewHolder(itemView){
+    private inner class ViewHolderTwoTrack(itemView:View,onListener: onUserListener): ViewHolder(itemView),View.OnClickListener{
         var postGender = itemView.postTrackGender
         var postTitle = itemView.postTrackName
         var postUsername = itemView.postTrackUserName
@@ -53,16 +57,29 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
 
         var deleteTrack = itemView.deleteTrackPost
 
+        var postTrackProfileImg = itemView.postTrackProfileImg
 
-
-
+        //Listener for accessing poster profile
+        var onListener = onListener
+        var postTrackUserName = itemView.postTrackUserName.setOnClickListener(this)
+        override fun onClick(v: View?) {
+            onListener.onPostClick(adapterPosition)
+        }
     }
 
-    private inner class ViewHolderThreeRequest(itemView:View): ViewHolder(itemView){
+    private inner class ViewHolderThreeRequest(itemView:View,onListener: onUserListener): ViewHolder(itemView),View.OnClickListener{
         var postLocation = itemView.postRequestLocation
         var deleteRequest = itemView.deleteRequestPost
         var contactButton = itemView.postRequestContact
 
+        var postRequestProfileImg = itemView.postRequestProfileImg
+
+        //Listener for accessing poster Profile
+        var onListener = onListener
+        var postRequestUserName = itemView.postRequestUserName.setOnClickListener(this)
+        override fun onClick(v: View?) {
+            onListener.onPostClick(adapterPosition)
+        }
     }
 
 
@@ -73,13 +90,13 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
 
         return if(viewType == 0){
             view = layoutInflater.inflate(R.layout.item_post_image, parent,false)
-            ViewHolderOnePhoto(view)
+            ViewHolderOnePhoto(view, mOnListener)
         }else if(viewType == 1){
             view = layoutInflater.inflate(R.layout.item_post_track,parent, false)
-            ViewHolderTwoTrack(view)
+            ViewHolderTwoTrack(view, mOnListener)
         }else {
             view = layoutInflater.inflate(R.layout.item_post_request, parent, false)
-            ViewHolderThreeRequest(view)
+            ViewHolderThreeRequest(view,mOnListener)
         }
     }
 
@@ -102,10 +119,18 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
             val post = list[position]
             val viewHolderOne = holder as ViewHolderOnePhoto
 
+            var poster = firestoreDb.collection("users").document(post.userid)
+            poster.get().addOnSuccessListener { documentSnapshot ->
+                if(documentSnapshot.getString("imageu") != "")
+                    Glide.with(context!!).load(documentSnapshot.getString("imageu")).into(viewHolderOne.postPhotoProfileImg)
+                }
+
                 viewHolderOne.itemView.postPhotoDescription.text = post.description
                 viewHolderOne.itemView.postPhotoUserName.text = post.username
                 viewHolderOne.itemView.postPhotoRelativeTime.text = DateUtils.getRelativeTimeSpanString(post.creation_time_ms)
                 Glide.with(context).load(post.posturl).into(viewHolderOne.itemView.postPhotoImageView)
+
+
 
             if(currentUser!!.uid == post.userid){
                 viewHolderOne.deletePhoto.visibility = View.VISIBLE
@@ -134,12 +159,21 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
 
             val viewHolderTwo = holder as ViewHolderTwoTrack
 
+            //ADD PROFILE PIC
+            var poster = firestoreDb.collection("users").document(post.userid)
+            poster.get().addOnSuccessListener { documentSnapshot ->
+                if(documentSnapshot.getString("imageu") != "")
+                    Glide.with(context!!).load(documentSnapshot.getString("imageu")).into(viewHolderTwo.postTrackProfileImg)
+            }
+
+            //Set up all parameters
             viewHolderTwo.postGender.text = post.gender
             viewHolderTwo.postTitle.text = post.title
             viewHolderTwo.postUsername.text = post.username
             viewHolderTwo.relativeTime.text = DateUtils.getRelativeTimeSpanString(post.creation_time_ms)
             viewHolderTwo.postDescription.text = post.description
 
+            //Music Player
             viewHolderTwo.playBtn.setOnClickListener { v:View? ->
                 val intent = Intent(context, Player::class.java)
                 var trackBundle = Bundle()
@@ -147,7 +181,6 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
                 intent.putExtra("Post", trackBundle)
                 context.startActivity(intent)
             }
-
 
             //Delete Button
             if(currentUser!!.uid == post.userid){
@@ -158,9 +191,9 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
                         .setCancelable(false)
                         .setPositiveButton("Yes"){ dialog, id ->
                             //DELETE FROM DATABASE METHOD
-                            deletePost(position)
+                            deletePost(position) //Delete the post if user selects "yes"
                         }
-                        .setNegativeButton("No"){ dialog, id ->
+                        .setNegativeButton("No"){ dialog, id -> //Dialog Dismiss if user selects "No"
                             dialog.dismiss()
                         }
                     val alert = builder.create()
@@ -171,12 +204,16 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
             }
 
 
-
-
         }else if(getItemViewType(position) == 2) {
             var viewHolderThreeRequest = holder as ViewHolderThreeRequest
 
             val post = list[position]
+
+            var poster = firestoreDb.collection("users").document(post.userid)
+                poster.get().addOnSuccessListener { documentSnapshot ->
+                if(documentSnapshot.getString("imageu") != "")
+                    Glide.with(context!!).load(documentSnapshot.getString("imageu")).into(viewHolderThreeRequest.postRequestProfileImg)
+            }
 
             viewHolderThreeRequest.itemView.postRequestTitle.text = post.title
             viewHolderThreeRequest.itemView.postRequestGender.text = post.gender
@@ -184,7 +221,6 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
             viewHolderThreeRequest.itemView.postRequestUserName.text = post.username
             viewHolderThreeRequest.itemView.postRequestRelativeTime.text =
                 DateUtils.getRelativeTimeSpanString(post.creation_time_ms)
-
 
             viewHolderThreeRequest.itemView.postRequestLocation.text = post.locationtext + " - Maps"
 
@@ -226,14 +262,6 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
 
     override fun getItemCount(): Int = list.size
 
-    @SuppressLint("DefaultLocale")
-    private fun convertFormat(duration:Long):String{
-        return String.format("%02d:0%2d",
-            TimeUnit.MILLISECONDS.toMinutes(duration)
-            , TimeUnit.MILLISECONDS.toSeconds(duration) -
-                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)))
-    }
-
 
     private fun deletePost(position: Int){
         firestoreDb.collection("posts").document(list.get(position).documentId)
@@ -249,6 +277,8 @@ class PostAdapter(var context: Context, list: List<AllPost>) :
             }
     }
 
-
+    interface onUserListener{
+        fun onPostClick(position: Int)
+    }
 
 }

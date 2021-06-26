@@ -12,10 +12,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.soundbliss.Adapters.PostAdapter
 import com.soundbliss.Model.AllPost
+import com.soundbliss.Model.User
 import com.soundbliss.R
 import kotlinx.android.synthetic.main.fragment_home.*
 import java.util.*
@@ -23,7 +25,7 @@ import kotlin.concurrent.thread
 
 private const val TAG = "Home Fragment"
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), PostAdapter.onUserListener {
 
 
     private lateinit var firestoreDb: FirebaseFirestore
@@ -47,7 +49,7 @@ class HomeFragment : Fragment() {
 
         posts = mutableListOf()
 
-        postAdapter = PostAdapter(context!!, posts)
+        postAdapter = PostAdapter(requireContext(), posts,this)
 
         recyclerView.adapter = postAdapter
 
@@ -105,6 +107,22 @@ class HomeFragment : Fragment() {
         }})
 
         return view
+    }
+
+    override fun onPostClick(position: Int) {
+        val fragmentTransaction = fragmentManager!!.beginTransaction()
+
+        var postCreator : User
+        var poster = firestoreDb.collection("users").document(posts[position].userid)
+        poster.get().addOnSuccessListener { documentSnapshot ->
+            postCreator = documentSnapshot.toObject(User::class.java)!!
+
+            val profileFragment = ProfileFragment(postCreator)
+            fragmentTransaction.replace(R.id.fragment_container, profileFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
     }
 
 }

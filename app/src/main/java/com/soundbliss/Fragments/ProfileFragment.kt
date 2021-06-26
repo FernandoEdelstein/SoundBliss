@@ -1,6 +1,7 @@
 package com.soundbliss.Fragments
 
 import android.content.ContentValues
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
@@ -26,9 +28,12 @@ import com.soundbliss.Model.User
 import com.soundbliss.R
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.item_post_image.view.*
+import java.net.URI
 
 
-class ProfileFragment(user:User?) : Fragment() {
+class ProfileFragment(user:User?) : Fragment(), PostAdapter.onUserListener {
 
     constructor() : this(null){}
 
@@ -65,7 +70,7 @@ class ProfileFragment(user:User?) : Fragment() {
 
         posts = mutableListOf()
 
-        postAdapter = PostAdapter(context!!, posts)
+        postAdapter = PostAdapter(requireContext(), posts,this)
 
         recyclerView.adapter = postAdapter
 
@@ -86,6 +91,8 @@ class ProfileFragment(user:User?) : Fragment() {
             username.text = initUser!!.uname
             descriptionProfile.text = initUser!!.bio
 
+            //LOAD PROFILE PIC METHOD
+
             getPosts(initUser!!.uid)
 
             if(initUser!!.uid == FirebaseAuth.getInstance().currentUser!!.uid){
@@ -103,12 +110,19 @@ class ProfileFragment(user:User?) : Fragment() {
                     if(documentSnapshot.exists()) {
                         username.text = documentSnapshot.getString("uname")
                         descriptionProfile.text = documentSnapshot.getString("bio")
+
+                        //Set Profile Pic
+                        if(documentSnapshot.getString("imageu") != "")
+                            Glide.with(requireContext()).load(documentSnapshot.getString("imageu")).into(profilePhoto)
+
+                        //Get Posts
                         getPosts(documentSnapshot.id)
                     }
                 }
                 .addOnFailureListener{ exception ->
                     Log.i("HomeFragment","Failure fetching signed in user" , exception)
                 }
+
 
         }
 
@@ -126,7 +140,6 @@ class ProfileFragment(user:User?) : Fragment() {
                     .addToBackStack(null)
                     .commit()
             }
-
 
         return view
     }
@@ -155,6 +168,10 @@ class ProfileFragment(user:User?) : Fragment() {
             postAdapter.notifyDataSetChanged()
 
         }
+    }
+
+    override fun onPostClick(position: Int) {
+
     }
 
 }
