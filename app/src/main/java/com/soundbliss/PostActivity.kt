@@ -7,7 +7,7 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.soundbliss.Adapters.PostAdapter
-import com.soundbliss.PostFragments.PhotoVideoFragment
+import com.soundbliss.PostFragments.PhotoFragment
 import com.soundbliss.PostFragments.RequestFragment
 import com.soundbliss.PostFragments.TrackFragment
 import kotlinx.android.synthetic.main.activity_main.bottom_navigation
@@ -20,14 +20,22 @@ class PostActivity : AppCompatActivity() {
     private lateinit var fragmentManager: FragmentManager
     private lateinit var adapter: PostAdapter
 
+    private var userid = ""
+    private var username = ""
+    private var userpic = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post)
 
-        val trackFrag = TrackFragment()
-        val photoFrag = PhotoVideoFragment()
-        val requestFrag = RequestFragment()
+        userid = intent.getStringExtra("userId")!!
+        username = intent.getStringExtra("username")!!
+        userpic = intent.getStringExtra("userPic")!!
+
+
+        val trackFrag = TrackFragment(userid,username,userpic)
+        val photoFrag = PhotoFragment(userid,username,userpic)
+        val requestFrag = RequestFragment(userid,username,userpic)
 
         makeCurrentFragment(requestFrag)
         bottom_navigation.setOnNavigationItemSelectedListener {
@@ -53,7 +61,16 @@ class PostActivity : AppCompatActivity() {
         commit()
     }
 
+    fun getUserid(): String {
+        return userid
+    }
 
+    fun getUserPic(): String {
+        return userpic
+    }
 
+    fun getUserName(): String {
+        return username
+    }
 
 }

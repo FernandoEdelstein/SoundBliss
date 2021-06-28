@@ -88,8 +88,7 @@ class EditProfileFragment : Fragment() {
         checkMark!!.setOnClickListener {
 
             saveChangesSetting()
-            fragmentManager?.beginTransaction()?.replace(R.id.fragment_profile, ProfileFragment())
-                ?.commit()
+            fragmentManager?.beginTransaction()?.replace(R.id.fragment_profile, ProfileFragment())?.commit()
         }
 
         return view

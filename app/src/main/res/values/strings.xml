@@ -2,6 +2,14 @@
     <string name="app_name">SoundBliss</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="Yes">Yes</string>
+    <string name="No">No</string>
+
+    <!-- Error Strings -->
+    <string name="Error">Error</string>
+    <string name="FailedToSavePost">Failed To Save Post</string>
+    <string name="TryAgain">Try Again</string>
+
     <!-- LogIn / Register Fields Strings -->
     <string name="Password">Password</string>
     <string name="Username">Username</string>
@@ -29,6 +37,8 @@
     <string name="Location">Location</string>
     <string name="UploadTrack">Upload Track</string>
     <string name="ShareYourMusic">Share Your Music</string>
+    <string name="DeletePost">Delete Post?</string>
+    <string name="PostDeleted">Post Deleted</string>
 
     <string name="FillTitle">Please fill the title</string>
     <string name="FillGender">Please fill the gender</string>

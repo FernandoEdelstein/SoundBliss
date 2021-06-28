@@ -21,8 +21,6 @@ import kotlinx.android.synthetic.main.fragment_search.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val bottomNavigationView : BottomNavigationView? = null
-    private var selectorFragment : Fragment? = null
     private lateinit var firestoreDb : FirebaseFirestore
     private lateinit var documentReference : DocumentReference
     private lateinit var auth: FirebaseAuth
@@ -41,16 +39,13 @@ class MainActivity : AppCompatActivity() {
         documentReference.get()
             .addOnSuccessListener { documentSnapshot ->
                 user = documentSnapshot.toObject(User::class.java)!!
-                Log.i("MAIN", user.toString())
+                Log.i("MAINACTIVITY", user.toString())
             }.addOnFailureListener{ exception ->
-                Log.i("HomeFragment","Failure fetching signed in user" , exception)
+                Log.e("MAINACTIVITY","Failure fetching signed in user" , exception)
             }
 
-
-        val homeFrag = HomeFragment()
-        val searchFrag = SearchFragment()
-        //val chatFrag = ChatListFragment()
-        //val profileFrag = ProfileFragment()
+        val homeFrag = HomeFragment(id)
+        val searchFrag = SearchFragment(id)
 
         makeCurrentFragment(homeFrag)
         bottom_navigation.setOnNavigationItemSelectedListener {
@@ -63,14 +58,15 @@ class MainActivity : AppCompatActivity() {
                     overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
                 }
                 R.id.nav_add -> {
-                    startActivity(Intent(this, PostActivity::class.java))
-
+                    var intent = Intent(this, PostActivity::class.java)
+                    intent.putExtra("userId", id)
+                    intent.putExtra("userPic", user.imageu.toString())
+                    intent.putExtra("username", user.uname)
+                    startActivity(intent)
                 }
             }
             true
         }
-
-
     }
 
         private fun makeCurrentFragment(fragment:Fragment) = supportFragmentManager.beginTransaction().apply{

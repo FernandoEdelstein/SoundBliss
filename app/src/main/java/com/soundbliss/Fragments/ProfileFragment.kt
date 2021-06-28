@@ -26,6 +26,8 @@ import com.soundbliss.Adapters.PostAdapter
 import com.soundbliss.Model.AllPost
 import com.soundbliss.Model.User
 import com.soundbliss.R
+import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -53,10 +55,9 @@ class ProfileFragment(user:User?) : Fragment(), PostAdapter.onUserListener {
     private lateinit var username: TextView
     private lateinit var editProfile : Button
     private lateinit var descriptionProfile : TextView
+    private lateinit var profilePhoto : CircleImageView
 
     private var initUser = user
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,37 +66,45 @@ class ProfileFragment(user:User?) : Fragment(), PostAdapter.onUserListener {
         // Inflate the layout for this fragment
         val view : View = inflater.inflate(R.layout.fragment_profile, container, false)
 
+        auth = FirebaseAuth.getInstance()
+        var id = auth.currentUser!!.uid
+
         //POSTS RECYCLER VIEW
         recyclerView = view.findViewById(R.id.rvProfilePosts)
 
         posts = mutableListOf()
 
-        postAdapter = PostAdapter(requireContext(), posts,this)
+        postAdapter = PostAdapter(requireContext(), posts,this, id)
 
         recyclerView.adapter = postAdapter
 
         recyclerView.layoutManager = LinearLayoutManager(context)
 
+        //Initializers
         editProfile = view.findViewById(R.id.editProfile)
         username= view.findViewById(R.id.usernameProfile)
         descriptionProfile = view.findViewById(R.id.descriptionBio)
         editProfileButton = view.findViewById(R.id.editProfile)
         messageButton = view.findViewById(R.id.messageButton)
+        profilePhoto = view.findViewById(R.id.profilePhoto)
 
-        auth = FirebaseAuth.getInstance()
-        var id = auth.currentUser!!.uid
-
-
+        //Check if a user has been parsed
         if(initUser !=null){
-            Log.i("PROFILE", initUser.toString())
+            //Set up username and bio
             username.text = initUser!!.uname
             descriptionProfile.text = initUser!!.bio
 
             //LOAD PROFILE PIC METHOD
+            if(initUser!!.imageu != "")
+                Picasso.get().load(initUser!!.imageu).placeholder(R.mipmap.default_profile_pic).into(profilePhoto)
+            else
+                Picasso.get().load(R.mipmap.default_profile_pic).placeholder(R.mipmap.default_profile_pic).into(profilePhoto)
 
+            //Get the users posts
             getPosts(initUser!!.uid)
 
-            if(initUser!!.uid == FirebaseAuth.getInstance().currentUser!!.uid){
+            //Set the message button instead of Edit Profile
+            if(initUser!!.uid == id){
                 editProfileButton.visibility = View.VISIBLE
                 messageButton.visibility = View.GONE
             }else{
@@ -103,6 +112,8 @@ class ProfileFragment(user:User?) : Fragment(), PostAdapter.onUserListener {
                 messageButton.visibility = View.VISIBLE
             }
         }else{
+            //If no user has been parsed then load current User
+
             firestoreDb = FirebaseFirestore.getInstance()
             documentReference = firestoreDb.collection("users").document(id)
             documentReference.get()
@@ -157,11 +168,7 @@ class ProfileFragment(user:User?) : Fragment(), PostAdapter.onUserListener {
             posts.clear()
 
             for (documentSnapshot in snapshot) {
-                var documentid = documentSnapshot.id
-
                 var post = documentSnapshot.toObject(AllPost::class.java)
-                post.setDocumentId(documentid)
-
                 posts.add(post)
             }
 

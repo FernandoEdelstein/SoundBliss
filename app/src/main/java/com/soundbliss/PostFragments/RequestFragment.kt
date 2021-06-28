@@ -29,7 +29,7 @@ import java.io.IOException
 import java.util.*
 
 
-class RequestFragment : Fragment(), OnMapReadyCallback {
+class RequestFragment(userid:String, username:String, userpic:String) : Fragment(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var search : SearchView
@@ -46,8 +46,10 @@ class RequestFragment : Fragment(), OnMapReadyCallback {
     private lateinit var geocoder: Geocoder
     private var addressList: MutableList<Address>? = null
 
-    private lateinit var currentUsername : String
-    private lateinit var firebaseUser : FirebaseUser
+    //Parsed Arguments
+    private var userid = userid
+    private var username = username
+    private var userpic = userpic
 
      override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,15 +58,6 @@ class RequestFragment : Fragment(), OnMapReadyCallback {
          var view = inflater.inflate(R.layout.fragment_request, container, false)
 
          firestoreDb = FirebaseFirestore.getInstance()
-         firebaseUser = FirebaseAuth.getInstance().currentUser!!
-         var documentReference = firestoreDb.collection("users").document(firebaseUser.uid)
-         documentReference.get()
-             .addOnSuccessListener { documentSnapshot ->
-                 if(documentSnapshot.exists()) {
-                     currentUsername = documentSnapshot.getString("uname").toString()
-                 }
-             }
-
 
          requestTitle = view.findViewById(R.id.requestTitle)
          requestDescription = view.findViewById(R.id.requestDescription)
@@ -139,7 +132,7 @@ class RequestFragment : Fragment(), OnMapReadyCallback {
         }
 
         if(latLng == null){
-            Toast.makeText(context,"Error",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,R.string.Error,Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -159,6 +152,7 @@ class RequestFragment : Fragment(), OnMapReadyCallback {
             return
         }
 
+        val docref = firestoreDb.collection("posts/").document()
 
         val requestPost = AllPost(
             System.currentTimeMillis(),
@@ -167,13 +161,15 @@ class RequestFragment : Fragment(), OnMapReadyCallback {
             geoLocation,
             locationText,
             requestTitle.text.toString(),
-            firebaseUser.uid,
-            currentUsername
+            userid,
+            username
         )
-        firestoreDb.collection("posts/").add(requestPost)
+        requestPost.setDocumentId(docref.id)
+        requestPost.setPosterPic(userpic)
+
+        docref.set(requestPost)
 
         //Back to Home Fragment
-        Toast.makeText(context,"Success" , Toast.LENGTH_SHORT).show()
         val profileIntent = Intent(activity,MainActivity::class.java)
         startActivity(profileIntent)
         activity?.finish()

@@ -32,7 +32,7 @@ import android.content.Intent as Intent
 private const val TAG = "TrackFragment"
 private const val PICK_AUDIO_CODE = 1234
 
-class TrackFragment : Fragment() {
+class TrackFragment(userid : String, username : String, userpic: String) : Fragment() {
 
     private val TAG = "TrackFragment"
     private var trackUri : Uri? = null
@@ -56,10 +56,12 @@ class TrackFragment : Fragment() {
     //Database
     private lateinit var firestoreDb : FirebaseFirestore
     private lateinit var storageReference: StorageReference
-    private lateinit var firebaseUser: FirebaseUser
-    private lateinit var currentUsername : String
 
     private lateinit var testPost : Button
+
+    private var userid = userid
+    private var username = username
+    private var userpic = userpic
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,16 +72,6 @@ class TrackFragment : Fragment() {
         //Firestore / Storage
         storageReference = FirebaseStorage.getInstance().reference
         firestoreDb = FirebaseFirestore.getInstance()
-        firebaseUser = FirebaseAuth.getInstance().currentUser!!
-
-        var documentReference = firestoreDb.collection("users").document(firebaseUser.uid)
-        documentReference.get()
-            .addOnSuccessListener { documentSnapshot ->
-                if(documentSnapshot.exists()) {
-                    currentUsername = documentSnapshot.getString("uname").toString()
-                }
-            }
-
 
             //Track player Assignment
         playerDuration = view.findViewById(R.id.player_duration)
@@ -112,13 +104,17 @@ class TrackFragment : Fragment() {
         }
 
 
-
         testPost = view.findViewById(R.id.postTest)
         testPost.setOnClickListener {
             uploadTrack()
         }
 
         return view
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.stop()
     }
 
 
@@ -216,7 +212,7 @@ class TrackFragment : Fragment() {
             return
         }
 
-
+        //Disable button so that the post can't be uploaded twice
         testPost.isEnabled = false
 
         val uploadTrackUri = trackUri as Uri
@@ -227,32 +223,33 @@ class TrackFragment : Fragment() {
                 Log.i(TAG,"uploaded bytes : ${trackUploadTask.result?.bytesTransferred}")
                 trackReference.downloadUrl
             }.continueWithTask { downloadUrlTask ->
+                val docref = firestoreDb.collection("posts/").document()
                 val trackPost = AllPost(
                     System.currentTimeMillis(),
                     trackDescription.text.toString(),
                     trackGender.text.toString(),
                     downloadUrlTask.result.toString(),
                     trackTitle.text.toString(),
-                    firebaseUser.uid,
-                    currentUsername)
+                    userid,
+                    username)
 
-                firestoreDb.collection("posts/").add(trackPost)
+                trackPost.setDocumentId(docref.id)
+                trackPost.setPosterPic(userpic)
+                docref.set(trackPost)
             }.addOnCompleteListener {postCreationTask ->
                 testPost.isEnabled = true
                 if(!postCreationTask.isSuccessful){
                     Log.e(TAG, "Exception during FireStore Operations", postCreationTask.exception)
-                    Toast.makeText(context,"Failed to save post",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,R.string.FailedToSavePost,Toast.LENGTH_SHORT).show()
                 }
-                Toast.makeText(context,"Success!" , Toast.LENGTH_SHORT)
                 val mainIntent = Intent(activity,MainActivity::class.java)
                 startActivity(mainIntent)
-                activity!!.finish()
+                requireActivity().finish()
 
             }
     }
 
     private fun getFileExtension(uri: Uri) : String? {
-        return MimeTypeMap.getSingleton().getExtensionFromMimeType(context!!.contentResolver?.getType(uri))
+        return MimeTypeMap.getSingleton().getExtensionFromMimeType(requireContext().contentResolver?.getType(uri))
     }
-
 }

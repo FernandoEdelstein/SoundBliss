@@ -24,12 +24,11 @@ import kotlinx.android.synthetic.main.item_post_image.view.*
 import kotlinx.android.synthetic.main.item_post_request.view.*
 import kotlinx.android.synthetic.main.item_post_track.view.*
 
-class PostAdapter(var context: Context, list: List<AllPost>,onListener: onUserListener) :
+class PostAdapter(var context: Context, list: List<AllPost>,onListener: onUserListener, currentUserId : String) :
     RecyclerView.Adapter<ViewHolder>() {
     private val TAG = "RecyclerAdapter"
     private var list = list
-
-    private val currentUser = FirebaseAuth.getInstance().currentUser
+    private var currentUserId = currentUserId
     private var firestoreDb = FirebaseFirestore.getInstance()
 
     var mOnListener = onListener
@@ -119,30 +118,25 @@ class PostAdapter(var context: Context, list: List<AllPost>,onListener: onUserLi
             val post = list[position]
             val viewHolderOne = holder as ViewHolderOnePhoto
 
-            var poster = firestoreDb.collection("users").document(post.userid)
-            poster.get().addOnSuccessListener { documentSnapshot ->
-                if(documentSnapshot.getString("imageu") != "")
-                    Glide.with(context!!).load(documentSnapshot.getString("imageu")).into(viewHolderOne.postPhotoProfileImg)
-                }
+                if(post.posterPic != "")
+                    Glide.with(context!!).load(post.posterPic).into(viewHolderOne.postPhotoProfileImg)
 
                 viewHolderOne.itemView.postPhotoDescription.text = post.description
                 viewHolderOne.itemView.postPhotoUserName.text = post.username
                 viewHolderOne.itemView.postPhotoRelativeTime.text = DateUtils.getRelativeTimeSpanString(post.creation_time_ms)
                 Glide.with(context).load(post.posturl).into(viewHolderOne.itemView.postPhotoImageView)
 
-
-
-            if(currentUser!!.uid == post.userid){
+            if(currentUserId == post.userid){
                 viewHolderOne.deletePhoto.visibility = View.VISIBLE
                 viewHolderOne.deletePhoto.setOnClickListener {
                     val builder = AlertDialog.Builder(context)
-                    builder.setMessage("Delete post?")
+                    builder.setMessage(R.string.DeletePost)
                         .setCancelable(false)
-                        .setPositiveButton("Yes"){ dialog, id ->
+                        .setPositiveButton(R.string.Yes){ dialog, id ->
                             //DELETE FROM DATABASE METHOD
                             deletePost(position)
                         }
-                        .setNegativeButton("No"){ dialog, id ->
+                        .setNegativeButton(R.string.No){ dialog, id ->
                             dialog.dismiss()
                         }
                     val alert = builder.create()
@@ -152,19 +146,15 @@ class PostAdapter(var context: Context, list: List<AllPost>,onListener: onUserLi
                 viewHolderOne.deletePhoto.visibility = View.GONE
             }
 
-
-
         }else if(getItemViewType(position) == 1){
             val post = list.get(position)
 
             val viewHolderTwo = holder as ViewHolderTwoTrack
 
             //ADD PROFILE PIC
-            var poster = firestoreDb.collection("users").document(post.userid)
-            poster.get().addOnSuccessListener { documentSnapshot ->
-                if(documentSnapshot.getString("imageu") != "")
-                    Glide.with(context!!).load(documentSnapshot.getString("imageu")).into(viewHolderTwo.postTrackProfileImg)
-            }
+            if(post.posterPic != "")
+                Glide.with(context!!).load(post.posterPic).into(viewHolderTwo.postTrackProfileImg)
+
 
             //Set up all parameters
             viewHolderTwo.postGender.text = post.gender
@@ -183,17 +173,17 @@ class PostAdapter(var context: Context, list: List<AllPost>,onListener: onUserLi
             }
 
             //Delete Button
-            if(currentUser!!.uid == post.userid){
+            if(currentUserId == post.userid){
                 viewHolderTwo.deleteTrack.visibility = View.VISIBLE
                 viewHolderTwo.deleteTrack.setOnClickListener {
                     val builder = AlertDialog.Builder(context)
-                    builder.setMessage("Delete post?")
+                    builder.setMessage(R.string.DeletePost)
                         .setCancelable(false)
-                        .setPositiveButton("Yes"){ dialog, id ->
+                        .setPositiveButton(R.string.Yes){ dialog, id ->
                             //DELETE FROM DATABASE METHOD
                             deletePost(position) //Delete the post if user selects "yes"
                         }
-                        .setNegativeButton("No"){ dialog, id -> //Dialog Dismiss if user selects "No"
+                        .setNegativeButton(R.string.No){ dialog, id -> //Dialog Dismiss if user selects "No"
                             dialog.dismiss()
                         }
                     val alert = builder.create()
@@ -209,11 +199,9 @@ class PostAdapter(var context: Context, list: List<AllPost>,onListener: onUserLi
 
             val post = list[position]
 
-            var poster = firestoreDb.collection("users").document(post.userid)
-                poster.get().addOnSuccessListener { documentSnapshot ->
-                if(documentSnapshot.getString("imageu") != "")
-                    Glide.with(context!!).load(documentSnapshot.getString("imageu")).into(viewHolderThreeRequest.postRequestProfileImg)
-            }
+            if(post.posterPic != "")
+                Glide.with(context!!).load(post.posterPic).into(viewHolderThreeRequest.postRequestProfileImg)
+
 
             viewHolderThreeRequest.itemView.postRequestTitle.text = post.title
             viewHolderThreeRequest.itemView.postRequestGender.text = post.gender
@@ -233,21 +221,21 @@ class PostAdapter(var context: Context, list: List<AllPost>,onListener: onUserLi
             }
 
             //If current user = Poster then hide contact button
-            if(currentUser!!.uid.equals(post.userid))
+            if(currentUserId.equals(post.userid))
                 viewHolderThreeRequest.contactButton.visibility = View.GONE
 
             //DELETE POST SECTION
-            if(currentUser!!.uid == post.userid){
+            if(currentUserId == post.userid){
                 viewHolderThreeRequest.deleteRequest.visibility = View.VISIBLE
                 viewHolderThreeRequest.deleteRequest.setOnClickListener {
                     val builder = AlertDialog.Builder(context)
-                    builder.setMessage("Delete post?")
+                    builder.setMessage(R.string.DeletePost)
                         .setCancelable(false)
-                        .setPositiveButton("Yes"){ dialog, id ->
+                        .setPositiveButton(R.string.Yes){ dialog, id ->
                             //DELETE FROM DATABASE METHOD
                             deletePost(position)
                         }
-                        .setNegativeButton("No"){ dialog, id ->
+                        .setNegativeButton(R.string.No){ dialog, id ->
                             dialog.dismiss()
                         }
                     val alert = builder.create()
@@ -264,15 +252,15 @@ class PostAdapter(var context: Context, list: List<AllPost>,onListener: onUserLi
 
 
     private fun deletePost(position: Int){
-        firestoreDb.collection("posts").document(list.get(position).documentId)
+        firestoreDb.collection("posts").document(list[position].documentId)
             .delete()
             .addOnCompleteListener{task ->
                 if(task.isSuccessful){
                     list.drop(position)
                     notifyDataSetChanged()
-                    Toast.makeText(context,"Item Deleted", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,R.string.PostDeleted, Toast.LENGTH_SHORT).show()
                 }else{
-                    Toast.makeText(context,"Error" + task.exception!!.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,R.string.Error, Toast.LENGTH_SHORT).show()
                 }
             }
     }

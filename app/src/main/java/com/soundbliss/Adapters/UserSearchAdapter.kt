@@ -50,7 +50,7 @@ class UserSearchAdapter(context: Context, mUsers: List<User>, isFragment: Boolea
         holder.fullName.text = user.name
 
         if(user.imageu != ""){
-            Picasso.get().load(user.imageu).placeholder(R.mipmap.ic_launcher).into(holder.profileImage)
+            Picasso.get().load(user.imageu).placeholder(R.mipmap.default_profile_pic).into(holder.profileImage)
         }
     }
 

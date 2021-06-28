@@ -25,8 +25,7 @@ import kotlin.concurrent.thread
 
 private const val TAG = "Home Fragment"
 
-class HomeFragment : Fragment(), PostAdapter.onUserListener {
-
+class HomeFragment(userid: String) : Fragment(), PostAdapter.onUserListener {
 
     private lateinit var firestoreDb: FirebaseFirestore
     
@@ -36,6 +35,8 @@ class HomeFragment : Fragment(), PostAdapter.onUserListener {
     private lateinit var recyclerView: RecyclerView
 
     private lateinit var refresh : SwipeRefreshLayout
+
+    private val currentUserId = userid
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +50,7 @@ class HomeFragment : Fragment(), PostAdapter.onUserListener {
 
         posts = mutableListOf()
 
-        postAdapter = PostAdapter(requireContext(), posts,this)
+        postAdapter = PostAdapter(requireContext(), posts,this, currentUserId)
 
         recyclerView.adapter = postAdapter
 
@@ -67,10 +68,7 @@ class HomeFragment : Fragment(), PostAdapter.onUserListener {
             posts.clear()
 
             for (documentSnapshot in snapshot) {
-                var documentid = documentSnapshot.id
                 var post = documentSnapshot.toObject(AllPost::class.java)
-                post.setDocumentId(documentid)
-
                 posts.add(post)
             }
 
@@ -92,17 +90,11 @@ class HomeFragment : Fragment(), PostAdapter.onUserListener {
                     posts.clear()
 
                     for (documentSnapshot in snapshot){
-                        var documentid = documentSnapshot.id
-
                         var post = documentSnapshot.toObject(AllPost::class.java)
-                        post.setDocumentId(documentid)
-
                         posts.add(post)
                     }
-
                     postAdapter.notifyDataSetChanged()
             }
-
                 refresh.isRefreshing = false
         }})
 
