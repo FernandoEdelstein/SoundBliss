@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.soundbliss.MapsActivity
 import com.soundbliss.Model.AllPost
 import com.soundbliss.Player
@@ -30,6 +31,8 @@ class PostAdapter(var context: Context, list: List<AllPost>,onListener: onUserLi
     private var list = list
     private var currentUserId = currentUserId
     private var firestoreDb = FirebaseFirestore.getInstance()
+
+    private var storageReference = FirebaseStorage.getInstance().reference
 
     var mOnListener = onListener
 
@@ -118,11 +121,18 @@ class PostAdapter(var context: Context, list: List<AllPost>,onListener: onUserLi
             val post = list[position]
             val viewHolderOne = holder as ViewHolderOnePhoto
 
-                if(post.posterPic != "")
-                    Glide.with(context!!).load(post.posterPic).into(viewHolderOne.postPhotoProfileImg)
+            //Add username and profile pic
+            var poster = firestoreDb.collection("users").document(post.userid)
+            poster.get().addOnSuccessListener { documentSnapshot ->
+                if(documentSnapshot.getString("imageu") != "") {
+                    Glide.with(context!!).load(documentSnapshot.getString("imageu"))
+                        .into(viewHolderOne.postPhotoProfileImg)
+                }
+                    viewHolderOne.itemView.postPhotoUserName.text = documentSnapshot.getString("uname")
+
+            }
 
                 viewHolderOne.itemView.postPhotoDescription.text = post.description
-                viewHolderOne.itemView.postPhotoUserName.text = post.username
                 viewHolderOne.itemView.postPhotoRelativeTime.text = DateUtils.getRelativeTimeSpanString(post.creation_time_ms)
                 Glide.with(context).load(post.posturl).into(viewHolderOne.itemView.postPhotoImageView)
 
@@ -151,15 +161,22 @@ class PostAdapter(var context: Context, list: List<AllPost>,onListener: onUserLi
 
             val viewHolderTwo = holder as ViewHolderTwoTrack
 
-            //ADD PROFILE PIC
-            if(post.posterPic != "")
-                Glide.with(context!!).load(post.posterPic).into(viewHolderTwo.postTrackProfileImg)
+            //Add profile pic and username
+            var poster = firestoreDb.collection("users").document(post.userid)
+            poster.get().addOnSuccessListener { documentSnapshot ->
+                if(documentSnapshot.getString("imageu") != "") {
+                    Glide.with(context!!).load(documentSnapshot.getString("imageu"))
+                        .into(viewHolderTwo.postTrackProfileImg)
+                }
+                    viewHolderTwo.postUsername.text = documentSnapshot.getString("uname")
+
+            }
 
 
             //Set up all parameters
             viewHolderTwo.postGender.text = post.gender
             viewHolderTwo.postTitle.text = post.title
-            viewHolderTwo.postUsername.text = post.username
+
             viewHolderTwo.relativeTime.text = DateUtils.getRelativeTimeSpanString(post.creation_time_ms)
             viewHolderTwo.postDescription.text = post.description
 
@@ -199,14 +216,21 @@ class PostAdapter(var context: Context, list: List<AllPost>,onListener: onUserLi
 
             val post = list[position]
 
-            if(post.posterPic != "")
-                Glide.with(context!!).load(post.posterPic).into(viewHolderThreeRequest.postRequestProfileImg)
+            //UserImage and Username
+            var poster = firestoreDb.collection("users").document(post.userid)
+            poster.get().addOnSuccessListener { documentSnapshot ->
+                if(documentSnapshot.getString("imageu") != "") {
+                    Glide.with(context!!).load(documentSnapshot.getString("imageu"))
+                        .into(viewHolderThreeRequest.postRequestProfileImg)
+                }
+                    viewHolderThreeRequest.itemView.postRequestUserName.text = documentSnapshot.getString("uname")
 
+            }
 
+            //Set ViewHolder Content
             viewHolderThreeRequest.itemView.postRequestTitle.text = post.title
             viewHolderThreeRequest.itemView.postRequestGender.text = post.gender
             viewHolderThreeRequest.itemView.postRequestDescription.text = post.description
-            viewHolderThreeRequest.itemView.postRequestUserName.text = post.username
             viewHolderThreeRequest.itemView.postRequestRelativeTime.text =
                 DateUtils.getRelativeTimeSpanString(post.creation_time_ms)
 
@@ -252,17 +276,36 @@ class PostAdapter(var context: Context, list: List<AllPost>,onListener: onUserLi
 
 
     private fun deletePost(position: Int){
-        firestoreDb.collection("posts").document(list[position].documentId)
-            .delete()
-            .addOnCompleteListener{task ->
-                if(task.isSuccessful){
-                    list.drop(position)
-                    notifyDataSetChanged()
-                    Toast.makeText(context,R.string.PostDeleted, Toast.LENGTH_SHORT).show()
-                }else{
-                    Toast.makeText(context,R.string.Error, Toast.LENGTH_SHORT).show()
+        //Delete post from Storage
+        if(list[position].posturl == null){
+            firestoreDb.collection("posts").document(list[position].documentId)
+                .delete()
+                .addOnCompleteListener{task ->
+                    if(task.isSuccessful){
+                        list.drop(position)
+                        notifyDataSetChanged()
+                        Toast.makeText(context,R.string.PostDeleted, Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(context,R.string.Error, Toast.LENGTH_SHORT).show()
+                    }
                 }
+        }else if(list[position].posturl != null){
+            val storage = FirebaseStorage.getInstance().getReferenceFromUrl(list[position].posturl!!)
+            storage.delete().addOnSuccessListener {
+                //Delete the post from Firestore
+                firestoreDb.collection("posts").document(list[position].documentId)
+                    .delete()
+                    .addOnCompleteListener{task ->
+                        if(task.isSuccessful){
+                            list.drop(position)
+                            notifyDataSetChanged()
+                            Toast.makeText(context,R.string.PostDeleted, Toast.LENGTH_SHORT).show()
+                        }else{
+                            Toast.makeText(context,R.string.Error, Toast.LENGTH_SHORT).show()
+                        }
+                    }
             }
+        }
     }
 
     interface onUserListener{

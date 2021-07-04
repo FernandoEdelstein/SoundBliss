@@ -140,11 +140,12 @@ class RequestFragment(userid:String, username:String, userpic:String) : Fragment
 
         val geoLocation = GeoPoint(latLng.latitude,latLng.longitude)
 
-        val locationText = ""
+        var locationText = ""
         if(addressList == null){
-            Toast.makeText(context,R.string.FillLocation,Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context,R.string.FillLocation,Toast.LENGTH_SHORT).show()
+            return
         }else{
-            val locationText = addressList!!.get(0).locality
+            locationText = addressList!![0].locality
         }
 
         if(locationText == ""){
@@ -165,7 +166,6 @@ class RequestFragment(userid:String, username:String, userpic:String) : Fragment
             username
         )
         requestPost.setDocumentId(docref.id)
-        requestPost.setPosterPic(userpic)
 
         docref.set(requestPost)
 

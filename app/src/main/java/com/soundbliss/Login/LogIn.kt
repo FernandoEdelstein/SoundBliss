@@ -5,13 +5,12 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.soundbliss.Fragments.HomeFragment
-import com.soundbliss.Fragments.ProfileFragment
 import com.soundbliss.MainActivity
 import com.soundbliss.R
 
@@ -23,16 +22,18 @@ class LogIn : AppCompatActivity() {
     private lateinit var passwordUserText: EditText
     private lateinit var buttonLogin: Button
     private lateinit var regButton: Button
+    private lateinit var passForget: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_in)
 
         auth = FirebaseAuth.getInstance()
-        emailUserText = findViewById(R.id.userField);
-        passwordUserText = findViewById(R.id.passwordField);
-        buttonLogin = findViewById(R.id.loginButton);
+        emailUserText = findViewById(R.id.userField)
+        passwordUserText = findViewById(R.id.passwordField)
+        buttonLogin = findViewById(R.id.loginButton)
         regButton = findViewById(R.id.regButton)
+        passForget = findViewById(R.id.passwordForget)
 
         buttonLogin.setOnClickListener {
             buttonLogin.isEnabled = false
@@ -62,6 +63,12 @@ class LogIn : AppCompatActivity() {
         regButton.setOnClickListener {
             val intent = Intent(this, SignUp::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
+            finish()
+        }
+
+        passForget.setOnClickListener {
+            startActivity(Intent(this, PasswordReset::class.java))
             overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
             finish()
         }

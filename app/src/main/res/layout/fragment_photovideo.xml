@@ -33,9 +33,12 @@
             android:id="@+id/image_added"/>
         <com.hendraanggrian.appcompat.widget.SocialAutoCompleteTextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginTop="15dp"
             android:hint="Description"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:background="@drawable/text_box"
             android:maxLines="5"
             android:id="@+id/description"
             app:socialFlags="hashtag|mention"
@@ -47,7 +50,10 @@
             android:layout_height="wrap_content"
             android:text="@string/Post"
             android:id="@+id/photoPostSubmit"
-            android:textColor="@color/white_100" />
+            android:textColor="@color/white_100"
+            android:backgroundTint="@color/blue_100"
+            app:cornerRadius="22dp"
+            android:layout_marginTop="15dp"/>
 
     </LinearLayout>
 

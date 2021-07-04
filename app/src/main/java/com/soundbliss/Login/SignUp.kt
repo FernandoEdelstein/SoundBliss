@@ -9,9 +9,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 import com.soundbliss.Fragments.ProfileFragment
 import com.soundbliss.MainActivity
 import com.soundbliss.Model.User
@@ -71,6 +74,7 @@ class SignUp : AppCompatActivity() {
             if(TextUtils.isEmpty(email)||TextUtils.isEmpty(pass) || TextUtils.isEmpty(user)||TextUtils.isEmpty(name) || TextUtils.isEmpty(lastName)){
                 Toast.makeText(this, R.string.FillAllFields,Toast.LENGTH_LONG).show()
             } else{
+
                 auth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(this, OnCompleteListener { task ->
                     // Re enable button
                     registBtn.isEnabled = true
@@ -111,4 +115,5 @@ class SignUp : AppCompatActivity() {
             finish()
         }
     }
+
 }

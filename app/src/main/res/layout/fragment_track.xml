@@ -26,8 +26,10 @@
         android:layout_height="wrap_content"
         android:text="@string/UploadTrack"
         android:textColor="@color/white_100"
-        android:background="@color/blue_100"
-        android:layout_marginBottom="16dp" />
+
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/blue_500"
+        app:cornerRadius="22dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -91,41 +93,54 @@
     <EditText
         android:id="@+id/trackTitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="@string/Title"
         android:textColorHint="@color/white_300"
-        android:textColor="@color/white_100"/>
+        android:textColor="@color/white_100"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:background="@drawable/text_box" />
 
     <EditText
         android:id="@+id/trackGender"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="@string/Gender"
         android:textColorHint="@color/white_300"
-        android:textColor="@color/white_100"/>
+        android:textColor="@color/white_100"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:background="@drawable/text_box"
+        android:layout_marginTop="15dp"/>
 
     <com.hendraanggrian.appcompat.widget.SocialAutoCompleteTextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_height="50dp"
         android:hint="@string/Description"
         android:maxLines="5"
         android:id="@+id/trackDescription"
         app:socialFlags="hashtag|mention"
         app:hashtagColor="@color/blue_100"
         android:textColorHint="@color/white_300"
-        android:textColor="@color/white_100"/>
-
+        android:textColor="@color/white_100"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:background="@drawable/text_box"
+        android:layout_marginTop="15dp"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/Post"
         android:id="@+id/postTest"
-        android:textColor="@color/white_100" />
+        android:textColor="@color/white_100"
+        android:backgroundTint="@color/blue_100"
+        app:cornerRadius="22dp"
+        android:layout_marginTop="15dp"/>
 
 </LinearLayout>

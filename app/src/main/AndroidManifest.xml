@@ -23,11 +23,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SoundBliss">
-
-
+        <activity android:name=".Login.PasswordReset"></activity>
         <activity android:name=".MessengerActivity" />
         <activity android:name=".MapsActivity" />
-        <activity android:name=".Player"/>
+        <activity android:name=".Player" />
         <activity android:name=".ChatActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

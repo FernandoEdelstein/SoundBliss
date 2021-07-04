@@ -5,26 +5,49 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="24dp"
-    android:id="@+id/fragment_profile">
+    android:id="@+id/fragment_profile"
+    android:background="@color/blue_800">
 
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profilePhoto"
-        android:layout_width="64dp"
-        android:layout_height="67dp"
-        android:layout_gravity="center"
-        app:srcCompat="@drawable/default_profile_pic"/>
-
-    <TextView
-        android:id="@+id/usernameProfile"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Username"
-        android:gravity="center"
-        android:fontFamily="@font/montserrat_bold"
-        android:textSize="20sp"
-        android:textColor="@color/blue_100"
-        android:layout_marginBottom="10dp"/>
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profilePhoto"
+            android:layout_width="64dp"
+            android:layout_height="67dp"
+            android:layout_gravity="center"
+            android:src="@drawable/default_profile_pic"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="16dp"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/usernameProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Username"
+                android:fontFamily="@font/montserrat_bold"
+                android:textSize="20sp"
+                android:textColor="@color/blue_100" />
+
+            <TextView
+                android:id="@+id/descriptionBio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/Description"
+                android:textColor="@color/white_100"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"/>
+        </LinearLayout>
+
+
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/editProfile"
@@ -33,7 +56,10 @@
         android:text="@string/EditProfile"
         android:layout_gravity="center"
         android:textColor="@color/white_100"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="@color/white_300"
+        app:cornerRadius="22dp"
+        android:layout_marginTop="8dp"/>
 
     <Button
         android:id="@+id/messageButton"
@@ -43,24 +69,15 @@
         android:layout_gravity="center"
         android:textColor="@color/white_100"
         android:layout_marginBottom="10dp"
-        android:visibility="gone"/>
-
-    <TextView
-        android:id="@+id/descriptionBio"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/Description"
-        android:textColor="@color/white_100"
-        android:layout_marginBottom="24dp"/>
+        android:visibility="gone"
+        android:backgroundTint="@color/blue_100"
+        app:cornerRadius="22dp"/>
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/rvProfilePosts"
-
-
-        >
+        android:id="@+id/rvProfilePosts">
 
 
     </androidx.recyclerview.widget.RecyclerView>

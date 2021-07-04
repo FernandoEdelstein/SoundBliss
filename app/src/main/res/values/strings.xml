@@ -9,6 +9,11 @@
     <string name="Error">Error</string>
     <string name="FailedToSavePost">Failed To Save Post</string>
     <string name="TryAgain">Try Again</string>
+    <string name="fillMailField">Please fill mail field</string>
+    <string name="provideValidEmail">Please provide a valid mail</string>
+    <string name="errorEmail">Try again! Something wrong happened!</string>
+
+
 
     <!-- LogIn / Register Fields Strings -->
     <string name="Password">Password</string>
@@ -16,11 +21,12 @@
     <string name="Nome">Nome</string>
     <string name="Cognome">Cognome</string>
     <string name="eMail">Mail</string>
+    <string name="checkEmail">Check your email to reset your password</string>
 
     <!-- LogIn / Register Interface Strings -->
-    <string name="Registrati">Registrati</string>
+    <string name="Register">Register</string>
     <string name="LogIn">LogIn</string>
-    <string name="TornaLogIn">TornaLogIn</string>
+    <string name="backtoLogin">Back to LogIn</string>
 
     <!-- LogIn / Register Strings -->
     <string name="FillAllFields">Please fill all fields to continue</string>
@@ -88,5 +94,11 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="play_track">Play Track</string>
     <string name="logout">LogOut</string>
+
+    <string name="send">Send</string>
+    <string name="back">Back</string>
+    <string name="passwordResetInfo">Insert your mail, you\'ll receive an eMail to confirm your identity and reset your password</string>
+    <string name="forgot_your_password">Forgot your password?</string>
+
 
 </resources>

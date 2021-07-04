@@ -189,8 +189,6 @@ class TrackFragment(userid : String, username : String, userpic: String) : Fragm
                 })
 
 
-            }else{
-                Toast.makeText(context,"Audio Pick Cancelled", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -234,7 +232,6 @@ class TrackFragment(userid : String, username : String, userpic: String) : Fragm
                     username)
 
                 trackPost.setDocumentId(docref.id)
-                trackPost.setPosterPic(userpic)
                 docref.set(trackPost)
             }.addOnCompleteListener {postCreationTask ->
                 testPost.isEnabled = true

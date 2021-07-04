@@ -39,7 +39,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="120dp"
                     android:src="@drawable/default_profile_pic"
-                    android:layout_marginTop="24dp"/>
+                    android:layout_marginTop="24dp"
+                    android:layout_gravity="center"/>
 
                 <TextView
                     android:id="@+id/changeProfilePhoto"
@@ -51,6 +52,38 @@
                     android:textSize="16sp"
                     android:layout_marginTop="16dp"
                     android:layout_gravity="center_horizontal" />
+
+    <!-- description section -->
+    <RelativeLayout
+        android:id="@+id/relLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/relLayout1"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/text_box"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_person" />
+
+        <EditText
+            android:id="@+id/mUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="40dp"
+            android:layout_marginLeft="40dp"
+            android:background="@null"
+            android:hint="@string/Username"
+            android:inputType="textNoSuggestions"
+            android:textColor="@color/white_100"
+            android:textColorHint="@color/white_300" />
+
+    </RelativeLayout>
 
                 <!-- description section -->
                 <RelativeLayout
@@ -157,6 +190,8 @@
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
         android:text="@string/logout"
-        android:textColor="@color/white_100"/>
+        android:textColor="@color/white_100"
+        app:cornerRadius="22dp"
+        android:backgroundTint="@color/red"/>
 
 </LinearLayout>

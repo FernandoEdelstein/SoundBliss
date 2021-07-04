@@ -110,8 +110,6 @@ class PhotoFragment(userid: String, username : String, userpic: String) : Fragme
                     //Set PostId to the post itself so that later it can be eliminated faster
                     post.setDocumentId(docref.id)
 
-                    //Set the Profile pic URL of the poster
-                    post.setPosterPic(userpic)
 
                 docref.set(post)
             }.addOnCompleteListener { postCreationTask ->

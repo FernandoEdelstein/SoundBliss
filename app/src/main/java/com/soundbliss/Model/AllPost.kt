@@ -19,16 +19,12 @@ data class AllPost(@get:PropertyName("creation_time_ms")@set:PropertyName("creat
 
 
     var documentId : String = ""
-    var posterPic : String = ""
 
     @JvmName("setDocumentId1")
     fun setDocumentId(s: String){
         documentId = s
     }
-    @JvmName("setPosterPic1")
-    fun setPosterPic(s: String){
-        posterPic = s
-    }
+
     //Track Constructor
     constructor(creation_time_ms: Long = 0,
                 description: String = "",
