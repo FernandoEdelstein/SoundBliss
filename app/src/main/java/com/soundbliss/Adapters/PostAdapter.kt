@@ -217,7 +217,7 @@ class PostAdapter(var context: Context, list: List<AllPost>,onListener: onUserLi
             var viewHolderThreeRequest = holder as ViewHolderThreeRequest
 
             val post = list[position]
-
+            var posterUname = ""
             //UserImage and Username
             var poster = firestoreDb.collection("users").document(post.userid)
             poster.get().addOnSuccessListener { documentSnapshot ->
@@ -226,7 +226,7 @@ class PostAdapter(var context: Context, list: List<AllPost>,onListener: onUserLi
                         .into(viewHolderThreeRequest.postRequestProfileImg)
                 }
                     viewHolderThreeRequest.itemView.postRequestUserName.text = documentSnapshot.getString("uname")
-
+                    posterUname = documentSnapshot.getString("uname")!!
             }
 
 
@@ -263,7 +263,7 @@ class PostAdapter(var context: Context, list: List<AllPost>,onListener: onUserLi
                     }
                 }*/
                 val intent = Intent(context, MessengerActivity::class.java)
-                intent.putExtra("username", list[position].username)
+                intent.putExtra("username", posterUname)
                 intent.putExtra("friendUid", list[position].userid)
                 context.startActivity(intent)
 
