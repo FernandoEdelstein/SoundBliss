@@ -1,6 +1,7 @@
 package com.soundbliss.Login
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Patterns
@@ -19,6 +20,8 @@ class PasswordReset : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_password_reset)
+
+        this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         backBtn = findViewById(R.id.forgotPassBack)
         sendBtn = findViewById(R.id.forgotPassSend)

@@ -18,7 +18,7 @@ Context): Item<ViewHolder>() {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
       viewHolder.itemView.username_item_message.text = user.uname
-        if(user.imageu != null){
+        if(user.imageu != ""){
             //to load a picture in the image view of the user
                 //context -> provides Activities, Fragments, and Services access to resource files, images, themes/styles, and external directory locations.
             Glide.with(context)

@@ -1,13 +1,12 @@
 package com.soundbliss
 
 
+import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
-import com.soundbliss.Fragments.ChatArchiveFragment
 import com.soundbliss.Fragments.PeopleChatFragment
 
 
@@ -29,6 +28,8 @@ class ChatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
 
+        this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
         auth = FirebaseAuth.getInstance()
         firestoreDb = FirebaseFirestore.getInstance()
         currentUser  = firestoreDb.collection("users").document(auth.currentUser!!.uid)
@@ -36,6 +37,7 @@ class ChatActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = intent.getStringExtra("username")
 
+        makeCurrentFragment(PeopleChatFragment())
 
         navigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
@@ -43,10 +45,6 @@ class ChatActivity : AppCompatActivity() {
                     makeCurrentFragment(PeopleChatFragment())
                     true
                 }
-             /*   R.id.navigation_my_account -> {
-                    makeCurrentFragment(ChatArchiveFragment())
-                    true
-                }*/
                 else -> false
             }
         }

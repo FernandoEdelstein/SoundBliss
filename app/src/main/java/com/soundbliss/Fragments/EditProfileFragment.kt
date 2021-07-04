@@ -30,6 +30,7 @@ import com.soundbliss.Login.LogIn
 import com.soundbliss.MainActivity
 import com.soundbliss.Model.AllPost
 import com.soundbliss.R
+import com.soundbliss.R.string.phone
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
@@ -54,12 +55,16 @@ class EditProfileFragment : Fragment() {
     private lateinit var mEmail: EditText//EditProfile Fragment widgets
     private lateinit var mChangeProfilePhoto: TextView
     private lateinit var mUsername: EditText
+    private lateinit var mPhoneNumber: EditText
 
     private var mProfilePhoto: CircleImageView? = null
     private var back: ImageView? = null
     private var checkMark: ImageView? = null
     private var userId: String? = null
+
     private lateinit var logOutButton: Button
+    private lateinit var deletePhone: Button
+
 
     private var imageUri : Uri? = null
 
@@ -72,6 +77,7 @@ class EditProfileFragment : Fragment() {
         userId = auth.currentUser!!.uid
 
         mUsername = view.findViewById(R.id.mUsername)
+        mPhoneNumber = view.findViewById(R.id.phone)
         mProfilePhoto = view.findViewById(R.id.profile_photo) as CircleImageView
         mDescription = view.findViewById(R.id.description) as EditText
         mEmail = view.findViewById(R.id.email) as EditText
@@ -79,6 +85,7 @@ class EditProfileFragment : Fragment() {
         mChangeProfilePhoto = view.findViewById(R.id.changeProfilePhoto) as TextView
         back = view.findViewById(R.id.backArrow) as ImageView
         checkMark = view.findViewById(R.id.saveChanges) as ImageView
+        deletePhone = view.findViewById(R.id.deletePhone)
 
         firestoreDb = FirebaseFirestore.getInstance()
         document = firestoreDb.collection("users").document(userId!!)
@@ -88,6 +95,12 @@ class EditProfileFragment : Fragment() {
             mDescription.hint = documentSnapshot.getString("bio")
             mEmail.hint = documentSnapshot.getString("mail")
             mUsername.hint = documentSnapshot.getString("uname")
+
+            if(documentSnapshot.getString("phoneNumber") != "")
+                mPhoneNumber.hint = documentSnapshot.getString("phoneNumber")
+            else
+                mPhoneNumber.hint = getString(R.string.phone)
+
 
             if(documentSnapshot.getString("imageu") != ""){
                 Picasso.get().load(documentSnapshot.getString("imageu")).into(mProfilePhoto)
@@ -120,6 +133,12 @@ class EditProfileFragment : Fragment() {
             CropImage.activity().start(requireContext(), this)
         }
 
+        deletePhone.setOnClickListener {
+            document.update(mapOf("phoneNumber" to ""))
+            Toast.makeText(this.context, R.string.phone_deleted, Toast.LENGTH_SHORT).show()
+            mPhoneNumber.hint = getString(R.string.phone)
+        }
+
         return view
     }
 
@@ -128,15 +147,16 @@ class EditProfileFragment : Fragment() {
         val description = mDescription.text.toString()
         val email = mEmail.text.toString()
         val password = mPassword.text.toString()
+        val phoneNum = mPhoneNumber.text.toString()
 
         if(username.isNotEmpty()) {
             document.update(mapOf("uname" to username))
-            Toast.makeText(this.context, R.string.Username, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this.context, R.string.User, Toast.LENGTH_SHORT).show()
         }
 
         if(description.isNotEmpty()) {
             document.update(mapOf("bio" to description))
-            Toast.makeText(this.context, R.string.Description, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this.context, R.string.Bio, Toast.LENGTH_SHORT).show()
         }
         if(email.isNotEmpty()) {
             if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
@@ -148,6 +168,11 @@ class EditProfileFragment : Fragment() {
         if(password.isNotEmpty()) {
            auth.currentUser!!.updatePassword(mPassword.toString())
             Toast.makeText(this.context, R.string.Pass, Toast.LENGTH_SHORT).show()
+        }
+
+        if(phoneNum.isNotEmpty()) {
+            document.update(mapOf("phoneNumber" to phoneNum))
+            Toast.makeText(this.context, R.string.phone_updated, Toast.LENGTH_SHORT).show()
         }
 
         if(imageUri != null){

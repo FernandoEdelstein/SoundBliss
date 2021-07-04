@@ -1,6 +1,7 @@
 package com.soundbliss
 
 import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -44,6 +45,8 @@ class Player : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_media_player)
+
+        this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         val bundle = intent.getBundleExtra("Post")
         post = bundle!!.getSerializable("post") as AllPost

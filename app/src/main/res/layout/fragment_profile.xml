@@ -59,19 +59,35 @@
         android:layout_marginBottom="10dp"
         android:backgroundTint="@color/white_300"
         app:cornerRadius="22dp"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="8dp"
+        />
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center">
     <Button
         android:id="@+id/messageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Message"
-        android:layout_gravity="center"
         android:textColor="@color/white_100"
-        android:layout_marginBottom="10dp"
-        android:visibility="gone"
         android:backgroundTint="@color/blue_100"
-        app:cornerRadius="22dp"/>
+        app:cornerRadius="22dp"
+        android:layout_marginRight="8dp"
+        android:visibility="gone"/>
+    <Button
+        android:id="@+id/callButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/call"
+        android:textColor="@color/white_100"
+        android:backgroundTint="@color/blue_500"
+        android:layout_marginLeft="8dp"
+        app:cornerRadius="22dp"
+        android:visibility="gone"/>
+</LinearLayout>
+
 
 
     <androidx.recyclerview.widget.RecyclerView

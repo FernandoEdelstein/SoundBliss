@@ -1,6 +1,7 @@
 package com.soundbliss.Login
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Button
@@ -27,6 +28,8 @@ class LogIn : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_in)
+
+        this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         auth = FirebaseAuth.getInstance()
         emailUserText = findViewById(R.id.userField)

@@ -13,4 +13,10 @@ data class User (@get:PropertyName("lastname")@set:PropertyName("lastname") var 
 
 constructor():this("","","","","","","")
 
+    var phoneNumber : String = ""
+
+    @JvmName("setDocumentId1")
+    fun setPhoneNumber(s: String){
+        phoneNumber = s
+    }
 }

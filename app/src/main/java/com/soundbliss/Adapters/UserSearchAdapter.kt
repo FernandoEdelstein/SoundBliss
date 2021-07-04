@@ -32,8 +32,6 @@ class UserSearchAdapter(context: Context, mUsers: List<User>, isFragment: Boolea
         override fun onClick(v: View?) {
             onLister.onClick(adapterPosition)
         }
-
-
     }
 
 

@@ -99,6 +99,14 @@
     <string name="back">Back</string>
     <string name="passwordResetInfo">Insert your mail, you\'ll receive an eMail to confirm your identity and reset your password</string>
     <string name="forgot_your_password">Forgot your password?</string>
+    <string name="call">Call</string>
+    <string name="phone">Phone</string>
+    <string name="phone_info">If you don\'t want your phone number to show up, then leave it blank, remember to add your local area code</string>
+    <string name="delete_my_phone">Delete my Phone</string>
+    <string name="phone_deleted">Phone Deleted</string>
+    <string name="phone_updated">Phone Updated</string>
+    <string name="sound_bliss">Sound Bliss</string>
+    <string name="people">People</string>
 
 
 </resources>

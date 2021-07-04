@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.soundbliss.MapsActivity
+import com.soundbliss.MessengerActivity
 import com.soundbliss.Model.AllPost
 import com.soundbliss.Player
 import com.soundbliss.R
@@ -227,6 +229,8 @@ class PostAdapter(var context: Context, list: List<AllPost>,onListener: onUserLi
 
             }
 
+
+
             //Set ViewHolder Content
             viewHolderThreeRequest.itemView.postRequestTitle.text = post.title
             viewHolderThreeRequest.itemView.postRequestGender.text = post.gender
@@ -242,6 +246,27 @@ class PostAdapter(var context: Context, list: List<AllPost>,onListener: onUserLi
                 bundle.putParcelable("latlng", LatLng(list[position].location!!.latitude, list[position].location!!.longitude))
                 mapIntent.putExtra("latlng", bundle)
                 context.startActivity(mapIntent)
+            }
+
+            viewHolderThreeRequest.contactButton.setOnClickListener { v:View ->
+/*
+                var poster = firestoreDb.collection("users").document(post.userid)
+                poster.get().addOnSuccessListener { documentSnapshot ->
+                    if(documentSnapshot.getString("phoneNumber") != "") {
+                        var phone = documentSnapshot.getString("phoneNumber")
+
+                        var intent = Intent(Intent.ACTION_DIAL)
+                        var temp = "tel:" + phone
+                        intent.data = ((Uri.parse(temp)))
+
+                        context.startActivity(intent)
+                    }
+                }*/
+                val intent = Intent(context, MessengerActivity::class.java)
+                intent.putExtra("username", list[position].username)
+                intent.putExtra("friendUid", list[position].userid)
+                context.startActivity(intent)
+
             }
 
             //If current user = Poster then hide contact button

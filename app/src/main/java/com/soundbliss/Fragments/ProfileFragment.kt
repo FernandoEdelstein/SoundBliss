@@ -1,6 +1,7 @@
 package com.soundbliss.Fragments
 
 import android.content.ContentValues
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -23,6 +24,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.soundbliss.Adapters.PostAdapter
+import com.soundbliss.MessengerActivity
 import com.soundbliss.Model.AllPost
 import com.soundbliss.Model.User
 import com.soundbliss.R
@@ -45,6 +47,7 @@ class ProfileFragment(user:User?) : Fragment(), PostAdapter.onUserListener {
 
     private lateinit var editProfileButton: Button
     private lateinit var messageButton: Button
+    private lateinit var callButton: Button
 
     private lateinit var posts : MutableList<AllPost>
     private lateinit var postAdapter: PostAdapter
@@ -54,6 +57,7 @@ class ProfileFragment(user:User?) : Fragment(), PostAdapter.onUserListener {
 
     private lateinit var username: TextView
     private lateinit var editProfile : Button
+
     private lateinit var descriptionProfile : TextView
     private lateinit var profilePhoto : CircleImageView
 
@@ -85,6 +89,7 @@ class ProfileFragment(user:User?) : Fragment(), PostAdapter.onUserListener {
         username= view.findViewById(R.id.usernameProfile)
         descriptionProfile = view.findViewById(R.id.descriptionBio)
         editProfileButton = view.findViewById(R.id.editProfile)
+        callButton = view.findViewById(R.id.callButton)
         messageButton = view.findViewById(R.id.messageButton)
         profilePhoto = view.findViewById(R.id.profilePhoto)
 
@@ -110,6 +115,24 @@ class ProfileFragment(user:User?) : Fragment(), PostAdapter.onUserListener {
             }else{
                 editProfileButton.visibility = View.GONE
                 messageButton.visibility = View.VISIBLE
+
+                messageButton.setOnClickListener {
+                    val intent = Intent(context, MessengerActivity::class.java)
+                    intent.putExtra("username", initUser!!.uname)
+                    intent.putExtra("friendUid", initUser!!.uid)
+                    requireContext().startActivity(intent)
+                }
+
+                if( initUser!!.phoneNumber != ""){
+                    callButton.visibility = View.VISIBLE
+                    callButton.setOnClickListener{
+                        var intent = Intent(Intent.ACTION_DIAL)
+                        var temp = "tel:" + initUser!!.phoneNumber
+                        intent.data = ((Uri.parse(temp)))
+
+                        startActivity(intent)
+                    }
+                }
             }
         }else{
             //If no user has been parsed then load current User

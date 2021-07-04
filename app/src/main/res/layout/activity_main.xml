@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/blue_800"
     tools:context=".MainActivity"
-    android:id="@+id/mainActivity">
+    android:id="@+id/mainActivity"
+    android:screenOrientation="portrait">
 
 
     <FrameLayout

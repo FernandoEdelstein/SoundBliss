@@ -74,7 +74,7 @@ class MessengerActivity : AppCompatActivity() {
 
 
     //creation of the chat channel
-            private fun onCreateChatChannel(
+            fun onCreateChatChannel(
                 friendId: String,
                 onComplete: (channelId: String) -> Unit
             ) {
